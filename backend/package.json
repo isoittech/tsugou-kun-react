@@ -1,0 +1,25 @@
+{
+  "name": "tsugou-kun-react-be",
+  "version": "1.0.0",
+  "description": "都合くん（スケジュール調整アプリ）のバックエンド実装",
+  "main": "index.ts",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.8",
+    "@types/node": "^14.6.4",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  },
+  "scripts": {
+    "test": "test",
+    "tsc": "tsc",
+    "tscrun": "ts-node"
+  },
+  "keywords": [
+    "tsugou-kun"
+  ],
+  "author": "isoittech",
+  "license": "ISC"
+}

@@ -1,0 +1,24 @@
+= tsugou-kun-react
+
+== ■開発環境構築
+
+=== ▼基本環境
+
+プロジェクトフォルダ・TypeScript・Expressの準備を行う。
+
+```shell
+$ mkdir backend; cd backend
+$ npm init
+$ npm install express --save
+$ npm install -D typescript @types/node ts-node @types/express
+$ tsc --version                                   # 確認コマンド
+$ tsc --init
+```
+
+※ts-node：コンパイルした後にnodeで実行してくれるモジュール。 +
+　package.jsonのscriptsに `ts-node` を実行するコマンドを定義する。
+
+=== ▼参照資料
+
+* https://qiita.com/pochopocho13/items/79a4735031ce11a91df7[Node+TypeScript+ExpressでAPIサーバ構築]
+* https://ics.media/entry/16329/[最新版TypeScript+webpack 4の環境構築まとめ(React, Vue.js, Three.jsのサンプル付き)]
