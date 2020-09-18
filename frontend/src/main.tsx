@@ -1,16 +1,14 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import {SubComponent} from './sub-component';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+import configureStore from './store';
+import { App } from './App'
 
-class App extends React.Component {
-    render() {
-        return (
-            <div>
-                <h1>Hello React!</h1>
-                <SubComponent name="My Counter for TypeScript"/>
-            </div>
-        );
-    }
-}
+ReactDOM.render(
+    <Provider store={configureStore({})}>
+        <App foo="aaaaa"/>
+    </Provider>,
+    document.getElementById('app')
+)
 
-ReactDOM.render(<App/>, document.querySelector('#app'));

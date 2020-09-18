@@ -7,6 +7,12 @@
 また本資料は、開発者用のmemoである。
 
 
+
+== ■開発方針
+
+
+
+
 == ■開発環境構築
 
 === ▼バックエンド側
@@ -16,30 +22,84 @@
 ```shell
 $ mkdir backend; cd backend
 $ npm init
-$ npm install -D typescript @types/node ts-node @types/express
-$ npm install --save express
-$ tsc --version                                   # 確認コマンド
+$ npm i -D typescript ts-node ts-node-dev sequelize-cli @types/node @types/express @types/sqlite3
+$ npm i express sqlite3 sequelize
+$ tsc --version
 $ tsc --init
 ```
 
+==== ◎DBマイグレーション・モデル初期構築
+
+```shell
+$ mkdir src/db
+$ cd src/db
+$ ../../node_modules/sequelize-cli/lib/sequelize init
+$ ls
+config/  migrations/  models/  seeders/
+＜この間で config/config.json の接続先等を編集＞
+$ ../../node_modules/sequelize-cli/lib/sequelize model:create \
+    --name event \
+    --underscored \
+    --attributes \
+        "name:string \
+        ,memo:string \
+        ,schedule_update_id:string"
+$ ../../node_modules/sequelize-cli/lib/sequelize model:create \
+    --name eventkouho_nichiji \
+    --underscored \
+    --attributes \
+        "kouho_nichiji:string \
+        ,event_id:bigint \
+        ,schedule_update_id:string"
+$ ../../node_modules/sequelize-cli/lib/sequelize model:create \
+    --name sankasha \
+    --underscored \
+    --attributes \
+        "name:string \
+        ,event_id:bigint \
+        ,comment:string"
+$ ../../node_modules/sequelize-cli/lib/sequelize model:create \
+    --name sanka_nichiji \
+    --underscored \
+    --attributes \
+        "sanka_kahi:enum \
+        ,event_kouho_nichiji_id:bigint \
+        ,sankasha_id:bigint"
+＜ここで、migration/とmodels/配下のソースに、非null制約・外部キー関連の設定（キーワード：associate, references）を行う＞
+$ ../../node_modules/sequelize-cli/lib/sequelize db:migrate --env development
+
+```
+
+
 === ▼フロントエンド側
 
+
+==== ◎実行コマンド
 プロジェクトフォルダ・TypeScript・Webpack・ReactJSの準備を行う。
 
 ```shell
 $ mkdir frontend; cd frontend
 $ npm init
-$ npm install -D typescript ts-loader webpack webpack-cli
-$ npm install --save react react-dom @types/react @types/react-dom
-$ tsc --version                                   # 確認コマンド
+$ npm i -D typescript ts-loader tslint @types/react @types/react-dom @types/react-redux webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin
+$ npm i react react-dom redux react-redux redux-saga redux-starter-kit axios connected-react-router redux-actions
+$ tsc --version
 $ tsc --init
 ```
 
 ※ts-node：コンパイルした後にnodeで実行してくれるモジュール。 +
 　package.jsonのscriptsに `ts-node` を実行するコマンドを定義する。
 
+==== ◎フォルダ構成
+[%hardbreaks]
+https://qiita.com/tashxii/items/0515f00ec641d52f879b[React+Redux+APIサーバーでのアプリケーションのディレクトリ/ファイル構成]
+この記事での考え方が一番しっくり来たため採用。
+
+
+
 === ▼参照資料
 
 * https://qiita.com/pochopocho13/items/79a4735031ce11a91df7[Node+TypeScript+ExpressでAPIサーバ構築]
 * https://ics.media/entry/16329/[最新版TypeScript+webpack 4の環境構築まとめ(React, Vue.js, Three.jsのサンプル付き)]
-
+* https://qiita.com/niyou0ct/items/cc09ed42a6a51cf2a8b1[ReactでAPI処理はredux-sagaを使うのがオススメ！]
+* https://qiita.com/pullphone/items/fdb0f36d8b4e5c0ae893[ざっくり React & Redux with TypeScript]
+* https://qiita.com/kuy/items/716affc808ebb3e1e8ac[★redux-sagaで非同期処理と戦う]

@@ -1,3 +1,6 @@
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
     // モード値を production に設定すると最適化された状態出力される。
     // 一方、development に設定するとソースマップ有効でJSファイルが出力される。
@@ -28,5 +31,13 @@ module.exports = {
     // import 文で .ts や .tsx ファイルを解決するため
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"]
-    }
+    },
+
+    devServer: {
+        contentBase: path.resolve(__dirname, 'dist'),
+        port: 8787
+    },
+
+    devtool: 'inline-source-map',
+
 };
