@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import {Provider} from 'react-redux';
 import configureStore from './store';
-import { App } from './App'
+import {App} from './App'
+import {BrowserRouter} from 'react-router-dom';
 
 ReactDOM.render(
     <Provider store={configureStore({})}>
-        <App foo="aaaaa"/>
+        <BrowserRouter>
+            <App foo="aaaaa"/>
+        </BrowserRouter>
     </Provider>,
     document.getElementById('app')
 )

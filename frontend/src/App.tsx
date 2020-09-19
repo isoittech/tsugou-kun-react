@@ -1,32 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import * as ReactDOM from 'react-dom';
-import store from './store'
+import React, {useState, useEffect} from 'react';
+import {useDispatch} from "react-redux";
+import {Navigate, Route, Routes} from "react-router";
+import {Button} from "react-bootstrap"; // ?
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
 import {fetchEvent} from './action/event'
-import {Provider} from "react-redux";
+import {Header} from "./component/organism/Header";
+import {Footer} from "./component/organism/Footer";
+import {Top} from "./component/pages/Top";
+import {Edit} from "./component/pages/Edit";
 
 type Props = {
     foo: string;
 }
-//
-// countryLists() {
-//     return this.state.countries.map(country => {
-//         return <li key={country}>{country}</li>
-//     })
-// }
-//
-
-
-// const render = () => {
-//     this.unsubscribe()
-//     return (
-//         <ul>
-//             {this.countryLists}
-//         </ul>
-//     )
-// }
-
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
 export const App: React.FC<Props> = (props) => {
 
@@ -54,11 +40,15 @@ export const App: React.FC<Props> = (props) => {
     });
 
     return (
-        <div>
-            <p>You clicked {count} times</p>
-            <button onClick={() => setCount(count + 1)}>
-                Click me
-            </button>
-        </div>
+        <>
+            <Header foo={"サイト名"}></Header>
+            <Routes>
+                <Route path="/" element={<Top foo={"aiueo"}/>}/>
+                <Route path="/edit/:key" element={<Edit/>}/>
+                {/*どれにもマッチしなければTop画面へリダイレクト*/}
+                <Route path="*" element={<Navigate to="/" replace />} />;
+            </Routes>
+            <Footer foo={"futta"}></Footer>
+        </>
     )
 }
