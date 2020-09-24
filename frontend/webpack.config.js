@@ -24,6 +24,20 @@ module.exports = {
                 test: /\.tsx?$/,
                 // TypeScript をコンパイルする
                 use: "ts-loader"
+            },
+            {
+                test: /\.css/,
+                use: [
+                    // linkタグに出力する機能
+                    "style-loader",
+                    {
+                        loader: "css-loader",
+                        options: {
+                            // オプションでCSS内のurl()メソッドの取り込みを禁止する
+                            url: false
+                        }
+                    }
+                ]
             }
         ]
     },

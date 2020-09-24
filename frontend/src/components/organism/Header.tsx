@@ -18,13 +18,14 @@ export const Header: React.FC<Props> = (props) => {
 
     return (
         <>
-            <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="/">都合くん「この日空いてるっすか。」</Navbar.Brand>
+            <Navbar className={"navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-5 shadow"} expand="lg">
+                <Navbar.Brand href="/" className={"navbar-brand"}>都合くん「この日空いてるっすか。」</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link href="/">Home</Nav.Link>
+                        <Link to="/" className={"nav-link"}>Home</Link>
                         <Link to="/edit/aieuo" className={"nav-link"}>Edit</Link>
+                        {/*<Nav.Link href="/">Home</Nav.Link>*/}
                         {/*<Nav.Link href="/edit/aieuo">Edit</Nav.Link>*/}
                         {/*                       <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

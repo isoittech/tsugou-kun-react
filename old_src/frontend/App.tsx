@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch} from "react-redux";
 import {Navigate, Route, Routes} from "react-router";
+import {Button} from "react-bootstrap"; // ?
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
-import {Header} from "./components/organism/Header";
-import {Footer} from "./components/organism/Footer";
-import {Top} from "./components/pages/Top";
-import {Edit} from "./components/pages/Edit";
+import {fetchEvent} from './action/event'
+import {Header} from "./component/organism/Header";
+import {Footer} from "./component/organism/Footer";
+import {Top} from "./component/pages/Top";
+import {Edit} from "./component/pages/Edit";
 
 type Props = {
     foo: string;
@@ -28,12 +31,12 @@ export const App: React.FC<Props> = (props) => {
         // useEffectで返却すべきなのはEffectのキャンセルを行う関数である。Promise返却関数を返却しても動かない、ということ。
         // そのため、下記のように一旦関数定義を行い、その後叩くといった対応を行う。
 
-        // const runFetchEvent = async () => {
-        //     // action.type=FETCH_EVENTのAction Creatorを実行 ---> イベント取得リクエスト実行
-        //     await dispatch(fetchEvent())
-        // }
-        //
-        // runFetchEvent();
+        const runFetchEvent = async () => {
+            // action.type=FETCH_EVENTのAction Creatorを実行 ---> イベント取得リクエスト実行
+            await dispatch(fetchEvent())
+        }
+
+        runFetchEvent();
     });
 
     return (
@@ -44,7 +47,7 @@ export const App: React.FC<Props> = (props) => {
                     <Route path="/" element={<Top foo={"aiueo"}/>}/>
                     <Route path="/edit/:key" element={<Edit/>}/>
                     {/*どれにもマッチしなければTop画面へリダイレクト*/}
-                    {/*<Route path="*" element={<Navigate to="/" replace/>}/>;*/}
+                    <Route path="*" element={<Navigate to="/" replace/>}/>;
                 </Routes>
             </div>
             <Footer foo={"futta"}></Footer>

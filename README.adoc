@@ -38,25 +38,25 @@ $ ls
 config/  migrations/  models/  seeders/
 ＜この間で config/config.json の接続先等を編集＞
 $ ../../node_modules/sequelize-cli/lib/sequelize model:create \
-    --name event \
+    --name moyooshi \
     --underscored \
     --attributes \
         "name:string \
         ,memo:string \
         ,schedule_update_id:string"
 $ ../../node_modules/sequelize-cli/lib/sequelize model:create \
-    --name eventkouho_nichiji \
+    --name moyooshikouho_nichiji \
     --underscored \
     --attributes \
         "kouho_nichiji:string \
-        ,event_id:bigint \
+        ,moyooshi_id:bigint \
         ,schedule_update_id:string"
 $ ../../node_modules/sequelize-cli/lib/sequelize model:create \
     --name sankasha \
     --underscored \
     --attributes \
         "name:string \
-        ,event_id:bigint \
+        ,moyooshi_id:bigint \
         ,comment:string"
 $ ../../node_modules/sequelize-cli/lib/sequelize model:create \
     --name sanka_nichiji \
@@ -67,6 +67,7 @@ $ ../../node_modules/sequelize-cli/lib/sequelize model:create \
         ,sankasha_id:bigint"
 ＜ここで、migration/とmodels/配下のソースに、非null制約・外部キー関連の設定（キーワード：associate, references）を行う＞
 $ ../../node_modules/sequelize-cli/lib/sequelize db:migrate --env development
+＜ここで、src/db/data配下に出力される.sqlite3ファイルを、data/に移動する＞
 
 ```
 
@@ -80,10 +81,11 @@ $ ../../node_modules/sequelize-cli/lib/sequelize db:migrate --env development
 ```shell
 $ mkdir frontend; cd frontend
 $ npm init
-$ npm i -D typescript ts-loader tslint @types/react @types/react-dom @types/react-redux webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin
-$ npm i react react-dom redux react-redux redux-saga redux-starter-kit axios connected-react-router redux-actions
+$ npm i -D typescript ts-loader tslint @types/react @types/react-dom @types/react-redux @types/react-router-dom webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin style-loader css-loader
+$ npm i react react-dom redux react-redux redux-saga @reduxjs/toolkit axios react-router@next react-router-dom@next history redux-actions react-bootstrap bootstrap react-modern-calendar-datepicker
 $ tsc --version
 $ tsc --init
+※React Routerについてはβ版の6を使用。競合のReach Routerとの合併版であり、便利かつ直感的であるため。正式版がリリースされ次第「@next」を除去する。
 ```
 
 ※ts-node：コンパイルした後にnodeで実行してくれるモジュール。 +
@@ -96,10 +98,11 @@ https://qiita.com/tashxii/items/0515f00ec641d52f879b[React+Redux+APIサーバー
 
 
 
-=== ▼参照資料
+== ■参照資料
 
 * https://qiita.com/pochopocho13/items/79a4735031ce11a91df7[Node+TypeScript+ExpressでAPIサーバ構築]
 * https://ics.media/entry/16329/[最新版TypeScript+webpack 4の環境構築まとめ(React, Vue.js, Three.jsのサンプル付き)]
 * https://qiita.com/niyou0ct/items/cc09ed42a6a51cf2a8b1[ReactでAPI処理はredux-sagaを使うのがオススメ！]
 * https://qiita.com/pullphone/items/fdb0f36d8b4e5c0ae893[ざっくり React & Redux with TypeScript]
 * https://qiita.com/kuy/items/716affc808ebb3e1e8ac[★redux-sagaで非同期処理と戦う]
+* https://www.hypertextcandy.com/react-error-handling[Reactアプリにおける非同期通信エラー処理の実装案]
