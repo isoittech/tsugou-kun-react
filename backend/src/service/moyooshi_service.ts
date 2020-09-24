@@ -7,72 +7,72 @@ const db = require('../models/index');
 
 
 export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Promise<MoyooshiServiceOutputDto> => {
+    const t = await db.sequelize.transaction();
+
     try {
+        // managed transactionが正常に動作しない（同期的に実行されない）ため、unmanagedでコミット・ロールバックする。
+        // const {addedMoyooshi, scheduleUpdateId} = await db.sequelize.transaction(async (t: Transaction): models.Moyooshi => {
 
-        const {addedMoyooshi, scheduleUpdateId} = await db.sequelize.transaction(
-            async (t: Transaction): models.Moyooshi => {
+        // ===================================================
+        // 保存対象モデルデータ作成
+        // ===================================================
+        const moyooshiModel = {
+            name: moyooshiServiceDto.name,
+            memo: moyooshiServiceDto.memo
+        } as models.Moyooshi;
 
-                // ===================================================
-                // 保存対象モデルデータ作成
-                // ===================================================
-                const moyooshiModel = {
-                    name: moyooshiServiceDto.name,
-                    memo: moyooshiServiceDto.memo
-                } as models.Moyooshi;
+        // ===================================================
+        // 保存処理 #1
+        // ※2つに分けている理由：新規登録の場合、一旦保存しないとPKが採番されないため。
+        // ===================================================
+        const addedMoyooshi: models.Moyooshi = await models.Moyooshi.create(
+            moyooshiModel,
+            {transaction: t}
+        );
 
-                // ===================================================
-                // 保存処理 #1
-                // ※2つに分けている理由：新規登録の場合、一旦保存しないとPKが採番されないため。
-                // ===================================================
-                const addedMoyooshi: models.Moyooshi = await models.Moyooshi.create(
-                    moyooshiModel,
-                    {transaction: t}
-                );
+        // ===================================================
+        // 保存対象データ設定処理
+        // ===================================================
+        // ------------------------
+        // イベント
+        // ------------------------
+        // スケジュール更新ページID
+        const scheduleUpdateId: string = endecode.createScheduleUpdateId(addedMoyooshi.id)
+        addedMoyooshi.schedule_update_id = scheduleUpdateId
 
-                // ===================================================
-                // 保存対象データ設定処理
-                // ===================================================
-                // ------------------------
-                // イベント
-                // ------------------------
-                // スケジュール更新ページID
-                const scheduleUpdateId: string = endecode.createScheduleUpdateId(addedMoyooshi.id)
-                addedMoyooshi.schedule_update_id = scheduleUpdateId
+        // ------------------------
+        // イベント日時候補
+        // ------------------------
+        const addedMoyooshiKouhoNichijis: models.MoyooshiKouhoNichiji[] = []
+        moyooshiServiceDto.nichiji_kouho.forEach((nichiji_kouho_elm) => {
+            const moyooshiKouhoNichiji = {
+                kouho_nichiji: nichiji_kouho_elm,
+                moyooshi_id: addedMoyooshi.id,
+                schedule_update_id: scheduleUpdateId,
+            } as models.MoyooshiKouhoNichiji;
+            addedMoyooshiKouhoNichijis.push(moyooshiKouhoNichiji);
+        });
 
-                // ------------------------
-                // イベント日時候補
-                // ------------------------
-                const addedMoyooshiKouhoNichijis: models.MoyooshiKouhoNichiji[] = []
-                moyooshiServiceDto.nichiji_kouho.forEach((nichiji_kouho_elm) => {
-                    const moyooshiKouhoNichiji = {
-                        kouho_nichiji: nichiji_kouho_elm,
-                        moyooshi_id: addedMoyooshi.id,
-                        schedule_update_id: scheduleUpdateId,
-                    } as models.MoyooshiKouhoNichiji;
-                    addedMoyooshiKouhoNichijis.push(moyooshiKouhoNichiji);
-                });
+        // ===================================================
+        // 保存処理 #2
+        // ===================================================
+        if (addedMoyooshiKouhoNichijis.length != 0) {
+            await models.MoyooshiKouhoNichiji.bulkCreate(
+                addedMoyooshiKouhoNichijis,
+                {transaction: t}
+            );
+        }
+        addedMoyooshi.save();
 
-                // ===================================================
-                // 保存処理 #2
-                // ===================================================
-                if (addedMoyooshiKouhoNichijis.length != 0) {
-                    await models.MoyooshiKouhoNichiji.bulkCreate(
-                        addedMoyooshiKouhoNichijis,
-                        {transaction: t}
-                    );
-                }
-
-                return {addedMoyooshi, scheduleUpdateId};
-
-            });
+        await t.commit();
 
         return {
             added_moyooshi: addedMoyooshi,
             schedule_update_id: scheduleUpdateId
         } as MoyooshiServiceOutputDto;
 
-
     } catch (error) {
+        await t.rollback();
         console.log(`[ERROR]createMoyooshiでエラーが発生。${JSON.stringify(error)}`)
 
         return {

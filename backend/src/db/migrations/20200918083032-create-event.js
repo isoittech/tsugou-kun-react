@@ -16,7 +16,6 @@ module.exports = {
         type: Sequelize.STRING
       },
       schedule_update_id: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       created_at: {

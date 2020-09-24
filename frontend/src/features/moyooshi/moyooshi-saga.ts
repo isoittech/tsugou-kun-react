@@ -13,10 +13,8 @@ const requestAddMoyooshiApi = async (data: MoyooshiAddRequest) => {
     const url = 'http://localhost:3000/moyooshi'
 
     try {
-        const response = await axios.post(url, data)
-        const result = response
+        const result = await axios.post(url, data)
         return {result}
-
     } catch (error) {
         return {error}
     }
