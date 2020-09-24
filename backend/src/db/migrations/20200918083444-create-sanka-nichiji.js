@@ -12,11 +12,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.ENUM('mikaitou','maru','sankaku','batsu')
       },
-      event_kouho_nichiji_id: {
+      moyooshi_kouho_nichiji_id: {
         allowNull: false,
         type: Sequelize.BIGINT,
         references: {
-          model: 'eventkouho_nichijis',
+          model: 'moyooshi_kouho_nichijis',
           key: 'id'
         },
       },

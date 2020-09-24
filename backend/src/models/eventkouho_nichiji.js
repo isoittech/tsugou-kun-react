@@ -4,19 +4,20 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class eventkouho_nichiji extends Model {
+  class MoyooshiKouhoNichiji extends Model {
     static associate(models) {
-      models.eventkouho_nichiji.hasMany(models.sanka_nichiji);
+      models.MoyooshiKouhoNichiji.hasMany(models.SankaNichiji);
+      models.MoyooshiKouhoNichiji.belongsTo(models.Moyooshi);
     }
   };
-  eventkouho_nichiji.init({
+  MoyooshiKouhoNichiji.init({
     kouho_nichiji: DataTypes.STRING,
     event_id: DataTypes.BIGINT,
     schedule_update_id: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'eventkouho_nichiji',
+    modelName: 'MoyooshiKouhoNichiji',
     underscored: true,
   });
-  return eventkouho_nichiji;
+  return MoyooshiKouhoNichiji;
 };

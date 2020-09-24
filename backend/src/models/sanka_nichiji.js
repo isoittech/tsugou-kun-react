@@ -4,23 +4,23 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class sanka_nichiji extends Model {
+  class SankaNichiji extends Model {
     static associate(models) {
-      models.sanka_nichiji.belongsTo(models.sankasha);
-      models.sanka_nichiji.belongsTo(models.eventkouho_nichiji);
+      models.SankaNichiji.belongsTo(models.Sankasha);
+      models.SankaNichiji.belongsTo(models.MoyooshiKouhoNichiji);
     }
   };
-  sanka_nichiji.init({
+  SankaNichiji.init({
     sanka_kahi: {
       type: DataTypes.ENUM('mikaitou','maru','sankaku','batsu'),
       defaultValue: 'mikaitou'
     },
-    event_kouho_nichiji_id: DataTypes.BIGINT,
+    moyooshi_kouho_nichiji_id: DataTypes.BIGINT,
     sankasha_id: DataTypes.BIGINT
   }, {
     sequelize,
-    modelName: 'sanka_nichiji',
+    modelName: 'SankaNichiji',
     underscored: true,
   });
-  return sanka_nichiji;
+  return SankaNichiji;
 };

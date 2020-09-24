@@ -1,14 +1,18 @@
+import e from "express";
+
 const models = require('../models');
 
-export default async () => {
+export default async (moyooshiModel: any) => {
     try {
-        const ret: any = await models.event.create({
-            name: 'test',
-            memo: 'memo',
-            schedule_update_id: 'hhehehehe'
-        })
+        console.log("async test log moyooshi_service 1")
+
+        console.log(`moyooshiModel:${moyooshiModel}`)
+
+        const ret: any = await models.Moyooshi.create(moyooshiModel)
+        console.log("async test log moyooshi_service 2")
         return ret;
     } catch (error) {
+        console.log("async test log moyooshi_service error 1")
         return {
             name: error.name,
             message: error.message,

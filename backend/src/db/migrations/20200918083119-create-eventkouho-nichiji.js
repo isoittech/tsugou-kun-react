@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('eventkouho_nichijis', {
+    await queryInterface.createTable('moyooshi_kouho_nichijis', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,11 +12,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      event_id: {
+      moyooshi_id: {
         allowNull: false,
         type: Sequelize.BIGINT,
         references: {
-          model: 'events',
+          model: 'moyooshis',
           key: 'id'
         },
       },
@@ -34,6 +34,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('eventkouho_nichijis');
+    await queryInterface.dropTable('moyooshi_kouho_nichijis');
   }
 };

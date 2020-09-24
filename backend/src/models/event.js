@@ -6,20 +6,21 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class event extends Model {
+  class Moyooshi extends Model {
     static associate(models) {
-      models.event.hasMany(models.sankasha);
-      models.event.hasMany(models.eventkouho_nichiji);
+      models.Moyooshi.hasMany(models.Sankasha);
+      models.Moyooshi.hasMany(models.MoyooshiKouhoNichiji);
     }
   };
-  event.init({
+  Moyooshi.init({
     name: DataTypes.STRING,
     memo: DataTypes.STRING,
     schedule_update_id: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'event',
+    modelName: 'Moyooshi',
     underscored: true,
+    tableName: 'moyooshis'
   });
-  return event;
+  return Moyooshi;
 };

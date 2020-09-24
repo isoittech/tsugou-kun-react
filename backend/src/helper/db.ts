@@ -14,34 +14,34 @@ export default () => {
 
 
 const prepareTable = (db: sqlite3.Database) => {
-    db.run("CREATE TABLE IF NOT EXISTS event (  \n" +
+    db.run("CREATE TABLE IF NOT EXISTS moyooshi (  \n" +
         "  id INTEGER PRIMARY KEY,\n" +
         "  name TEXT NOT NULL,\n" +
         "  memo TEXT NOT NULL,\n" +
         "  schedule_update_id TEXT NOT NULL\n" +
         ");")
 
-    db.run("CREATE TABLE IF NOT EXISTS eventkouho_nichiji (  \n" +
+    db.run("CREATE TABLE IF NOT EXISTS moyooshikouho_nichiji (  \n" +
         "  id INTEGER PRIMARY KEY,\n" +
         "  kouho_nichiji TEXT NOT NULL,\n" +
-        "  event_id INTEGER NOT NULL,\n" +
-        "  foreign key(event_id) references event(id)\n" +
+        "  moyooshi_id INTEGER NOT NULL,\n" +
+        "  foreign key(moyooshi_id) references moyooshi(id)\n" +
         ");");
 
     db.run("CREATE TABLE IF NOT EXISTS sankasha (  \n" +
         "  id INTEGER PRIMARY KEY,\n" +
         "  name TEXT NOT NULL,\n" +
-        "  event_id INTEGER NOT NULL,\n" +
+        "  moyooshi_id INTEGER NOT NULL,\n" +
         "  comment TEXT NOT NULL,\n" +
-        "  foreign key(event_id) references event(id)\n" +
+        "  foreign key(moyooshi_id) references moyooshi(id)\n" +
         ");");
 
     db.run("CREATE TABLE IF NOT EXISTS sanka_nichiji (  \n" +
         "  id INTEGER PRIMARY KEY,\n" +
         "  sanka_kahi INTEGER NOT NULL,\n" +
-        "  event_kouho_nichiji_id INTEGER NOT NULL,\n" +
+        "  moyooshi_kouho_nichiji_id INTEGER NOT NULL,\n" +
         "  sankasha_id INTEGER NOT NULL,\n" +
-        "  foreign key(event_kouho_nichiji_id) references eventkouho_nichiji(id),\n" +
+        "  foreign key(moyooshi_kouho_nichiji_id) references moyooshikouho_nichiji(id),\n" +
         "  foreign key(sankasha_id) references sankasha(id)\n" +
         ");");
 }

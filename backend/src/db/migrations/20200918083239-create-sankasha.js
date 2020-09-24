@@ -12,11 +12,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      event_id: {
+      moyooshi_id: {
         allowNull: false,
         type: Sequelize.BIGINT,
         references: {
-          model: 'events',
+          model: 'moyooshis',
           key: 'id'
         },
       },

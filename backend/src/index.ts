@@ -2,7 +2,6 @@ import express from 'express'
 import router_event from './controller/event_controller'
 import access_log from "./helper/access_log";
 
-const {Sequelize} = require('sequelize');
 
 const app: express.Express = express()
 const router: express.Router = express.Router()
@@ -31,18 +30,6 @@ app.use(access_log)
 app.use('/', router_event)
 app.use(router)
 
-
-// const sequelize = new Sequelize({
-//     dialect: 'sqlite',
-//     storage: '../data/tsugoukun_development.sqlite3'
-// });
-//
-// sequelize.authenticate()
-//     .then(() => {
-//         console.log('Connection has been established successfully.');
-//     }).catch((error: any) => {
-//     console.error('Unable to connect to the database:', error);
-// })
 
 // -----------------------------------
 // 3000番ポートでAPIサーバ起動
