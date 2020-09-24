@@ -1,8 +1,8 @@
 import * as Express from 'express';
 import * as moyooshi_service from '../service/moyooshi_service'
-import {MoyooshiAddRequest} from "./form/moyooshi";
 // @ts-ignore
 import models from '../models';
+import {MoyooshiServiceDto, MoyooshiServiceOutputDto} from "../service/moyooshi_service";
 
 const router = Express.Router();
 
@@ -13,20 +13,27 @@ const router = Express.Router();
 router.post('/moyooshi', async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
 
     const {name, memo, nichiji_kouho} = req.body;
-    const eventModel: models.Moyooshi = {
+    const moyooshiServiceDto: MoyooshiServiceDto = {
         name: name,
         memo: memo,
-        schedule_update_id: 'dummy'
+        nichiji_kouho: nichiji_kouho,
     }
 
-    const result = await moyooshi_service.createMoyooshi(eventModel)
+    const result: MoyooshiServiceOutputDto = await moyooshi_service.createMoyooshi(moyooshiServiceDto)
 
-    res.status(200).json(
-        {
-            message: 'Yeah! Yeah!.',
-            value: result
-        }
-    );
+    return result.error_name || result.error_message
+        ? res.status(500).json(
+            {
+                message: result.error_message,
+                value: result.error_name
+            }
+        )
+        : res.status(200).json(
+            {
+                message: 'Yeah! Yeah!.',
+                value: result
+            }
+        );
 });
 
 export default router;

@@ -106,3 +106,4 @@ https://qiita.com/tashxii/items/0515f00ec641d52f879b[React+Redux+APIサーバー
 * https://qiita.com/pullphone/items/fdb0f36d8b4e5c0ae893[ざっくり React & Redux with TypeScript]
 * https://qiita.com/kuy/items/716affc808ebb3e1e8ac[★redux-sagaで非同期処理と戦う]
 * https://www.hypertextcandy.com/react-error-handling[Reactアプリにおける非同期通信エラー処理の実装案]
+* https://blog.capilano-fw.com/?p=5582[保存版！「sequelize」モデルの使い方実例・全59件]
