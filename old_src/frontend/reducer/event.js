@@ -13,4 +13,4 @@ var eventState = function (state, action) {
     }
 };
 export default eventState;
-//# sourceMappingURL=event.js.map
+//# sourceMappingURL=moyooshi.js.map

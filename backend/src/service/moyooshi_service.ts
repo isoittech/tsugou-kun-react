@@ -1,8 +1,6 @@
-import e from "express";
-
 const models = require('../models');
 
-export default async (moyooshiModel: any) => {
+export const createMoyooshi =  async (moyooshiModel: any) => {
     try {
         console.log("async test log moyooshi_service 1")
 

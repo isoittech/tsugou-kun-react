@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   MoyooshiKouhoNichiji.init({
     kouho_nichiji: DataTypes.STRING,
-    event_id: DataTypes.BIGINT,
+    moyooshi_id: DataTypes.BIGINT,
     schedule_update_id: DataTypes.STRING
   }, {
     sequelize,

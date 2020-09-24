@@ -20,4 +20,4 @@ export var failFetchEventApi = createAction(FAIL_FETCH_EVENT_API, function (erro
 //     type: FAIL_FETCH_EVENT_API,
 //     items: error
 // })
-//# sourceMappingURL=event.js.map
+//# sourceMappingURL=moyooshi.js.map

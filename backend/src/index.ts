@@ -1,5 +1,5 @@
 import express from 'express'
-import router_event from './controller/event_controller'
+import router_moyooshi from './controller/moyooshi_controller'
 import access_log from "./helper/access_log";
 
 
@@ -27,7 +27,7 @@ app.use(access_log)
 // -----------------------------------
 // ルーティング
 // -----------------------------------
-app.use('/', router_event)
+app.use('/', router_moyooshi)
 app.use(router)
 
 

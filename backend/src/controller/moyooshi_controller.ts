@@ -1,6 +1,6 @@
 import * as Express from 'express';
-import createMoyooshi from '../service/event_service'
-import {MoyooshiAddRequest} from "./form/event";
+import * as moyooshi_service from '../service/moyooshi_service'
+import {MoyooshiAddRequest} from "./form/moyooshi";
 // @ts-ignore
 import models from '../models';
 
@@ -19,9 +19,7 @@ router.post('/moyooshi', async (req: Express.Request, res: Express.Response, nex
         schedule_update_id: 'dummy'
     }
 
-    console.log("async test log event_controller 1")
-    const result = await createMoyooshi(eventModel)
-    console.log("async test log event_controller 2")
+    const result = await moyooshi_service.createMoyooshi(eventModel)
 
     res.status(200).json(
         {

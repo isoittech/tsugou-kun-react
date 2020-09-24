@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Sankasha.init({
     name: DataTypes.STRING,
-    event_id: DataTypes.BIGINT,
+    moyooshi_id: DataTypes.BIGINT,
     comment: DataTypes.STRING
   }, {
     sequelize,

@@ -89,4 +89,4 @@ export var eventSaga = [takeLatest(FETCH_EVENT, runRequest)];
 //
 // }
 // }
-//# sourceMappingURL=event.js.map
+//# sourceMappingURL=moyooshi.js.map
