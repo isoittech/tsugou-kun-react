@@ -41,8 +41,9 @@ export const App: React.FC<Props> = (props) => {
             <Header foo={"サイト名"}></Header>
             <div className="container">
                 <Routes>
-                    <Route path="/" element={<Top foo={"aiueo"}/>}/>
+                    <Route path="/" element={<Top/>}/>
                     <Route path="/edit/:key" element={<Edit/>}/>
+                    {/*<Route path="/:key" element={<Edit/>}/>*/}
                     {/*どれにもマッチしなければTop画面へリダイレクト*/}
                     {/*<Route path="*" element={<Navigate to="/" replace/>}/>;*/}
                 </Routes>

@@ -1,24 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {Navbar, Nav, NavItem, NavDropdown, Button, FormControl, Form} from 'react-bootstrap';
-import {EventEditCard} from "../molecules/EventEditCard";
-import {ApiExecutionState, ApiExecutionStateType} from "../../store/moyooshi_api";
-import {ValueOf} from "../../libs/common/declare";
+import {Helmet} from "react-helmet";
 
-type Props = {
-    foo: string;
-}
+import {EventAddCard} from "../organism/EventAddCard";
 
-export const Top: React.FC<Props> = (props) => {
-    useEffect(() => {
-        console.log("Topがよばれたよー")
-    });
+export const Top: React.FC = (props) => {
+
+    console.log("★Top画面");
 
     return (
         <>
+            <Helmet>
+                <title>イベント新規登録 - 都合くん「この日空いてるっすか。」</title>
+            </Helmet>
             <div className=" row d-flex justify-content-center my-5">
                 <div className="col-sm-10">
-                    <EventEditCard/>
+                    <EventAddCard/>
                 </div>
             </div>
         </>

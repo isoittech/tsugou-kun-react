@@ -5,6 +5,10 @@ export const ApiExecutionStateType = {
     JIKKOU_CHU: 'JIKKOU_CHU',
     SUCCEEDED: 'SUCCEEDED',
     FAILED: 'FAILED',
+    READ_SUCCEEDED: 'READ_SUCCEEDED',
+    READ_FAILED: 'READ_FAILED',
+    UPDATE_SUCCEEDED: 'UPDATE_SUCCEEDED',
+    UPDATE_FAILED: 'UPDATE_FAILED',
 } as const;
 // 「as const」というConstアサーションを利用。
 // これを利用することで、後続の宣言EventAction.typeの型が「string」ではなくリテラル型の「ADD_EVENT|SUCCESS_～|FAIL_～…」となる。
@@ -15,5 +19,7 @@ export type ApiExecutionState = {
     // 下記は、EventAction.typeの型を、EventActionTypeの中で定義したリテラル型の「ADD_EVENT|SUCCESS_～|FAIL_～…」にしてくれる。
     // ※前述「as const」と組み合わせる必要あり。
     moyooshiAddApiStatus: ValueOf<typeof ApiExecutionStateType>;
+    // APIからの返却オブジェクト
+    returnObject: any;
 };
 //

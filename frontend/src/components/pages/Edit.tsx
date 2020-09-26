@@ -1,21 +1,37 @@
-import React, {useState, useEffect} from 'react';
-import {useParams} from "react-router";
-import {useDispatch} from "react-redux";
+import React, {useEffect} from 'react';
+import {Helmet} from "react-helmet";
+
+import {EventEditCard} from "../organism/EventEditCard";
 
 export const Edit: React.FC = () => {
-    const { key } = useParams();
 
-    const [count, setCount] = useState(0);
-    const dispatch = useDispatch();
+    console.log("★Edit画面");
 
-    useEffect(() => {
-        console.log("Editがよばれたよー")
-    });
+    // const handleBeforeUnload = (e) => {
+    //     // 仕様標準のメソッドを呼び出す
+    //     e.preventDefault();
+    //     alert(`本当にいいのか？リロードして。`)
+    //
+    // }
+    //
+    // useEffect(() => {
+    //     window.addEventListener('beforeunload', handleBeforeUnload);
+    //     // return () => {
+    //     //     // 解除
+    //     //     window.removeEventListener('beforeunload', handleBeforeUnload);
+    //     // }
+    // }, [])　// 初回レンダリング時、一回だけ実行する
 
     return (
         <>
-            <div>Editです。keyは{key}です。</div>
-            {/*<div>Editです。</div>*/}
+            <Helmet>
+                <title>イベント編集 - 都合くん「この日空いてるっすか。」</title>
+            </Helmet>
+            <div className=" row d-flex justify-content-center my-5">
+                <div className="col-sm-10">
+                    <EventEditCard/>
+                </div>
+            </div>
         </>
     )
 }

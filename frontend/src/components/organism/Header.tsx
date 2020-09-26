@@ -24,7 +24,6 @@ export const Header: React.FC<Props> = (props) => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         <Link to="/" className={"nav-link"}>Home</Link>
-                        <Link to="/edit/aieuo" className={"nav-link"}>Edit</Link>
                         {/*<Nav.Link href="/">Home</Nav.Link>*/}
                         {/*<Nav.Link href="/edit/aieuo">Edit</Nav.Link>*/}
                         {/*                       <NavDropdown title="Dropdown" id="basic-nav-dropdown">

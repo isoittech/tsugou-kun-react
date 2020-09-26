@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Calendar, DayValue} from 'react-modern-calendar-datepicker';
-import {Button, Card, Col, Form, Row, Toast} from 'react-bootstrap';
+import {Alert, Badge, Button, Card, Col, Form, Row, Toast} from 'react-bootstrap';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 
 import {moyooshiSlice} from "../../features/moyooshi/moyooshi-slice";
@@ -9,8 +9,15 @@ import {Moyooshi} from "../../features/moyooshi/moyooshi-type";
 import {ValueOf} from "../../libs/common/declare";
 import {getToday} from "../../libs/common/datetime";
 import {ApiExecutionState, ApiExecutionStateType} from "../../store/moyooshi_api";
+import {Link} from "react-router-dom";
+import {ApiResultToast} from "../molecules/ApiResultToast";
 
-export const EventEditCard: React.FC = () => {
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// イベント編集フォーム（新規追加）
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+export const EventAddCard: React.FC = () => {
     // ========================================================
     // グローバルのState
     // ========================================================
@@ -22,6 +29,11 @@ export const EventEditCard: React.FC = () => {
         ((state: ApiExecutionState) => state.moyooshi.moyooshiAddApiStatus); // @ts-ignoreが無いとエラー（moyooshiがない）になる。
     // const moyooshiAddApiSucceeded = useSelector<ApiExecutionState, ValueOf<typeof ApiExecutionStateType>> ((state) => state.moyooshiAddApiStatus);  // NG
     // const moyooshiAddApiSucceeded = useSelector((state: ApiExecutionState) => state.moyooshiAddApiStatus); // NG
+    // -------------------------------------
+    // APIからの返却データ
+    // -------------------------------------
+    const moyooshiAddApiReturnData = useSelector((state) => state.moyooshi.returnObject); // @ts-ignoreなくてもエラーにならない。anyだから？
+    const schedule_update_id = moyooshiAddApiReturnData?.schedule_update_id;
 
     // ========================================================
     // コンポーネントのState
@@ -41,6 +53,8 @@ export const EventEditCard: React.FC = () => {
     // Toast表示関係（登録完了のお知らせToast）
     // -------------------------------------
     const [showA, setShowA] = useState(false);
+    const [toastHeader, setToastHeader] = useState<JSX.Element | null>(null);
+    const [toastMessage, setToastMessage] = useState<JSX.Element | null>(null);
     const toggleShowA = () => setShowA(!showA);
 
 
@@ -53,14 +67,61 @@ export const EventEditCard: React.FC = () => {
     // ========================================================
     // 再レンダリング完了ごとの処理定義
     // ========================================================
-    // -------------------------------------
-    // 再レンダリング完了時にAPI実行結果により処理を変える
-    // -------------------------------------
     useEffect(() => {
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        // API（イベント新規登録）実行時起動関数
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
         if (moyooshiAddApiSucceeded === ApiExecutionStateType.SUCCEEDED) {
+            // ========================================================
+            // Toast表示内容設定処理
+            // ========================================================
+            // -------------------------------------
+            // ヘッダタイトル
+            // -------------------------------------
+            setToastHeader(<strong>イベントの新規登録に成功しました。</strong>);
+            // -------------------------------------
+            // 内容
+            // -------------------------------------
+            setToastMessage(
+                <ApiResultToast schedule_update_id={schedule_update_id}/>
+            );
+
+            // ========================================================
+            // Toastを表示させる
+            // ========================================================
+            setShowA(true)
+
+        } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.FAILED) {
+            // ========================================================
+            // Toast表示内容設定処理
+            // ========================================================
+            // -------------------------------------
+            // ヘッダタイトル
+            // -------------------------------------
+            setToastHeader(<strong>イベントの新規登録中にエラーが発生しました。</strong>);
+            // -------------------------------------
+            // 内容
+            // -------------------------------------
+            setToastMessage(
+                <p className="mb-0">
+                    <Badge variant="danger">残念</Badge>
+                    えっと。。。また後日お試し下さい。。。
+                </p>
+            );
+
+            // ========================================================
+            // Toastを表示させる
+            // ========================================================
             setShowA(true)
         }
-        // setShowA(!showA);
+
+        return () => {
+            // ========================================================
+            // 別画面遷移時はToastをOff
+            // ========================================================
+            setShowA(false)
+        }
+
     }, [moyooshiAddApiSucceeded]);
     // });
 
@@ -100,6 +161,9 @@ export const EventEditCard: React.FC = () => {
         dispatch(moyooshiSlice.actions.added(addedMoyooshi))
     };
 
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // カレンダー日付クリック時イベントハンドラ
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const onSelectedOnCalendar = (newValue: DayValue) => {
         const {year, month, day} = newValue
         const printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`
@@ -108,15 +172,16 @@ export const EventEditCard: React.FC = () => {
         setEventNichijiKouho(printedDate.trim())
     }
 
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // レンダー
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
         <>
             <Row className={"mt-5"}>
-                <Col xs={6}>
+                <Col sm={12}>
                     <Toast show={showA} onClose={toggleShowA}>
-                        <Toast.Header>
-                            <strong className="mr-auto">Bootstrap</strong>
-                        </Toast.Header>
-                        <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+                        <Toast.Header>{toastHeader}</Toast.Header>
+                        <Toast.Body>{toastMessage}</Toast.Body>
                     </Toast>
                 </Col>
             </Row>
@@ -127,7 +192,7 @@ export const EventEditCard: React.FC = () => {
                         <Form.Row>
                             <Form.Group as={Col} md="6">
                                 <Form.Group controlId="formEventName">
-                                    <Form.Label>イベント名</Form.Label>
+                                    <Form.Label className="hissu">イベント名</Form.Label>
                                     <Form.Control
                                         required
                                         type="text"
@@ -149,7 +214,7 @@ export const EventEditCard: React.FC = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formEventNichijiKouho">
-                                    <Form.Label>イベント日時候補</Form.Label>
+                                    <Form.Label className="hissu">イベント日時候補</Form.Label>
                                     <Form.Control
                                         required
                                         as="textarea"

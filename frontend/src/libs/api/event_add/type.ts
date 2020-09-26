@@ -1,11 +1,6 @@
-export type MoyooshiAddRequest = {
-    name: string;
-    memo?: string;
-    nichiji_kouho: string;
-};
-
-export type MoyooshiAddResponse = {
+export type MoyooshiApiResponse = {
     code: string;
     key: string;
     succeed: boolean;
+    returnObject?: any;
 }

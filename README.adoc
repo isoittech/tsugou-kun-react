@@ -23,7 +23,7 @@
 $ mkdir backend; cd backend
 $ npm init
 $ npm i -D typescript ts-node ts-node-dev sequelize-cli @types/node @types/express @types/sqlite3
-$ npm i express sqlite3 sequelize
+$ npm i express sqlite3 sequelize base64url
 $ tsc --version
 $ tsc --init
 ```
@@ -82,7 +82,7 @@ $ ../../node_modules/sequelize-cli/lib/sequelize db:migrate --env development
 $ mkdir frontend; cd frontend
 $ npm init
 $ npm i -D typescript ts-loader tslint @types/react @types/react-dom @types/react-redux @types/react-router-dom webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin style-loader css-loader
-$ npm i react react-dom redux react-redux redux-saga @reduxjs/toolkit axios react-router@next react-router-dom@next history redux-actions react-bootstrap bootstrap react-modern-calendar-datepicker
+$ npm i react react-dom redux react-redux redux-saga @reduxjs/toolkit axios react-router@next react-router-dom@next history redux-actions react-bootstrap bootstrap react-modern-calendar-datepicker react-helmet
 $ tsc --version
 $ tsc --init
 ※React Routerについてはβ版の6を使用。競合のReach Routerとの合併版であり、便利かつ直感的であるため。正式版がリリースされ次第「@next」を除去する。
