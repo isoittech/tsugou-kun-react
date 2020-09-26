@@ -4,18 +4,43 @@
 
 [%hardbreaks]
 調整さん （https://chouseisan.com/ ）のパクりサービス。リスペクト！
-また本資料は、開発者用のmemoである。
 
 
+== ■動作手順
+[%hardbreaks]
+開発工程用サーバ起動手順を示す。
+本プロジェクトでは、バックエンド用・フロントエンド用サーバを分けて開発している。
+（2020/09/26現在、一緒にビルドする方法が分からないのと、効率が良さそうだと感じたため）
 
-== ■開発方針
+下記にバックエンドサーバ、フロントエンドサーバの順に動作手順を示す。
+
+1. clone
+1. バックエンドサーバセットアップのため、下記コマンドを実行する。
++
+```shell
+$ PJ_HOME=`pwd`/tsugou-kun-react
+$ cd ${PJ_HOME}/backend
+$ npm ci
+$ cd ${PJ_HOME}/backend/src/db
+$ ${PJ_HOME}/backend/node_modules/sequelize-cli/lib/sequelize db:migrate --env development
+$ mv ${PJ_HOME}/backend/src/db/data/tsugoukun_development.sqlite3 ${PJ_HOME}/backend/data/
+$ cd ${PJ_HOME}/backend
+$ npm start
+```
+1. フロントエンドサーバセットアップのため、下記コマンドを実行する。
++
+```shell
+$ cd ${PJ_HOME}/frontend
+$ npm ci
+$ npm start
+```
 
 
+== ■開発者用メモ
 
+=== ▼開発環境構築
 
-== ■開発環境構築
-
-=== ▼バックエンド側
+==== ◎バックエンド側
 
 プロジェクトフォルダ・TypeScript・Expressの準備を行う。
 
@@ -28,7 +53,7 @@ $ tsc --version
 $ tsc --init
 ```
 
-==== ◎DBマイグレーション・モデル初期構築
+===== ○DBマイグレーション・モデル初期構築
 
 ```shell
 $ mkdir src/db
@@ -72,10 +97,10 @@ $ ../../node_modules/sequelize-cli/lib/sequelize db:migrate --env development
 ```
 
 
-=== ▼フロントエンド側
+==== ◎フロントエンド側
 
 
-==== ◎実行コマンド
+===== ○実行コマンド
 プロジェクトフォルダ・TypeScript・Webpack・ReactJSの準備を行う。
 
 ```shell
@@ -91,14 +116,14 @@ $ tsc --init
 ※ts-node：コンパイルした後にnodeで実行してくれるモジュール。 +
 　package.jsonのscriptsに `ts-node` を実行するコマンドを定義する。
 
-==== ◎フォルダ構成
+===== ○フォルダ構成
 [%hardbreaks]
 https://qiita.com/tashxii/items/0515f00ec641d52f879b[React+Redux+APIサーバーでのアプリケーションのディレクトリ/ファイル構成]
 この記事での考え方が一番しっくり来たため採用。
 
 
 
-== ■参照資料
+=== ▼参照資料
 
 * https://qiita.com/pochopocho13/items/79a4735031ce11a91df7[Node+TypeScript+ExpressでAPIサーバ構築]
 * https://ics.media/entry/16329/[最新版TypeScript+webpack 4の環境構築まとめ(React, Vue.js, Three.jsのサンプル付き)]
