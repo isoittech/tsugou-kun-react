@@ -47,8 +47,22 @@ $ npm start
 ```shell
 $ mkdir backend; cd backend
 $ npm init
-$ npm i -D typescript ts-node ts-node-dev sequelize-cli @types/node @types/express @types/sqlite3
-$ npm i express sqlite3 sequelize base64url
+$ npm i -D \
+    typescript \
+    ts-node \
+    ts-node-dev \
+    sequelize-cli \
+    tslint \
+    @types/node \
+    @types/express \
+    @types/sqlite3
+$ npm i \
+    express \
+    sqlite3 \
+    sequelize \
+    base64url \
+    mocha \
+    @types/mocha
 $ tsc --version
 $ tsc --init
 ```
