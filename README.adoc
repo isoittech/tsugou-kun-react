@@ -120,11 +120,50 @@ $ ../../node_modules/sequelize-cli/lib/sequelize db:migrate --env development
 ```shell
 $ mkdir frontend; cd frontend
 $ npm init
-$ npm i -D typescript ts-loader tslint @types/react @types/react-dom @types/react-redux @types/react-router-dom webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin style-loader css-loader
-$ npm i react react-dom redux react-redux redux-saga @reduxjs/toolkit axios react-router@next react-router-dom@next history redux-actions react-bootstrap bootstrap react-modern-calendar-datepicker react-helmet
+$ npm i -D \
+    typescript \
+    ts-loader \
+    tslint \
+    @types/react \
+    @types/react-dom \
+    @types/react-redux \
+    @types/react-router-dom \
+    webpack \
+    webpack-cli \
+    webpack-dev-server \
+    clean-webpack-plugin \
+    html-webpack-plugin \
+    style-loader \
+    css-loader
+$ npm i \
+    react \
+    react-dom \
+    redux \
+    react-redux \
+    redux-saga \
+    @reduxjs/toolkit \
+    axios \
+    react-router@next \
+    react-router-dom@next \
+    history \
+    redux-actions \
+    react-bootstrap \
+    bootstrap \
+    react-modern-calendar-datepicker \
+    react-helmet
 $ tsc --version
 $ tsc --init
 ※React Routerについてはβ版の6を使用。競合のReach Routerとの合併版であり、便利かつ直感的であるため。正式版がリリースされ次第「@next」を除去する。
+# for test
+$ npm i -D jest \
+    ts-jest \
+    jest-environment-jsdom-fourteen \
+    @testing-library/react \
+    @testing-library/user-event \
+    @testing-library/jest-dom \
+    @types/jest \
+    @babel/preset-react \
+    babel-preset-react-app
 ```
 
 ※ts-node：コンパイルした後にnodeで実行してくれるモジュール。 +
