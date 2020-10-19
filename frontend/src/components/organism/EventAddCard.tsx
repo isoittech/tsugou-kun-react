@@ -69,6 +69,13 @@ export const EventAddCard: React.FC = () => {
     // ========================================================
     useEffect(() => {
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        // 初期表示に起動
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+
+    },[]);
+
+    useEffect(() => {
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
         // API（イベント新規登録）実行時起動関数
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
         if (moyooshiAddApiSucceeded === ApiExecutionStateType.SUCCEEDED) {
@@ -197,9 +204,7 @@ export const EventAddCard: React.FC = () => {
                                         required
                                         type="text"
                                         placeholder="イベント名"
-                                        onChange={(e) => {
-                                            setEventName(e.target.value)
-                                        }}
+                                        onChange={(e) => {setEventName(e.target.value)}}
                                     />
                                     <Form.Control.Feedback>OKです。</Form.Control.Feedback>
                                 </Form.Group>
@@ -208,9 +213,7 @@ export const EventAddCard: React.FC = () => {
                                     <Form.Control
                                         as="textarea"
                                         rows={5}
-                                        onChange={(e) => {
-                                            setEventMemo(e.target.value)
-                                        }}
+                                        onChange={(e) => {setEventMemo(e.target.value)}}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="formEventNichijiKouho">
@@ -219,9 +222,7 @@ export const EventAddCard: React.FC = () => {
                                         required
                                         as="textarea"
                                         rows={5}
-                                        onChange={(e) => {
-                                            setEventNichijiKouho(e.target.value)
-                                        }}
+                                        onChange={(e) => {setEventNichijiKouho(e.target.value)}}
                                         defaultValue={eventNichijiKouho}
                                     />
                                     <Form.Control.Feedback>OKです。</Form.Control.Feedback>

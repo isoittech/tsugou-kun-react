@@ -106,3 +106,6 @@ dist
 frontend/**/*.js
 .idea/workspace.xml
 *.sqlite3
+backend/src/controller/*js
+backend/src/helper/*js 
+backend/src/service/*js
