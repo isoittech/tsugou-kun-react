@@ -12,6 +12,7 @@ import {ApiExecutionState, ApiExecutionStateType} from "../../store/moyooshi_api
 import {Link} from "react-router-dom";
 import {ApiResultToast} from "../molecules/ApiResultToast";
 import { EventName } from '../molecules/EventName';
+import { EventMemo } from '../molecules/EventMemo';
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -200,14 +201,8 @@ export const EventAddCard: React.FC = () => {
                         <Form.Row>
                             <Form.Group as={Col} md="6">
                                 <EventName valueSetter={setEventName}></EventName>
-                                <Form.Group controlId="formEventMemo">
-                                    <Form.Label>イベントメモ</Form.Label>
-                                    <Form.Control
-                                        as="textarea"
-                                        rows={5}
-                                        onChange={(e) => {setEventMemo(e.target.value)}}
-                                    />
-                                </Form.Group>
+                                <EventMemo valueSetter={setEventMemo}></EventMemo>
+                                
                                 <Form.Group controlId="formEventNichijiKouho">
                                     <Form.Label className="hissu">イベント日時候補</Form.Label>
                                     <Form.Control
