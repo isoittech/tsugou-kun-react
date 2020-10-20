@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {Badge, Button, Card, Col, Form, Row, Toast} from 'react-bootstrap';
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Badge, Button, Card, Col, Form, Row, Toast } from "react-bootstrap";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
-import {moyooshiSlice} from "../../features/moyooshi/moyooshi-slice";
-import {Moyooshi} from "../../features/moyooshi/moyooshi-type";
-import {ValueOf} from "../../libs/common/declare";
-import {ApiExecutionState, ApiExecutionStateType} from "../../store/moyooshi_api";
-import {ApiResultToast} from "../molecules/ApiResultToast";
-import { EventName } from '../molecules/EventName';
-import { EventMemo } from '../molecules/EventMemo';
-import { EventNichijiKouho } from '../molecules/EventNichijiKouho';
-import { EventNichijiKouhoCalendar } from '../molecules/EventNichijiKouhoCalendar';
+import { moyooshiSlice } from "../../features/moyooshi/moyooshi-slice";
+import { Moyooshi } from "../../features/moyooshi/moyooshi-type";
+import { ValueOf } from "../../libs/common/declare";
+import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_api";
+import { ApiResultToast } from "../molecules/ApiResultToast";
+import { EventName } from "../molecules/EventName";
+import { EventMemo } from "../molecules/EventMemo";
+import { EventNichijiKouho } from "../molecules/EventNichijiKouho";
+import { EventNichijiKouhoCalendar } from "../molecules/EventNichijiKouhoCalendar";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -25,9 +25,10 @@ export const EventAddCard: React.FC = () => {
     // -------------------------------------
     // API実行結果
     // -------------------------------------
-    const moyooshiAddApiSucceeded = useSelector<ApiExecutionState, ValueOf<typeof ApiExecutionStateType>>
+    const moyooshiAddApiSucceeded = useSelector<ApiExecutionState, ValueOf<typeof ApiExecutionStateType>>(
         // @ts-ignore
-        ((state: ApiExecutionState) => state.moyooshi.moyooshiAddApiStatus); // @ts-ignoreが無いとエラー（moyooshiがない）になる。
+        (state: ApiExecutionState) => state.moyooshi.moyooshiAddApiStatus
+    ); // @ts-ignoreが無いとエラー（moyooshiがない）になる。
     // const moyooshiAddApiSucceeded = useSelector<ApiExecutionState, ValueOf<typeof ApiExecutionStateType>> ((state) => state.moyooshiAddApiStatus);  // NG
     // const moyooshiAddApiSucceeded = useSelector((state: ApiExecutionState) => state.moyooshiAddApiStatus); // NG
     // -------------------------------------
@@ -46,9 +47,9 @@ export const EventAddCard: React.FC = () => {
     // -------------------------------------
     // フォームの値
     // -------------------------------------
-    const [eventName, setEventName] = useState('');
-    const [eventNichijiKouho, setEventNichijiKouho] = useState('');
-    const [eventMemo, setEventMemo] = useState('');
+    const [eventName, setEventName] = useState("");
+    const [eventNichijiKouho, setEventNichijiKouho] = useState("");
+    const [eventMemo, setEventMemo] = useState("");
     // -------------------------------------
     // Toast表示関係（登録完了のお知らせToast）
     // -------------------------------------
@@ -57,12 +58,10 @@ export const EventAddCard: React.FC = () => {
     const [toastMessage, setToastMessage] = useState<JSX.Element | null>(null);
     const toggleShowA = () => setShowA(!showA);
 
-
     // ========================================================
     // Action dispatcher
     // ========================================================
     const dispatch = useDispatch();
-
 
     // ========================================================
     // 再レンダリング完了ごとの処理定義
@@ -71,8 +70,7 @@ export const EventAddCard: React.FC = () => {
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
         // 初期表示に起動
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-
-    },[]);
+    }, []);
 
     useEffect(() => {
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -89,15 +87,12 @@ export const EventAddCard: React.FC = () => {
             // -------------------------------------
             // 内容
             // -------------------------------------
-            setToastMessage(
-                <ApiResultToast schedule_update_id={schedule_update_id}/>
-            );
+            setToastMessage(<ApiResultToast schedule_update_id={schedule_update_id} />);
 
             // ========================================================
             // Toastを表示させる
             // ========================================================
-            setShowA(true)
-
+            setShowA(true);
         } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.FAILED) {
             // ========================================================
             // Toast表示内容設定処理
@@ -119,19 +114,17 @@ export const EventAddCard: React.FC = () => {
             // ========================================================
             // Toastを表示させる
             // ========================================================
-            setShowA(true)
+            setShowA(true);
         }
 
         return () => {
             // ========================================================
             // 別画面遷移時はToastをOff
             // ========================================================
-            setShowA(false)
-        }
-
+            setShowA(false);
+        };
     }, [moyooshiAddApiSucceeded]);
     // });
-
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 送信ボタンクリックイベントハンドラ
@@ -163,9 +156,9 @@ export const EventAddCard: React.FC = () => {
         const addedMoyooshi: Moyooshi = {
             name: eventName,
             memo: eventMemo,
-            nichiji_kouho: eventNichijiKouhoArray
-        }
-        dispatch(moyooshiSlice.actions.added(addedMoyooshi))
+            nichiji_kouho: eventNichijiKouhoArray,
+        };
+        dispatch(moyooshiSlice.actions.added(addedMoyooshi));
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -200,5 +193,5 @@ export const EventAddCard: React.FC = () => {
                 </Card.Body>
             </Card>
         </>
-    )
-}
+    );
+};

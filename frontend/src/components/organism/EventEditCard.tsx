@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {Calendar, DayValue} from 'react-modern-calendar-datepicker';
-import {Badge, Button, Card, Col, Form, Row, Toast} from 'react-bootstrap';
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Calendar, DayValue } from "react-modern-calendar-datepicker";
+import { Badge, Button, Card, Col, Form, Row, Toast } from "react-bootstrap";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
-import {moyooshiSlice} from "../../features/moyooshi/moyooshi-slice";
-import {Moyooshi} from "../../features/moyooshi/moyooshi-type";
-import {ValueOf} from "../../libs/common/declare";
-import {getToday} from "../../libs/common/datetime";
-import {ApiExecutionState, ApiExecutionStateType} from "../../store/moyooshi_api";
-import {useParams} from "react-router";
-import {ApiResultToast} from "../molecules/ApiResultToast";
+import { moyooshiSlice } from "../../features/moyooshi/moyooshi-slice";
+import { Moyooshi } from "../../features/moyooshi/moyooshi-type";
+import { ValueOf } from "../../libs/common/declare";
+import { getToday } from "../../libs/common/datetime";
+import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_api";
+import { useParams } from "react-router";
+import { ApiResultToast } from "../molecules/ApiResultToast";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -18,8 +18,7 @@ import {ApiResultToast} from "../molecules/ApiResultToast";
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 export const EventEditCard: React.FC = () => {
-
-    const {key} = useParams();
+    const { key } = useParams();
     const schedule_update_id = key;
 
     // ========================================================
@@ -28,9 +27,10 @@ export const EventEditCard: React.FC = () => {
     // -------------------------------------
     // API実行結果
     // -------------------------------------
-    const moyooshiAddApiSucceeded = useSelector<ApiExecutionState, ValueOf<typeof ApiExecutionStateType>>
+    const moyooshiAddApiSucceeded = useSelector<ApiExecutionState, ValueOf<typeof ApiExecutionStateType>>(
         // @ts-ignore
-        ((state: ApiExecutionState) => state.moyooshi.moyooshiAddApiStatus); // @ts-ignoreが無いとエラー（moyooshiがない）になる。
+        (state: ApiExecutionState) => state.moyooshi.moyooshiAddApiStatus
+    ); // @ts-ignoreが無いとエラー（moyooshiがない）になる。
     // -------------------------------------
     // APIからの返却データ
     // -------------------------------------
@@ -48,13 +48,13 @@ export const EventEditCard: React.FC = () => {
     // フォームの値
     // -------------------------------------
     const [selectedDay, setSelectedDay] = useState<DayValue>(null);
-    const [eventName, setEventName] = useState('');
-    const [eventNichijiKouho, setEventNichijiKouho] = useState('');
-    const [eventMemo, setEventMemo] = useState('');
+    const [eventName, setEventName] = useState("");
+    const [eventNichijiKouho, setEventNichijiKouho] = useState("");
+    const [eventMemo, setEventMemo] = useState("");
     type NichijiData = {
-        id: string,
-        nichiji: string
-    }
+        id: string;
+        nichiji: string;
+    };
     const [eventNichijiKouhoDeleteTargets, setEventNichijiKouhoDeleteTargets] = useState<NichijiData[]>([]);
     const [eventNichijiKouhoDeleteTargetChecks, setEventNichijiKouhoDeleteTargetChecks] = useState({});
 
@@ -75,7 +75,7 @@ export const EventEditCard: React.FC = () => {
     // 初回レンダリング時起動関数
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     useEffect(() => {
-        dispatch(moyooshiSlice.actions.read(schedule_update_id))
+        dispatch(moyooshiSlice.actions.read(schedule_update_id));
     }, []); // 「初回のみ」をこの行の[]で制御
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -93,20 +93,17 @@ export const EventEditCard: React.FC = () => {
             // -------------------------------------
             // 内容
             // -------------------------------------
-            setToastMessage(
-                <ApiResultToast schedule_update_id={schedule_update_id}/>
-            );
+            setToastMessage(<ApiResultToast schedule_update_id={schedule_update_id} />);
 
             // ========================================================
             // Toastを表示させる
             // ========================================================
-            setShowA(true)
+            setShowA(true);
 
             // ========================================================
             // 更新後の情報を取得するため再読込のためのディスパッチ
             // ========================================================
-            dispatch(moyooshiSlice.actions.read(schedule_update_id))
-
+            dispatch(moyooshiSlice.actions.read(schedule_update_id));
         } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.UPDATE_FAILED) {
             // ========================================================
             // Toast表示内容設定処理
@@ -127,8 +124,7 @@ export const EventEditCard: React.FC = () => {
             // ========================================================
             // Toastを表示させる
             // ========================================================
-            setShowA(true)
-
+            setShowA(true);
         } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.READ_SUCCEEDED) {
             // ========================================================
             // 編集対象データをフォームにデフォルト設定
@@ -137,12 +133,12 @@ export const EventEditCard: React.FC = () => {
             // イベント日時候補
             // -------------------------------------
             const tempArray: NichijiData[] = [];
-            readMoyooshi.MoyooshiKouhoNichijis.forEach((MoyooshiKouhoNichiji) => (
+            readMoyooshi.MoyooshiKouhoNichijis.forEach((MoyooshiKouhoNichiji) =>
                 tempArray.push({
                     id: MoyooshiKouhoNichiji.id,
-                    nichiji: MoyooshiKouhoNichiji.kouho_nichiji
+                    nichiji: MoyooshiKouhoNichiji.kouho_nichiji,
                 })
-            ));
+            );
             setEventNichijiKouhoDeleteTargets(tempArray);
             // -------------------------------------
             // イベント名
@@ -155,8 +151,7 @@ export const EventEditCard: React.FC = () => {
             // -------------------------------------
             // イベント日時候補
             // -------------------------------------
-            setEventNichijiKouho(''); // 更新後の再レンダリング時には空になっているべき。
-
+            setEventNichijiKouho(""); // 更新後の再レンダリング時には空になっているべき。
         } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.READ_FAILED) {
             // ========================================================
             // Toast表示内容設定処理
@@ -174,18 +169,16 @@ export const EventEditCard: React.FC = () => {
                     えっと。。。また後日お試し下さい。。。
                 </p>
             );
-            setShowA(true)
+            setShowA(true);
         }
 
         return () => {
             // ========================================================
             // 別画面遷移時はToastをOff
             // ========================================================
-            setShowA(false)
-        }
-
+            setShowA(false);
+        };
     }, [moyooshiAddApiSucceeded]);
-
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 送信ボタンクリックイベントハンドラ
@@ -221,31 +214,31 @@ export const EventEditCard: React.FC = () => {
             nichiji_kouho: eventNichijiKouhoArray,
             deleted_nichiji_kouho: eventNichijiKouhoDeleteTargetChecks,
             schedule_update_id: schedule_update_id,
-        }
-        dispatch(moyooshiSlice.actions.updated(updatedMoyooshi))
+        };
+        dispatch(moyooshiSlice.actions.updated(updatedMoyooshi));
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // カレンダー日付クリック時イベントハンドラ
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const onSelectedOnCalendar = (newValue: DayValue) => {
-        const {year, month, day} = newValue
-        const printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`
+        const { year, month, day } = newValue;
+        const printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
 
-        setSelectedDay(newValue)
-        setEventNichijiKouho(printedDate.trim())
-    }
+        setSelectedDay(newValue);
+        setEventNichijiKouho(printedDate.trim());
+    };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 削除対象イベント日時候補のチェックボックスの状態に変化があったら起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onChangeOnCheckbox = e => {
+    const onChangeOnCheckbox = (e) => {
         //checkedItemsのstateをセット
         setEventNichijiKouhoDeleteTargetChecks({
             ...eventNichijiKouhoDeleteTargetChecks,
-            [e.target.id]: e.target.checked
-        })
-    }
+            [e.target.id]: e.target.checked,
+        });
+    };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
@@ -265,7 +258,6 @@ export const EventEditCard: React.FC = () => {
                 <Card.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group as={Row} className={"mt-3"}>
-
                             <Form.Label column sm="3" className="hissu edit_label">
                                 イベント名
                             </Form.Label>
@@ -275,16 +267,14 @@ export const EventEditCard: React.FC = () => {
                                     type="text"
                                     placeholder="イベント名"
                                     onChange={(e) => {
-                                        setEventName(e.target.value)
+                                        setEventName(e.target.value);
                                     }}
                                     defaultValue={eventName}
                                 />
                                 <Form.Control.Feedback>OKです。</Form.Control.Feedback>
                             </Col>
-
                         </Form.Group>
                         <Form.Group as={Row} className={"mt-5"}>
-
                             <Form.Label column sm="3" className="edit_label">
                                 イベントメモ
                             </Form.Label>
@@ -293,48 +283,50 @@ export const EventEditCard: React.FC = () => {
                                     as="textarea"
                                     rows={5}
                                     onChange={(e) => {
-                                        setEventMemo(e.target.value)
+                                        setEventMemo(e.target.value);
                                     }}
                                     defaultValue={eventMemo}
                                 />
                                 <Form.Control.Feedback>OKです。</Form.Control.Feedback>
                             </Col>
-
                         </Form.Group>
 
                         <Form.Group as={Row} className={"mt-5"}>
                             <Col sm="3">
-                                <Form.Label className="edit_label">
-                                    イベント日時削除
-                                </Form.Label>
-                                <small className="form-text text-muted">取り消したい日時があれば<br/>選択してください</small>
+                                <Form.Label className="edit_label">イベント日時削除</Form.Label>
+                                <small className="form-text text-muted">
+                                    取り消したい日時があれば
+                                    <br />
+                                    選択してください
+                                </small>
                             </Col>
                             <Col sm="9">
-                                {
-                                    eventNichijiKouhoDeleteTargets.map((nichijiData) => {
-                                        return (
-                                            <span style={{display: "inline-block"}} className="mr-5"
-                                                  key={nichijiData.id}>
-                                                <input type="checkbox"
-                                                       name={`del_eve_dt_kouho_id_${nichijiData.id}`}
-                                                       id={`id_del_eve_dt_kouho_id_${nichijiData.id}`}
-                                                       value={nichijiData.id}
-                                                       onChange={onChangeOnCheckbox}
-                                                       checked={eventNichijiKouhoDeleteTargetChecks[nichijiData.id]}
-                                                />
-                                                {nichijiData.nichiji}</span>
-                                        )
-                                    })
-                                }
+                                {eventNichijiKouhoDeleteTargets.map((nichijiData) => {
+                                    return (
+                                        <span style={{ display: "inline-block" }} className="mr-5" key={nichijiData.id}>
+                                            <input
+                                                type="checkbox"
+                                                name={`del_eve_dt_kouho_id_${nichijiData.id}`}
+                                                id={`id_del_eve_dt_kouho_id_${nichijiData.id}`}
+                                                value={nichijiData.id}
+                                                onChange={onChangeOnCheckbox}
+                                                checked={eventNichijiKouhoDeleteTargetChecks[nichijiData.id]}
+                                            />
+                                            {nichijiData.nichiji}
+                                        </span>
+                                    );
+                                })}
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row} className={"mt-5"}>
                             <Col sm="3">
-                                <Form.Label className="edit_label">
-                                    イベント日時追加
-                                </Form.Label>
-                                <small className="form-text text-muted">追加したい日時があれば<br/>入力してください</small>
+                                <Form.Label className="edit_label">イベント日時追加</Form.Label>
+                                <small className="form-text text-muted">
+                                    追加したい日時があれば
+                                    <br />
+                                    入力してください
+                                </small>
                             </Col>
                             <Col sm="9">
                                 <Form.Group as={Row}>
@@ -343,7 +335,7 @@ export const EventEditCard: React.FC = () => {
                                             as="textarea"
                                             rows={12}
                                             onChange={(e) => {
-                                                setEventMemo(e.target.value)
+                                                setEventMemo(e.target.value);
                                             }}
                                             defaultValue={eventNichijiKouho}
                                         />
@@ -367,5 +359,5 @@ export const EventEditCard: React.FC = () => {
                 </Card.Body>
             </Card>
         </>
-    )
-}
+    );
+};
