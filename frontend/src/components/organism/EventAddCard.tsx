@@ -13,6 +13,7 @@ import {Link} from "react-router-dom";
 import {ApiResultToast} from "../molecules/ApiResultToast";
 import { EventName } from '../molecules/EventName';
 import { EventMemo } from '../molecules/EventMemo';
+import { EventNichijiKouho } from '../molecules/EventNichijiKouho';
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -202,18 +203,7 @@ export const EventAddCard: React.FC = () => {
                             <Form.Group as={Col} md="6">
                                 <EventName valueSetter={setEventName}></EventName>
                                 <EventMemo valueSetter={setEventMemo}></EventMemo>
-                                
-                                <Form.Group controlId="formEventNichijiKouho">
-                                    <Form.Label className="hissu">イベント日時候補</Form.Label>
-                                    <Form.Control
-                                        required
-                                        as="textarea"
-                                        rows={5}
-                                        onChange={(e) => {setEventNichijiKouho(e.target.value)}}
-                                        defaultValue={eventNichijiKouho}
-                                    />
-                                    <Form.Control.Feedback>OKです。</Form.Control.Feedback>
-                                </Form.Group>
+                                <EventNichijiKouho value={eventNichijiKouho} valueSetter={setEventNichijiKouho}></EventNichijiKouho>
                             </Form.Group>
                             <Form.Group as={Col} md="6" className="pl-5" controlId="formCalendar">
                                 <Form.Label>※選択するとイベント日時候補欄に日付が追記されます</Form.Label>
