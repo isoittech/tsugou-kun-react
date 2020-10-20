@@ -11,6 +11,7 @@ import {getToday} from "../../libs/common/datetime";
 import {ApiExecutionState, ApiExecutionStateType} from "../../store/moyooshi_api";
 import {Link} from "react-router-dom";
 import {ApiResultToast} from "../molecules/ApiResultToast";
+import { EventName } from '../molecules/EventName';
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -198,16 +199,7 @@ export const EventAddCard: React.FC = () => {
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Row>
                             <Form.Group as={Col} md="6">
-                                <Form.Group controlId="formEventName">
-                                    <Form.Label className="hissu">イベント名</Form.Label>
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="イベント名"
-                                        onChange={(e) => {setEventName(e.target.value)}}
-                                    />
-                                    <Form.Control.Feedback>OKです。</Form.Control.Feedback>
-                                </Form.Group>
+                                <EventName valueSetter={setEventName}></EventName>
                                 <Form.Group controlId="formEventMemo">
                                     <Form.Label>イベントメモ</Form.Label>
                                     <Form.Control
