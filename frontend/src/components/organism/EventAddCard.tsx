@@ -1,19 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {Calendar, DayValue} from 'react-modern-calendar-datepicker';
-import {Alert, Badge, Button, Card, Col, Form, Row, Toast} from 'react-bootstrap';
+import {Badge, Button, Card, Col, Form, Row, Toast} from 'react-bootstrap';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 
 import {moyooshiSlice} from "../../features/moyooshi/moyooshi-slice";
 import {Moyooshi} from "../../features/moyooshi/moyooshi-type";
 import {ValueOf} from "../../libs/common/declare";
-import {getToday} from "../../libs/common/datetime";
 import {ApiExecutionState, ApiExecutionStateType} from "../../store/moyooshi_api";
-import {Link} from "react-router-dom";
 import {ApiResultToast} from "../molecules/ApiResultToast";
 import { EventName } from '../molecules/EventName';
 import { EventMemo } from '../molecules/EventMemo';
 import { EventNichijiKouho } from '../molecules/EventNichijiKouho';
+import { EventNichijiKouhoCalendar } from '../molecules/EventNichijiKouhoCalendar';
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -48,7 +46,6 @@ export const EventAddCard: React.FC = () => {
     // -------------------------------------
     // フォームの値
     // -------------------------------------
-    const [selectedDay, setSelectedDay] = useState<DayValue>(null);
     const [eventName, setEventName] = useState('');
     const [eventNichijiKouho, setEventNichijiKouho] = useState('');
     const [eventMemo, setEventMemo] = useState('');
@@ -172,17 +169,6 @@ export const EventAddCard: React.FC = () => {
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // カレンダー日付クリック時イベントハンドラ
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onSelectedOnCalendar = (newValue: DayValue) => {
-        const {year, month, day} = newValue
-        const printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`
-
-        setSelectedDay(newValue)
-        setEventNichijiKouho(printedDate.trim())
-    }
-
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
@@ -206,13 +192,7 @@ export const EventAddCard: React.FC = () => {
                                 <EventNichijiKouho value={eventNichijiKouho} valueSetter={setEventNichijiKouho}></EventNichijiKouho>
                             </Form.Group>
                             <Form.Group as={Col} md="6" className="pl-5" controlId="formCalendar">
-                                <Form.Label>※選択するとイベント日時候補欄に日付が追記されます</Form.Label>
-                                <Calendar
-                                    value={selectedDay}
-                                    onChange={onSelectedOnCalendar}
-                                    shouldHighlightWeekends
-                                    minimumDate={getToday()}
-                                />
+                                <EventNichijiKouhoCalendar value={eventNichijiKouho} valueSetter={setEventNichijiKouho}></EventNichijiKouhoCalendar>
                             </Form.Group>
                         </Form.Row>
                         <Button type="submit">新規イベントを登録する</Button>
