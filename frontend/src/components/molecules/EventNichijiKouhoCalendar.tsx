@@ -41,7 +41,12 @@ export const EventNichijiKouhoCalendar: React.FC<Props> = ({ value = "", valueSe
     return (
         <>
             <Form.Label>※選択すると日時候補欄に日付が追記されます</Form.Label>
-            <Calendar value={selectedDay} onChange={onSelectedOnCalendar} shouldHighlightWeekends minimumDate={getToday()} />
+            <Calendar
+                value={selectedDay}
+                onChange={onSelectedOnCalendar}
+                shouldHighlightWeekends
+                minimumDate={getToday()}
+            />
         </>
     );
 };

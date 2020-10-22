@@ -24,7 +24,10 @@ export const ApiResultToast: React.FC<Props> = (props) => {
                 <Link id={"schedule_fill_url"} className={"nav-link"} to={`/edit/${props.schedule_update_id}`}>
                     `{location.href}edit/{props.schedule_update_id}`
                 </Link>
-                <OverlayTrigger placement={"bottom"} overlay={<Tooltip id={"tooltip-bottom"}>残念ですがバグがあり、まだ機能しません。</Tooltip>}>
+                <OverlayTrigger
+                    placement={"bottom"}
+                    overlay={<Tooltip id={"tooltip-bottom"}>残念ですがバグがあり、まだ機能しません。</Tooltip>}
+                >
                     <button
                         type="submit"
                         className="btn btn-outline-primary"
@@ -36,7 +39,9 @@ export const ApiResultToast: React.FC<Props> = (props) => {
                             // コピー
                             document.execCommand("copy");
 
-                            alert("コピーできるようにしました。\nメール・チャット等で貼り付けてお知らせに貼り付けてご利用ください。");
+                            alert(
+                                "コピーできるようにしました。\nメール・チャット等で貼り付けてお知らせに貼り付けてご利用ください。"
+                            );
                         }}
                     >
                         URLをクリップボードにコピー
