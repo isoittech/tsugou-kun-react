@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "sourceMap": true,
+
         "target": "es5", // TSはECMAScript 5に変換
         // TSのモジュールはES Modules（es2015）として出力する。
         // これを指定しないと、TypeScriptコードのimport文とexport文がコンパイラによって
@@ -9,8 +10,27 @@
         "module": "es2015",
         // JSXの書式を有効に設定
         "jsx": "react",
+        // 相対パスではないモジュールは node_modules 配下を検索する
         "moduleResolution": "node",
         "lib": ["es2020", "dom"],
         "allowSyntheticDefaultImports": true
+        // トランスパイルを Babelが行う場合、`tsc`コマンドでJavaScriptファイルを出力しないようにする
+        // "noEmit": true
+
+        // 厳格な型チェックオプション（noImplicitAny、noImplicitThis、alwaysStrict、
+        // strictBindCallApply、strictNullChecks、strictFunctionTypes、
+        // strictPropertyInitialization）を有効化する
+        // "strict": true
+
+        // 各ファイルを個々のモジュールとしてトランスパイルする。
+        //   Babel では技術的制約で、ネームスペースなどのファイルを跨いだ構文を解釈してトランスパイルできない。
+        //   このオプションを有効にすれば、Babel でトランスパイルできない TypeScriptの構文を検出して警告を出す
+        // "isolatedModules": true
+
+        // ES modules 形式以外の、CommonJS 形式などのモジュールを default import 形式で読み込める
+        //   例）const module = require('module') -> import module from 'module'
+        // "esModuleInterop": true
     }
+    // "include": ["src"],
+    // "exclude": ["node_modules"]
 }

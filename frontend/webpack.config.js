@@ -22,8 +22,11 @@ module.exports = {
             {
                 // 拡張子 .ts もしくは .tsx の場合
                 test: /\.tsx?$/,
+                // test: [/\.ts$/, /\.tsx$/, /\.js$/],
                 // TypeScript をコンパイルする
+                // loader: ["babel-loader", "ts-loader"],
                 use: "ts-loader",
+                // exclude: `${__dirname}/node_modules`,
             },
             {
                 test: /\.css/,
@@ -44,6 +47,7 @@ module.exports = {
 
     // import 文で .ts や .tsx ファイルを解決するため
     resolve: {
+        // modules: [path.resolve(__dirname, "src"), path.resolve(__dirname, "node_modules")],
         extensions: [".ts", ".tsx", ".js", ".json"],
     },
 
@@ -53,5 +57,14 @@ module.exports = {
         historyApiFallback: true,
     },
 
-    devtool: "inline-source-map",
+    // developmentモードにおいてコンスパイル後リソースにオリジナルソースを含め、デバッグ効率化を図る指定
+    // https://webpack.js.org/configuration/devtool/
+    devtool: "inline-source-map", // build:slowest,  rebuild:slowest
+    // devtool: "eval-source-map", // build:slowest,  rebuild:fast
+    //
+    // developmentモードｘdevtool指定の場合、バンドルファイルサイズが異なる。
+    // developmentモードｘdevtool指定：数MB
+    // developmentモードｘdevtool指定なし：2MB
+    //  ※デバッグ時、見にくいコードになる。余計な文字列が変数名・関数名に付く。
+    // productionモード：500KB
 };

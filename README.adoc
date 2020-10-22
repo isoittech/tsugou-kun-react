@@ -135,6 +135,28 @@ $ npm start
 * 全体的な動作の保証のために、自動化された E2E テストを正常系に限って行う。
 
 
+=== ▼Webpack
+[%hardbreaks]
+webpack.config.js上におけるモードの切替・設定値によりリビルド速度やバンドルファイルサイズに差がでる。
+参考： https://webpack.js.org/configuration/devtool/
+
+[%hardbreaks]
+◎速度
+・devtool: "inline-source-map"
+　-> build:slowest,  rebuild:slowest
+・devtool: "eval-source-map"
+　-> build:slowest,  rebuild:fast
+
+[%hardbreaks]
+◎バンドルファイルサイズ
+・developmentモードｘdevtool指定
+　-> 数 [MB]
+・developmentモードｘdevtool指定なし
+　-> 2 [MB]
+　　※デバッグ時、見にくいコードになる。余計な文字列が変数名・関数名に付く。
+・productionモード
+　-> 500 [KB]
+
 
 == ■開発者用メモ
 
