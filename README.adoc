@@ -39,6 +39,26 @@ $ npm start
 
 == ■今後の開発用メモ
 
+=== ▼Hooks
+==== ◎useMemo
+関数の実行結果をメモ化（コンポーネント外に記憶）する。
+
+==== ◎useCallback
+関数定義そのものをメモ化する。
+
+==== ◎useRef
+[%hardbreaks]
+マウント時にuseRefで生成したRefオブジェクトを、そのまま使い続ける。
+このRefオブジェクトは、コンポーネントがアンマウントされるまで存在し続ける。
+[%hardbreaks]
+Refオブジェクトは最初からcurrentというプロパティを持っており、
+useRefに渡した引数がcurrentプロパティの初期値となる。
+引数を渡さなかった場合はundefinedが初期値になる。
+そしてcurrentは、自由に書き換えることが出来る。
+[%hardbreaks]
+アンマウントされるまで存在し続けること、自由に書き換えることが出来ること、これがRefオブジェクトの特徴
+関数コンポーネントを再レンダーした際に、前回のレンダー時のデータを取得することが可能ということを意味する。
+
 === ▼コンポーネント分類
 ==== ◎Presentational Component
 * 見た目を担当するコンポーネント
@@ -303,9 +323,11 @@ https://qiita.com/tashxii/items/0515f00ec641d52f879b[React+Redux+APIサーバー
 === ▼参照資料
 
 * https://qiita.com/pochopocho13/items/79a4735031ce11a91df7[Node+TypeScript+ExpressでAPIサーバ構築]
-* https://ics.media/entry/16329/[最新版TypeScript+webpack 4の環境構築まとめ(React, Vue.js, Three.jsのサンプル付き)]
+* https://ics.media/entry/16329/[最新版TypeScript+webpack 4の環境構築まとめ(React, Vue.js, Three.jsのサンプル付き]]
 * https://qiita.com/niyou0ct/items/cc09ed42a6a51cf2a8b1[ReactでAPI処理はredux-sagaを使うのがオススメ！]
 * https://qiita.com/pullphone/items/fdb0f36d8b4e5c0ae893[ざっくり React & Redux with TypeScript]
-* https://qiita.com/kuy/items/716affc808ebb3e1e8ac[★redux-sagaで非同期処理と戦う]
+* https://qiita.com/kuy/items/716affc808ebb3e1e8ac[redux-sagaで非同期処理と戦う]
 * https://www.hypertextcandy.com/react-error-handling[Reactアプリにおける非同期通信エラー処理の実装案]
 * https://blog.capilano-fw.com/?p=5582[保存版！「sequelize」モデルの使い方実例・全59件]
+* https://numb86-tech.hatenablog.com/entry/2019/12/05/111342[React Ref の基本]
+* https://numb86-tech.hatenablog.com/entry/2019/12/06/122217[forwardRef と useImperativeHandle]

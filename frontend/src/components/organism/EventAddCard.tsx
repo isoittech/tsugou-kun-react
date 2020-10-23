@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, ElementRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Badge, Button, Card, Col, Form, Row, Toast } from "react-bootstrap";
+import { DayValue } from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { moyooshiSlice } from "../../features/moyooshi/moyooshi-slice";
@@ -41,15 +42,20 @@ export const EventAddCard: React.FC = () => {
     // コンポーネントのState
     // ========================================================
     // -------------------------------------
-    // バリデーション関係
-    // -------------------------------------
-    const [validated, setValidated] = useState(false);
-    // -------------------------------------
     // フォームの値
     // -------------------------------------
     const [eventName, setEventName] = useState("");
     const [eventNichijiKouho, setEventNichijiKouho] = useState("");
     const [eventMemo, setEventMemo] = useState("");
+    // const [clickedAtCalendar, setClickedAtCalendar] = useState<DayValue>();
+
+    // -------------------------------------
+    // バリデーション関係
+    // -------------------------------------
+    const [validated, setValidated] = useState(false);
+    const [eventNameIsValid, setEventNameIsValid] = useState(false);
+    const [eventNichijiKouhoIsValid, setEventNichijiKouhoIsValid] = useState(false);
+
     // -------------------------------------
     // Toast表示関係（登録完了のお知らせToast）
     // -------------------------------------
@@ -64,13 +70,60 @@ export const EventAddCard: React.FC = () => {
     const dispatch = useDispatch();
 
     // ========================================================
+    // その他
+    // ========================================================
+    // -------------------------------------
+    // Ref
+    // -------------------------------------
+    const textArefRef: any = useRef<ElementRef<typeof EventNichijiKouho>>(null);
+
+    // ========================================================
     // 再レンダリング完了ごとの処理定義
     // ========================================================
     useEffect(() => {
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-        // 初期表示に起動
+        // レンダリング初回にのみ起動
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        // textArefRef.current.focus();
+        // textArefRef.current.onChange(); // 呼べない
+        // textArefRef.current.test("test"); // 呼べた
     }, []);
+
+    useEffect(() => {
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        // 子コンポーネントの入力値検証結果変更時に起動
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        setValidated(eventNameIsValid && eventNichijiKouhoIsValid);
+    }, [eventNameIsValid, eventNichijiKouhoIsValid]);
+
+    // useEffect(() => {
+    //     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    //     // カレンダーがクリックされた時に起動
+    //     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    //     if (clickedAtCalendar) {
+    //         const { year, month, day } = clickedAtCalendar;
+
+    //         let printedDate = null;
+    //         if (eventNichijiKouho) printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
+    //         else printedDate = `${year}/${month}/${day} 19:00～`;
+
+    //         // (1)
+    //         // 下記処理にてイベント日時候補テキストエリアの内容を変化させている。
+    //         // そのため、当該フォームのonChangeハンドラが起動されることを期待したがダメらしい。
+    //         // https://qiita.com/ayato077/items/a7c82a7f62b533fe45c2
+    //         // setEventNichijiKouho(printedDate);
+
+    //         // (2)
+    //         // なので代わりにDOM操作を行って手動（？）でイベント発火させる。
+    //         // const domEvent = new Event("change");
+    //         // const txtAreaNichijiKouho = document.getElementById("formEventNichijiKouho");
+    //         // txtAreaNichijiKouho.dispatchEvent(domEvent);
+    //         // -> 上記の試みではだめだった。
+
+    //         // (1)と(2)でだめだったので、下記で同時にやる。
+    //         textArefRef.current.onChangeInTextarea(printedDate);
+    //     }
+    // }, [clickedAtCalendar]);
 
     useEffect(() => {
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -126,6 +179,33 @@ export const EventAddCard: React.FC = () => {
     }, [moyooshiAddApiSucceeded]);
     // });
 
+    const onCalendarClick = (dateAtClicked: DayValue) => {
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        // カレンダーがクリックされた時に起動
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        const { year, month, day } = dateAtClicked;
+
+        let printedDate = null;
+        if (eventNichijiKouho) printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
+        else printedDate = `${year}/${month}/${day} 19:00～`;
+
+        // (1)
+        // 下記処理にてイベント日時候補テキストエリアの内容を変化させている。
+        // そのため、当該フォームのonChangeハンドラが起動されることを期待したがダメらしい。
+        // https://qiita.com/ayato077/items/a7c82a7f62b533fe45c2
+        // setEventNichijiKouho(printedDate);
+
+        // (2)
+        // なので代わりにDOM操作を行って手動（？）でイベント発火させる。
+        // const domEvent = new Event("change");
+        // const txtAreaNichijiKouho = document.getElementById("formEventNichijiKouho");
+        // txtAreaNichijiKouho.dispatchEvent(domEvent);
+        // -> 上記の試みではだめだった。
+
+        // (1)と(2)でだめだったので、下記で同時にやる。
+        textArefRef.current.onChangeInTextarea(printedDate);
+    };
+
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 送信ボタンクリックイベントハンドラ
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -177,18 +257,28 @@ export const EventAddCard: React.FC = () => {
 
             <Card className={"mt-5 shadow rounded"}>
                 <Card.Body>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                    <Form noValidate onSubmit={handleSubmit}>
                         <Form.Row>
                             <Form.Group as={Col} md="6">
-                                <EventName valueSetter={setEventName}></EventName>
+                                <EventName
+                                    valueSetter={setEventName}
+                                    validStatusSetter={setEventNameIsValid}
+                                ></EventName>
                                 <EventMemo valueSetter={setEventMemo}></EventMemo>
-                                <EventNichijiKouho value={eventNichijiKouho} valueSetter={setEventNichijiKouho}></EventNichijiKouho>
+                                <EventNichijiKouho
+                                    value={eventNichijiKouho}
+                                    valueSetter={setEventNichijiKouho}
+                                    validStatusSetter={setEventNichijiKouhoIsValid}
+                                    ref={textArefRef}
+                                ></EventNichijiKouho>
                             </Form.Group>
                             <Form.Group as={Col} md="6" className="pl-5" controlId="formCalendar">
-                                <EventNichijiKouhoCalendar value={eventNichijiKouho} valueSetter={setEventNichijiKouho}></EventNichijiKouhoCalendar>
+                                <EventNichijiKouhoCalendar clickedHandler={onCalendarClick}></EventNichijiKouhoCalendar>
                             </Form.Group>
                         </Form.Row>
-                        <Button type="submit">新規イベントを登録する</Button>
+                        <Button type="submit" disabled={!validated}>
+                            新規イベントを登録する
+                        </Button>
                     </Form>
                 </Card.Body>
             </Card>
