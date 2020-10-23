@@ -13,7 +13,7 @@ type Props = {
 // イベント日時候補編集フォーム（新規追加）
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-const EventNichijiKouho_: React.FC<Props> = ({ value = "", valueSetter, validStatusSetter }, ref: any) => {
+const EventNichijiKouhoNoRef: React.FC<Props> = ({ value = "", valueSetter, validStatusSetter }, ref: any) => {
     // ========================================================
     // コンポーネントのState
     // ========================================================
@@ -62,8 +62,9 @@ const EventNichijiKouho_: React.FC<Props> = ({ value = "", valueSetter, validSta
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
-        // 親コンポーネントからtextareaタグのonChangeハンドラを呼び出そうとするも、
-        // 色々試した結果ダメで、結果的に生
+        // React Bootstrapライブラリを使用した場合、意図通りにならなかったため、標準HTMLで書いた。
+        // 不具合ポイント：テキストエリアに手入力した内容があった場合に、カレンダー入力の値が反映されない
+        //
         // <Form.Group controlId="formEventNichijiKouho">
         //     <Form.Label className="hissu">イベント日時候補</Form.Label>
         //     <Form.Control
@@ -73,13 +74,9 @@ const EventNichijiKouho_: React.FC<Props> = ({ value = "", valueSetter, validSta
         //         isValid={touched ? valid : false}
         //         isInvalid={touched ? !valid : false}
         //         onChange={(e) => {
-        //             valueSetter(e.target.value);
-        //             setTouched(true);
-        //             setValid(e.target.value !== "");
-        //             validStatusSetter(e.target.value !== "");
+        //             onChangeInTextarea(e.target.value);
         //         }}
         //         defaultValue={value}
-        //         ref={textArefRef}
         //     />
         //     <Form.Control.Feedback type="valid">OK</Form.Control.Feedback>
         //     <Form.Control.Feedback type="invalid">必須です。入力してください。</Form.Control.Feedback>
@@ -107,5 +104,5 @@ const EventNichijiKouho_: React.FC<Props> = ({ value = "", valueSetter, validSta
 };
 
 export const EventNichijiKouho = forwardRef(
-    EventNichijiKouho_ as React.ForwardRefRenderFunction<HTMLTextAreaElement, Props>
+    EventNichijiKouhoNoRef as React.ForwardRefRenderFunction<HTMLTextAreaElement, Props>
 );

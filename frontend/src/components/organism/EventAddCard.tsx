@@ -96,35 +96,6 @@ export const EventAddCard: React.FC = () => {
         setValidated(eventNameIsValid && eventNichijiKouhoIsValid);
     }, [eventNameIsValid, eventNichijiKouhoIsValid]);
 
-    // useEffect(() => {
-    //     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    //     // カレンダーがクリックされた時に起動
-    //     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    //     if (clickedAtCalendar) {
-    //         const { year, month, day } = clickedAtCalendar;
-
-    //         let printedDate = null;
-    //         if (eventNichijiKouho) printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
-    //         else printedDate = `${year}/${month}/${day} 19:00～`;
-
-    //         // (1)
-    //         // 下記処理にてイベント日時候補テキストエリアの内容を変化させている。
-    //         // そのため、当該フォームのonChangeハンドラが起動されることを期待したがダメらしい。
-    //         // https://qiita.com/ayato077/items/a7c82a7f62b533fe45c2
-    //         // setEventNichijiKouho(printedDate);
-
-    //         // (2)
-    //         // なので代わりにDOM操作を行って手動（？）でイベント発火させる。
-    //         // const domEvent = new Event("change");
-    //         // const txtAreaNichijiKouho = document.getElementById("formEventNichijiKouho");
-    //         // txtAreaNichijiKouho.dispatchEvent(domEvent);
-    //         // -> 上記の試みではだめだった。
-
-    //         // (1)と(2)でだめだったので、下記で同時にやる。
-    //         textArefRef.current.onChangeInTextarea(printedDate);
-    //     }
-    // }, [clickedAtCalendar]);
-
     useEffect(() => {
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
         // API（イベント新規登録）実行時起動関数
@@ -202,7 +173,7 @@ export const EventAddCard: React.FC = () => {
         // txtAreaNichijiKouho.dispatchEvent(domEvent);
         // -> 上記の試みではだめだった。
 
-        // (1)と(2)でだめだったので、下記で同時にやる。
+        // (1)と(2)の組み合わせでだめだったので、下記で同時にやる。
         textArefRef.current.onChangeInTextarea(printedDate);
     };
 
