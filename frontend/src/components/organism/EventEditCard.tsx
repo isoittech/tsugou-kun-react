@@ -11,6 +11,7 @@ import { getToday } from "../../libs/common/datetime";
 import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_api";
 import { useParams } from "react-router";
 import { ApiResultToast } from "../molecules/ApiResultToast";
+import { EventName } from "../molecules/EventName";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -41,10 +42,6 @@ export const EventEditCard: React.FC = () => {
     // コンポーネントのState
     // ========================================================
     // -------------------------------------
-    // バリデーション関係
-    // -------------------------------------
-    const [validated, setValidated] = useState(false);
-    // -------------------------------------
     // フォームの値
     // -------------------------------------
     const [selectedDay, setSelectedDay] = useState<DayValue>(null);
@@ -57,6 +54,12 @@ export const EventEditCard: React.FC = () => {
     };
     const [eventNichijiKouhoDeleteTargets, setEventNichijiKouhoDeleteTargets] = useState<NichijiData[]>([]);
     const [eventNichijiKouhoDeleteTargetChecks, setEventNichijiKouhoDeleteTargetChecks] = useState({});
+
+    // -------------------------------------
+    // バリデーション関係
+    // -------------------------------------
+    const [validated, setValidated] = useState(false);
+    const [eventNameIsValid, setEventNameIsValid] = useState(false);
 
     // -------------------------------------
     // Toast表示関係（登録完了のお知らせToast）
@@ -213,7 +216,7 @@ export const EventEditCard: React.FC = () => {
             memo: eventMemo,
             nichiji_kouho: eventNichijiKouhoArray,
             deleted_nichiji_kouho: eventNichijiKouhoDeleteTargetChecks,
-            schedule_update_id: schedule_update_id,
+            schedule_update_id,
         };
         dispatch(moyooshiSlice.actions.updated(updatedMoyooshi));
     };
@@ -233,7 +236,7 @@ export const EventEditCard: React.FC = () => {
     // 削除対象イベント日時候補のチェックボックスの状態に変化があったら起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const onChangeOnCheckbox = (e) => {
-        //checkedItemsのstateをセット
+        // checkedItemsのstateをセット
         setEventNichijiKouhoDeleteTargetChecks({
             ...eventNichijiKouhoDeleteTargetChecks,
             [e.target.id]: e.target.checked,
@@ -257,23 +260,12 @@ export const EventEditCard: React.FC = () => {
             <Card className={"mt-5 shadow rounded"}>
                 <Card.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group as={Row} className={"mt-3"}>
-                            <Form.Label column sm="3" className="hissu edit_label">
-                                イベント名
-                            </Form.Label>
-                            <Col sm="9">
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="イベント名"
-                                    onChange={(e) => {
-                                        setEventName(e.target.value);
-                                    }}
-                                    defaultValue={eventName}
-                                />
-                                <Form.Control.Feedback>OKです。</Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
+                        <EventName
+                            value={eventName}
+                            displayMode={2}
+                            valueSetter={setEventName}
+                            validStatusSetter={setEventNameIsValid}
+                        ></EventName>
                         <Form.Group as={Row} className={"mt-5"}>
                             <Form.Label column sm="3" className="edit_label">
                                 イベントメモ

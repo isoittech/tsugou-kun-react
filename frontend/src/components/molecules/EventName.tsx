@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 type Props = {
+    value?: string;
     valueSetter: (value: string) => void;
     validStatusSetter: (flg: boolean) => void;
+    displayMode?: number;
 };
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-// イベント名編集フォーム（新規追加）
+// イベント名編集フォーム部品
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-export const EventName: React.FC<Props> = ({ valueSetter, validStatusSetter }) => {
+const EventNameForm: React.FC<Props> = ({ valueSetter, validStatusSetter, displayMode = 1, value = "" }) => {
     // ========================================================
     // コンポーネントのState
     // ========================================================
@@ -29,18 +31,11 @@ export const EventName: React.FC<Props> = ({ valueSetter, validStatusSetter }) =
     // フォームにaが入力されてonChangeハンドラが終わったあと、下記行が実行される。その時にはvalidにtrueが入っている。
     const [valid, setValid] = useState(false);
 
-    // ↑の観察の結果分かるのは、useState由来のハンドラがonChange内で実行されても、すぐにStateに反映されるわけではない。
-
-    // 最初はinvalid
-    // 文字が入力されたらvalid
-    // 文字がなくなったらinvalid
-
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
-        <Form.Group controlId="formEventName">
-            <Form.Label className="hissu">イベント名</Form.Label>
+        <>
             <Form.Control
                 required
                 type="text"
@@ -53,9 +48,41 @@ export const EventName: React.FC<Props> = ({ valueSetter, validStatusSetter }) =
                     setValid(e.target.value !== "");
                     validStatusSetter(e.target.value !== "");
                 }}
+                defaultValue={value}
             />
             <Form.Control.Feedback type="valid">OK</Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">必須です。入力してください。</Form.Control.Feedback>
-        </Form.Group>
+        </>
+    );
+};
+
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// イベント名編集フォーム
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+export const EventName: React.FC<Props> = ({ displayMode = 1, ...props }: Props) => {
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // レンダー
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    return (
+        <>
+            {displayMode === 1 && (
+                <Form.Group controlId="formEventName">
+                    <Form.Label className="hissu">イベント名</Form.Label>
+                    <EventNameForm {...props}></EventNameForm>
+                </Form.Group>
+            )}
+            {displayMode === 2 && (
+                <Form.Group as={Row} className={"mt-3"}>
+                    <Form.Label column sm="3" className="hissu edit_label">
+                        イベント名
+                    </Form.Label>
+                    <Col sm="9">
+                        <EventNameForm {...props}></EventNameForm>
+                    </Col>
+                </Form.Group>
+            )}
+        </>
     );
 };
