@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, ElementRef } from "react";
+import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { Calendar, DayValue } from "react-modern-calendar-datepicker";
+import { DayValue } from "react-modern-calendar-datepicker";
 import { Badge, Button, Card, Col, Form, Row, Toast } from "react-bootstrap";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { moyooshiSlice } from "../../features/moyooshi/moyooshi-slice";
 import { Moyooshi } from "../../features/moyooshi/moyooshi-type";
 import { ValueOf } from "../../libs/common/declare";
-import { getToday } from "../../libs/common/datetime";
 import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_api";
-import { useParams } from "react-router";
 import { ApiResultToast } from "../molecules/ApiResultToast";
 import { EventName } from "../molecules/EventName";
 import { EventMemo } from "../molecules/EventMemo";
+import { EventNichijiKouhoCalendar } from "../molecules/EventNichijiKouhoCalendar";
+import { EventNichijiKouho } from "../molecules/EventNichijiKouho";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -74,6 +75,14 @@ export const EventEditCard: React.FC = () => {
     // Action dispatcher
     // ========================================================
     const dispatch = useDispatch();
+
+    // ========================================================
+    // その他
+    // ========================================================
+    // -------------------------------------
+    // Ref
+    // -------------------------------------
+    const textArefRef: any = useRef<ElementRef<typeof EventNichijiKouho>>(null);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 初回レンダリング時起動関数
@@ -222,15 +231,31 @@ export const EventEditCard: React.FC = () => {
         dispatch(moyooshiSlice.actions.updated(updatedMoyooshi));
     };
 
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // カレンダー日付クリック時イベントハンドラ
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onSelectedOnCalendar = (newValue: DayValue) => {
-        const { year, month, day } = newValue;
-        const printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
+    const onCalendarClick = (dateAtClicked: DayValue) => {
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        // カレンダーがクリックされた時に起動
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        const { year, month, day } = dateAtClicked;
 
-        setSelectedDay(newValue);
-        setEventNichijiKouho(printedDate.trim());
+        let printedDate = null;
+        if (eventNichijiKouho) printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
+        else printedDate = `${year}/${month}/${day} 19:00～`;
+
+        // (1)
+        // 下記処理にてイベント日時候補テキストエリアの内容を変化させている。
+        // そのため、当該フォームのonChangeハンドラが起動されることを期待したがダメらしい。
+        // https://qiita.com/ayato077/items/a7c82a7f62b533fe45c2
+        // setEventNichijiKouho(printedDate);
+
+        // (2)
+        // なので代わりにDOM操作を行って手動（？）でイベント発火させる。
+        // const domEvent = new Event("change");
+        // const txtAreaNichijiKouho = document.getElementById("formEventNichijiKouho");
+        // txtAreaNichijiKouho.dispatchEvent(domEvent);
+        // -> 上記の試みではだめだった。
+
+        // (1)と(2)の組み合わせでだめだったので、下記で同時にやる。
+        textArefRef.current.onChangeInTextarea(printedDate);
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -319,12 +344,9 @@ export const EventEditCard: React.FC = () => {
                                         />
                                     </Col>
                                     <Col sm="6">
-                                        <Calendar
-                                            value={selectedDay}
-                                            onChange={onSelectedOnCalendar}
-                                            shouldHighlightWeekends
-                                            minimumDate={getToday()}
-                                        />
+                                        <EventNichijiKouhoCalendar
+                                            clickedHandler={onCalendarClick}
+                                        ></EventNichijiKouhoCalendar>
                                     </Col>
                                 </Form.Group>
                             </Col>

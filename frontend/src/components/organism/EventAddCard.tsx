@@ -244,6 +244,7 @@ export const EventAddCard: React.FC = () => {
                                 ></EventNichijiKouho>
                             </Form.Group>
                             <Form.Group as={Col} md="6" className="pl-5" controlId="formCalendar">
+                                <Form.Label>※選択すると日時候補欄に日付が追記されます</Form.Label>
                                 <EventNichijiKouhoCalendar clickedHandler={onCalendarClick}></EventNichijiKouhoCalendar>
                             </Form.Group>
                         </Form.Row>
