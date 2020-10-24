@@ -12,6 +12,7 @@ import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_a
 import { useParams } from "react-router";
 import { ApiResultToast } from "../molecules/ApiResultToast";
 import { EventName } from "../molecules/EventName";
+import { EventMemo } from "../molecules/EventMemo";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -266,22 +267,7 @@ export const EventEditCard: React.FC = () => {
                             valueSetter={setEventName}
                             validStatusSetter={setEventNameIsValid}
                         ></EventName>
-                        <Form.Group as={Row} className={"mt-5"}>
-                            <Form.Label column sm="3" className="edit_label">
-                                イベントメモ
-                            </Form.Label>
-                            <Col sm="9">
-                                <Form.Control
-                                    as="textarea"
-                                    rows={5}
-                                    onChange={(e) => {
-                                        setEventMemo(e.target.value);
-                                    }}
-                                    defaultValue={eventMemo}
-                                />
-                                <Form.Control.Feedback>OKです。</Form.Control.Feedback>
-                            </Col>
-                        </Form.Group>
+                        <EventMemo value={eventMemo} displayMode={2} valueSetter={setEventMemo}></EventMemo>
 
                         <Form.Group as={Row} className={"mt-5"}>
                             <Col sm="3">
