@@ -1,10 +1,9 @@
-import {Transaction} from "sequelize/types/lib/transaction";
+import { Transaction } from "sequelize/types/lib/transaction";
 // @ts-ignore
-import models from '../models'
-import * as endecode from '../helper/endecode'
+import models from "../models";
+import * as endecode from "../helper/endecode";
 
-const db = require('../models/index');
-
+const db = require("../models/index");
 
 export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Promise<MoyooshiServiceOutputDto> => {
     const t = await db.sequelize.transaction();
@@ -18,17 +17,14 @@ export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Pr
         // ===================================================
         const moyooshiModel = {
             name: moyooshiServiceDto.name,
-            memo: moyooshiServiceDto.memo
+            memo: moyooshiServiceDto.memo,
         } as models.Moyooshi;
 
         // ===================================================
         // 保存処理 #1
         // ※2つに分けている理由：新規登録の場合、一旦保存しないとPKが採番されないため。
         // ===================================================
-        const addedMoyooshi: models.Moyooshi = await models.Moyooshi.create(
-            moyooshiModel,
-            {transaction: t}
-        );
+        const addedMoyooshi: models.Moyooshi = await models.Moyooshi.create(moyooshiModel, { transaction: t });
 
         // ===================================================
         // 保存対象データ設定処理
@@ -37,13 +33,13 @@ export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Pr
         // イベント
         // ------------------------
         // スケジュール更新ページID
-        const scheduleUpdateId: string = endecode.createScheduleUpdateId(addedMoyooshi.id)
-        addedMoyooshi.schedule_update_id = scheduleUpdateId
+        const scheduleUpdateId: string = endecode.createScheduleUpdateId(addedMoyooshi.id);
+        addedMoyooshi.schedule_update_id = scheduleUpdateId;
 
         // ------------------------
         // イベント日時候補
         // ------------------------
-        const addedMoyooshiKouhoNichijis: models.MoyooshiKouhoNichiji[] = []
+        const addedMoyooshiKouhoNichijis: models.MoyooshiKouhoNichiji[] = [];
         moyooshiServiceDto.nichiji_kouho.forEach((nichiji_kouho_elm) => {
             const moyooshiKouhoNichiji = {
                 kouho_nichiji: nichiji_kouho_elm,
@@ -57,10 +53,7 @@ export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Pr
         // 保存処理 #2
         // ===================================================
         if (addedMoyooshiKouhoNichijis.length != 0) {
-            await models.MoyooshiKouhoNichiji.bulkCreate(
-                addedMoyooshiKouhoNichijis,
-                {transaction: t}
-            );
+            await models.MoyooshiKouhoNichiji.bulkCreate(addedMoyooshiKouhoNichijis, { transaction: t });
         }
         // await addedMoyooshi.save();
 
@@ -71,23 +64,23 @@ export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Pr
         // ===================================================
         return {
             added_moyooshi: addedMoyooshi,
-            schedule_update_id: scheduleUpdateId
+            schedule_update_id: scheduleUpdateId,
         } as MoyooshiServiceOutputDto;
-
     } catch (error) {
         await t.rollback();
-        console.log(`[ERROR]createMoyooshiでエラーが発生。${JSON.stringify(error)}`)
+        console.log(`[ERROR]createMoyooshiでエラーが発生。${JSON.stringify(error)}`);
 
         return {
             error_name: error.name,
             error_message: error.message,
         } as MoyooshiServiceOutputDto;
-
     }
 };
 
-
-export const updateMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto, scheduleUpdateId: string): Promise<MoyooshiServiceOutputDto> => {
+export const updateMoyooshi = async (
+    moyooshiServiceDto: MoyooshiServiceDto,
+    scheduleUpdateId: string
+): Promise<MoyooshiServiceOutputDto> => {
     const t = await db.sequelize.transaction();
 
     try {
@@ -100,7 +93,7 @@ export const updateMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto, sch
         const moyooshiModel = {
             id: moyooshiServiceDto.id,
             name: moyooshiServiceDto.name,
-            memo: moyooshiServiceDto.memo
+            memo: moyooshiServiceDto.memo,
         } as models.Moyooshi;
 
         // ------------------------
@@ -109,15 +102,15 @@ export const updateMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto, sch
         const deleteTargetInfos = moyooshiServiceDto.deleted_nichiji_kouho;
         const deleteTargetIds: number[] = [];
         for (const [key, value] of Object.entries(deleteTargetInfos)) {
-            if(key.startsWith('id_del_eve_dt_kouho_id_') && value){
-                deleteTargetIds.push(Number(key.replace('id_del_eve_dt_kouho_id_','')))
+            if (key.startsWith("id_del_eve_dt_kouho_id_") && value) {
+                deleteTargetIds.push(Number(key.replace("id_del_eve_dt_kouho_id_", "")));
             }
         }
 
         // ------------------------
         // 追加対象イベント日時候補
         // ------------------------
-        const addedMoyooshiKouhoNichijis: models.MoyooshiKouhoNichiji[] = []
+        const addedMoyooshiKouhoNichijis: models.MoyooshiKouhoNichiji[] = [];
         moyooshiServiceDto.nichiji_kouho.forEach((nichiji_kouho_elm) => {
             const moyooshiKouhoNichiji = {
                 kouho_nichiji: nichiji_kouho_elm,
@@ -126,7 +119,6 @@ export const updateMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto, sch
             } as models.MoyooshiKouhoNichiji;
             addedMoyooshiKouhoNichijis.push(moyooshiKouhoNichiji);
         });
-
 
         // ===================================================
         // 保存処理
@@ -137,32 +129,29 @@ export const updateMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto, sch
         // ※この後のイベント日時レコード追加前に掃除
         // ------------------------
         if (deleteTargetIds.length != 0) {
-            await models.MoyooshiKouhoNichiji.destroy({
-                where: {
-                    id: deleteTargetIds
-                }
-            }, {transaction: t});
+            await models.MoyooshiKouhoNichiji.destroy(
+                {
+                    where: {
+                        id: deleteTargetIds,
+                    },
+                },
+                { transaction: t }
+            );
         }
 
         // ------------------------
         // イベント
         // ------------------------
-        await models.Moyooshi.update(
-            moyooshiModel,
-            {
-                where: {id : moyooshiModel.id},
-                transaction: t
-            }
-        )
+        await models.Moyooshi.update(moyooshiModel, {
+            where: { id: moyooshiModel.id },
+            transaction: t,
+        });
 
         // ------------------------
         // イベント日時候補
         // ------------------------
         if (addedMoyooshiKouhoNichijis.length != 0) {
-            await models.MoyooshiKouhoNichiji.bulkCreate(
-                addedMoyooshiKouhoNichijis,
-                {transaction: t}
-            );
+            await models.MoyooshiKouhoNichiji.bulkCreate(addedMoyooshiKouhoNichijis, { transaction: t });
         }
 
         await t.commit();
@@ -172,24 +161,20 @@ export const updateMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto, sch
         // ===================================================
         return {
             added_moyooshi: moyooshiModel,
-            schedule_update_id: scheduleUpdateId
+            schedule_update_id: scheduleUpdateId,
         } as MoyooshiServiceOutputDto;
-
     } catch (error) {
         await t.rollback();
-        console.log(`[ERROR]updateMoyooshiでエラーが発生。${JSON.stringify(error)}`)
+        console.log(`[ERROR]updateMoyooshiでエラーが発生。${JSON.stringify(error)}`);
 
         return {
             error_name: error.name,
             error_message: error.message,
         } as MoyooshiServiceOutputDto;
-
     }
 };
 
-
 export const readMoyooshi = async (moyooshiId: number): Promise<MoyooshiReadServiceOutputDto> => {
-
     try {
         // ===================================================
         // DBデータ取得
@@ -202,13 +187,9 @@ export const readMoyooshi = async (moyooshiId: number): Promise<MoyooshiReadServ
         // ※同時取得
         // ------------------------
 
-        const moyooshi: models.Moyooshi = await models.Moyooshi.findByPk(moyooshiId,
-            {
-                include: [
-                    {model: models.MoyooshiKouhoNichiji}
-                ]
-            }
-        );
+        const moyooshi: models.Moyooshi = await models.Moyooshi.findByPk(moyooshiId, {
+            include: [{ model: models.MoyooshiKouhoNichiji }],
+        });
 
         // ===================================================
         // 終了処理
@@ -216,36 +197,33 @@ export const readMoyooshi = async (moyooshiId: number): Promise<MoyooshiReadServ
         return {
             read_moyooshi: moyooshi,
         } as MoyooshiReadServiceOutputDto;
-
     } catch (error) {
-        console.log(`[ERROR]readMoyooshiでエラーが発生。${JSON.stringify(error)}`)
+        console.log(`[ERROR]readMoyooshiでエラーが発生。${JSON.stringify(error)}`);
 
         return {
             error_name: error.name,
             error_message: error.message,
         } as MoyooshiReadServiceOutputDto;
-
     }
-
 };
 
 export type MoyooshiServiceDto = {
-    id?: number,
-    name: string,
-    memo?: string,
-    nichiji_kouho: string[],
+    id?: number;
+    name: string;
+    memo?: string;
+    nichiji_kouho: string[];
     deleted_nichiji_kouho?: any /*{ [key: string]: boolean }*/; // TODO anyから相応しい型に直す
 };
 
 export type MoyooshiServiceOutputDto = {
-    added_moyooshi?: models.Moyooshi,
-    error_name?: string,
-    error_message?: string,
-    schedule_update_id?: string,
+    added_moyooshi?: models.Moyooshi;
+    error_name?: string;
+    error_message?: string;
+    schedule_update_id?: string;
 };
 
 export type MoyooshiReadServiceOutputDto = {
-    read_moyooshi?: models.Moyooshi,
-    error_name?: string,
-    error_message?: string,
+    read_moyooshi?: models.Moyooshi;
+    error_name?: string;
+    error_message?: string;
 };
