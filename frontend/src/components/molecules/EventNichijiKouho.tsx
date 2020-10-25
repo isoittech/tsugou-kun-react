@@ -131,9 +131,9 @@ const EventNichijiKouhoNoRef: React.FC<Props> = (
                                         value={value}
                                     ></textarea>
                                 </div>
+                                <div className="col-sm-6">{children}</div>
                             </div>
                         </div>
-                        <div className="col-sm-9">{children}</div>
                     </div>
                 </>
             )}
