@@ -242,7 +242,7 @@ export const EventEditCard: React.FC = () => {
         else printedDate = `${year}/${month}/${day} 19:00～`;
 
         // (1)
-        // 下記処理にてイベント日時候補テキストエリアの内容を変化させている。
+        // 下記処理にてイベント日時候補テキストエリアの内容を変更させている。（この変更自体は成功）
         // そのため、当該フォームのonChangeハンドラが起動されることを期待したがダメらしい。
         // https://qiita.com/ayato077/items/a7c82a7f62b533fe45c2
         // setEventNichijiKouho(printedDate);
@@ -322,35 +322,14 @@ export const EventEditCard: React.FC = () => {
                             </Col>
                         </Form.Group>
 
-                        <Form.Group as={Row} className={"mt-5"}>
-                            <Col sm="3">
-                                <Form.Label className="edit_label">イベント日時追加</Form.Label>
-                                <small className="form-text text-muted">
-                                    追加したい日時があれば
-                                    <br />
-                                    入力してください
-                                </small>
-                            </Col>
-                            <Col sm="9">
-                                <Form.Group as={Row}>
-                                    <Col sm="6">
-                                        <Form.Control
-                                            as="textarea"
-                                            rows={12}
-                                            onChange={(e) => {
-                                                setEventMemo(e.target.value);
-                                            }}
-                                            defaultValue={eventNichijiKouho}
-                                        />
-                                    </Col>
-                                    <Col sm="6">
-                                        <EventNichijiKouhoCalendar
-                                            clickedHandler={onCalendarClick}
-                                        ></EventNichijiKouhoCalendar>
-                                    </Col>
-                                </Form.Group>
-                            </Col>
-                        </Form.Group>
+                        <EventNichijiKouho
+                            value={eventNichijiKouho}
+                            displayMode={2}
+                            valueSetter={setEventNichijiKouho}
+                            ref={textArefRef}
+                        >
+                            <EventNichijiKouhoCalendar clickedHandler={onCalendarClick}></EventNichijiKouhoCalendar>
+                        </EventNichijiKouho>
 
                         <Form.Group className="form-row mt-2 float-right">
                             <Button type="submit">イベント情報を修正する</Button>
