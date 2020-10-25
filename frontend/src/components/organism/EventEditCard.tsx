@@ -7,13 +7,14 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { moyooshiSlice } from "../../features/moyooshi/moyooshi-slice";
 import { Moyooshi } from "../../features/moyooshi/moyooshi-type";
-import { ValueOf } from "../../libs/common/declare";
+import { CheckedBox, NichijiData, ValueOf } from "../../libs/common/declare";
 import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_api";
 import { ApiResultToast } from "../molecules/ApiResultToast";
 import { EventName } from "../molecules/EventName";
 import { EventMemo } from "../molecules/EventMemo";
 import { EventNichijiKouhoCalendar } from "../molecules/EventNichijiKouhoCalendar";
 import { EventNichijiKouho } from "../molecules/EventNichijiKouho";
+import { EventNichijiKouhoDelete } from "../molecules/EventNichijiKouhoDelete";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -50,12 +51,8 @@ export const EventEditCard: React.FC = () => {
     const [eventName, setEventName] = useState("");
     const [eventNichijiKouho, setEventNichijiKouho] = useState("");
     const [eventMemo, setEventMemo] = useState("");
-    type NichijiData = {
-        id: string;
-        nichiji: string;
-    };
     const [eventNichijiKouhoDeleteTargets, setEventNichijiKouhoDeleteTargets] = useState<NichijiData[]>([]);
-    const [eventNichijiKouhoDeleteTargetChecks, setEventNichijiKouhoDeleteTargetChecks] = useState({});
+    const [eventNichijiKouhoDeleteTargetChecks, setEventNichijiKouhoDeleteTargetChecks] = useState<CheckedBox>({});
 
     // -------------------------------------
     // バリデーション関係
@@ -259,17 +256,6 @@ export const EventEditCard: React.FC = () => {
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // 削除対象イベント日時候補のチェックボックスの状態に変化があったら起動
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onChangeOnCheckbox = (e) => {
-        // checkedItemsのstateをセット
-        setEventNichijiKouhoDeleteTargetChecks({
-            ...eventNichijiKouhoDeleteTargetChecks,
-            [e.target.id]: e.target.checked,
-        });
-    };
-
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
@@ -294,33 +280,11 @@ export const EventEditCard: React.FC = () => {
                         ></EventName>
                         <EventMemo value={eventMemo} displayMode={2} valueSetter={setEventMemo}></EventMemo>
 
-                        <Form.Group as={Row} className={"mt-5"}>
-                            <Col sm="3">
-                                <Form.Label className="edit_label">イベント日時削除</Form.Label>
-                                <small className="form-text text-muted">
-                                    取り消したい日時があれば
-                                    <br />
-                                    選択してください
-                                </small>
-                            </Col>
-                            <Col sm="9">
-                                {eventNichijiKouhoDeleteTargets.map((nichijiData) => {
-                                    return (
-                                        <span style={{ display: "inline-block" }} className="mr-5" key={nichijiData.id}>
-                                            <input
-                                                type="checkbox"
-                                                name={`del_eve_dt_kouho_id_${nichijiData.id}`}
-                                                id={`id_del_eve_dt_kouho_id_${nichijiData.id}`}
-                                                value={nichijiData.id}
-                                                onChange={onChangeOnCheckbox}
-                                                checked={eventNichijiKouhoDeleteTargetChecks[nichijiData.id]}
-                                            />
-                                            {nichijiData.nichiji}
-                                        </span>
-                                    );
-                                })}
-                            </Col>
-                        </Form.Group>
+                        <EventNichijiKouhoDelete
+                            eventNichijiKouhoDeleteTargets={eventNichijiKouhoDeleteTargets}
+                            eventNichijiKouhoDeleteTargetChecks={eventNichijiKouhoDeleteTargetChecks}
+                            setEventNichijiKouhoDeleteTargetChecks={setEventNichijiKouhoDeleteTargetChecks}
+                        ></EventNichijiKouhoDelete>
 
                         <EventNichijiKouho
                             value={eventNichijiKouho}
