@@ -7,6 +7,7 @@ export const Footer: React.FC = () => {
                 <span>
                     Developed by <a href="https://github.com/isoittech/tsugou-kun-react">isoittech</a>
                 </span>
+                <br />
                 <a className="text-secondary" href="https://chouseisan.com/">
                     Respect For Chouseisan
                 </a>
