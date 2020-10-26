@@ -5,6 +5,7 @@ import { Header } from "./components/organism/Header";
 import { Footer } from "./components/organism/Footer";
 import { Top } from "./components/pages/Top";
 import { Edit } from "./components/pages/Edit";
+import EventHistory from "./components/organism/EventHistory";
 
 export const App: React.FC = () => {
     useEffect(() => {
@@ -36,6 +37,7 @@ export const App: React.FC = () => {
                     {/*どれにもマッチしなければTop画面へリダイレクト*/}
                     {/*<Route path="*" element={<Navigate to="/" replace/>}/>;*/}
                 </Routes>
+                <EventHistory></EventHistory>
             </div>
             <Footer></Footer>
         </>

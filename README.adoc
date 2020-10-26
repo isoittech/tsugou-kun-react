@@ -294,7 +294,8 @@ $ npm i \
     react-bootstrap \
     bootstrap \
     react-modern-calendar-datepicker \
-    react-helmet
+    react-helmet \
+    react-cookie
 $ tsc --version
 $ tsc --init
 ※React Routerについてはβ版の6を使用。競合のReach Routerとの合併版であり、便利かつ直感的であるため。正式版がリリースされ次第「@next」を除去する。

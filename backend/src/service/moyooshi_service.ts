@@ -65,6 +65,7 @@ export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Pr
         return {
             added_moyooshi: addedMoyooshi,
             schedule_update_id: scheduleUpdateId,
+            added_nichiji_kouhos: addedMoyooshiKouhoNichijis,
         } as MoyooshiServiceOutputDto;
     } catch (error) {
         await t.rollback();
@@ -220,6 +221,7 @@ export type MoyooshiServiceOutputDto = {
     error_name?: string;
     error_message?: string;
     schedule_update_id?: string;
+    added_nichiji_kouhos?: models.MoyooshiKouhoNichiji[];
 };
 
 export type MoyooshiReadServiceOutputDto = {

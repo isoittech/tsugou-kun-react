@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Badge, Button, Card, Col, Form, Row, Toast } from "react-bootstrap";
 import { DayValue } from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import { withCookies, Cookies } from "react-cookie";
 
 import { moyooshiSlice } from "../../features/moyooshi/moyooshi-slice";
 import { Moyooshi } from "../../features/moyooshi/moyooshi-type";
-import { ValueOf } from "../../libs/common/declare";
+import { ValueOf, EventInfo } from "../../libs/common/declare";
 import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_api";
 import { ApiResultToast } from "../molecules/ApiResultToast";
 import { EventName } from "../molecules/EventName";
@@ -19,8 +20,8 @@ import { EventNichijiKouhoCalendar } from "../molecules/EventNichijiKouhoCalenda
 // イベント編集フォーム（新規追加）
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-export const EventAddCard: React.FC = () => {
-    // ========================================================
+export const EventAddCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
+    // ===================================ma=====================
     // グローバルのState
     // ========================================================
     // -------------------------------------
@@ -47,7 +48,6 @@ export const EventAddCard: React.FC = () => {
     const [eventName, setEventName] = useState("");
     const [eventNichijiKouho, setEventNichijiKouho] = useState("");
     const [eventMemo, setEventMemo] = useState("");
-    // const [clickedAtCalendar, setClickedAtCalendar] = useState<DayValue>();
 
     // -------------------------------------
     // バリデーション関係
@@ -148,7 +148,47 @@ export const EventAddCard: React.FC = () => {
             setShowA(false);
         };
     }, [moyooshiAddApiSucceeded]);
-    // });
+
+    useEffect(() => {
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        // API実行結果返却時に起動
+        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        if (moyooshiAddApiReturnData) {
+            // ========================================================
+            // Cookieへの設定値準備
+            // ========================================================
+            // -------------------------------------
+            // Cookie有効期限
+            // -------------------------------------
+            const expiredDate = new Date();
+            // expiredDate.setMonth(expiredDate.getMonth() + 3); // 有効期限：3ヶ月
+            // expiredDate.setDate(expiredDate.getDate() + 1); // 有効期限：1日
+            expiredDate.setMinutes(expiredDate.getMinutes() + 3); // 有効期限：3分
+
+            // -------------------------------------
+            // Cookieの器・設定値格納
+            // -------------------------------------
+            const eventInfo: EventInfo = {
+                name: moyooshiAddApiReturnData.added_moyooshi.name,
+                scheduleUpdateId: moyooshiAddApiReturnData.schedule_update_id,
+                nichijis: [],
+            };
+            // -------------------------------------
+            // イベント候補日時
+            // -------------------------------------
+            moyooshiAddApiReturnData.added_nichiji_kouhos.map((kouho) => {
+                eventInfo.nichijis.push(kouho.kouho_nichiji);
+            });
+
+            // ========================================================
+            // Cookieへの設定
+            // ========================================================
+            cookies.set(`schedule_update_id_${moyooshiAddApiReturnData.added_moyooshi.id}`, eventInfo, {
+                path: "/",
+                expires: expiredDate,
+            });
+        }
+    }, [moyooshiAddApiReturnData]);
 
     const onCalendarClick = (dateAtClicked: DayValue) => {
         // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -257,3 +297,5 @@ export const EventAddCard: React.FC = () => {
         </>
     );
 };
+
+export default withCookies(EventAddCard);

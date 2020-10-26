@@ -9,3 +9,9 @@ export type NichijiData = {
 export type CheckedBox = {
     [key: string]: boolean;
 };
+
+export type EventInfo = {
+    name: string;
+    scheduleUpdateId: string;
+    nichijis: string[];
+};
