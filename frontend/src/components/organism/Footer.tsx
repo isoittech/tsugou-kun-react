@@ -3,7 +3,7 @@ import React from "react";
 export const Footer: React.FC = () => {
     return (
         <>
-            <footer className="footer bg-dark mt-2 text-center">
+            <footer className="footer bg-dark mt-4 text-center">
                 <span>
                     Developed by <a href="https://github.com/isoittech/tsugou-kun-react">isoittech</a>
                 </span>
