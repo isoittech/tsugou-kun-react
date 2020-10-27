@@ -143,12 +143,16 @@ export const EventEditCard: React.FC = () => {
             // イベント日時候補
             // -------------------------------------
             const tempArray: NichijiData[] = [];
-            readMoyooshi.MoyooshiKouhoNichijis.forEach((MoyooshiKouhoNichiji) =>
-                tempArray.push({
-                    id: MoyooshiKouhoNichiji.id,
-                    nichiji: MoyooshiKouhoNichiji.kouho_nichiji,
-                })
-            );
+            readMoyooshi.MoyooshiKouhoNichijis.forEach((moyooshiKouhoNichiji) => {
+                if (moyooshiKouhoNichiji.kouho_nichiji) {
+                    // サーバ側ではレコードを物理削除ではなく論理削除している。
+                    // そのため、「論理削除されていない」レコードを表示対象とする。
+                    tempArray.push({
+                        id: moyooshiKouhoNichiji.id,
+                        nichiji: moyooshiKouhoNichiji.kouho_nichiji,
+                    });
+                }
+            });
             setEventNichijiKouhoDeleteTargets(tempArray);
             // -------------------------------------
             // イベント名
