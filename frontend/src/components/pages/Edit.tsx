@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-import { EventEditCard } from "../organism/EventEditCard";
+import { EventEditCard } from "../../containers/organism/EventEditCard";
 
 export const Edit: React.FC = () => {
     return (
