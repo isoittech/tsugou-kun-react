@@ -122,7 +122,7 @@ const EventNichijiKouhoNoRef: React.FC<Props> = (
                         </div>
                         <div className="col-sm-9">
                             <div className="form-group row">
-                                <div className="col-sm-6">
+                                <div className="col-sm-5">
                                     <textarea
                                         rows={12}
                                         className="form-control"
@@ -131,7 +131,7 @@ const EventNichijiKouhoNoRef: React.FC<Props> = (
                                         value={value}
                                     ></textarea>
                                 </div>
-                                <div className="col-sm-6">{children}</div>
+                                <div className="col-sm-7">{children}</div>
                             </div>
                         </div>
                     </div>
