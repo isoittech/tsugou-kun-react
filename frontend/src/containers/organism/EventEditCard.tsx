@@ -44,7 +44,6 @@ export const EventEditCard: React.FC = () => {
     // -------------------------------------
     // フォームの値
     // -------------------------------------
-    const [selectedDay, setSelectedDay] = useState<DayValue>(null);
     const [eventName, setEventName] = useState("");
     const [eventNichijiKouho, setEventNichijiKouho] = useState("");
     const [eventMemo, setEventMemo] = useState("");
