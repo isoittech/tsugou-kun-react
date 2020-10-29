@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-import EventAddCard from "../organism/EventAddCard";
+import EventAddCard from "../../containers/organism/EventAddCard";
 
 export const Top: React.FC = () => {
     return (
