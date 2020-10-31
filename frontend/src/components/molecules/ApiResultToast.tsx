@@ -21,7 +21,7 @@ export const ApiResultToast: React.FC<Props> = (props) => {
             <p className="mb-0">
                 <Badge variant="secondary">Yes！</Badge>
                 次のリンクでイベント情報の修正ができます。
-                <Link id={"schedule_fill_url"} className={"nav-link"} to={`/edit/${props.schedule_update_id}`}>
+                <Link id={"scheduleFillUrl"} className={"nav-link"} to={`/edit/${props.schedule_update_id}`}>
                     `{location.href}edit/{props.schedule_update_id}`
                 </Link>
                 <OverlayTrigger
@@ -32,10 +32,10 @@ export const ApiResultToast: React.FC<Props> = (props) => {
                         type="submit"
                         className="btn btn-outline-primary"
                         onClick={() => {
-                            const schedule_fill_url = document.getElementById("schedule_fill_url");
+                            const scheduleFillUrl = document.getElementById("scheduleFillUrl");
                             // 文字をすべて選択
                             // @ts-ignore
-                            schedule_fill_url.select();
+                            scheduleFillUrl.select();
                             // コピー
                             document.execCommand("copy");
 
