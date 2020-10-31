@@ -71,7 +71,7 @@ export const EventCardPC: React.FC<Props> = ({
         <>
             <Row className={"mt-5"}>
                 <Col sm={12}>
-                    <Toast show={showA} onClose={toggleShowA}>
+                    <Toast show={showA} onClose={toggleShowA} className={"overrideToastStyle"}>
                         <Toast.Header>{toastHeader}</Toast.Header>
                         <Toast.Body>{toastMessage}</Toast.Body>
                     </Toast>

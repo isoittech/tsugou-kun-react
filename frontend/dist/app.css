@@ -53,3 +53,15 @@ table#kaitou_table > tbody > tr > td {
 .edit_label {
     font-size: 1.25rem;
 }
+
+.overrideToastStyle {
+    max-width: 100% !important;
+}
+
+#scheduleFillUrl {
+    width: 500px;
+}
+
+#scheduleFillUrl:hover {
+    cursor: pointer;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Badge, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Badge, Button, Col, Form } from "react-bootstrap";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 type Props = {
@@ -14,39 +14,46 @@ type Props = {
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 export const ApiResultToast: React.FC<Props> = (props) => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // Clickイベントハンドラ
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const onClick = () => {
+        const scheduleFillUrl = document.getElementById("scheduleFillUrl");
+        // 文字をすべて選択
+        // @ts-ignore
+        scheduleFillUrl.select();
+        // コピー
+        document.execCommand("copy");
+
+        alert("URLをコピーしました。\nメール・チャットで貼り付ける等、お知らせ用にご利用ください。");
+    };
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
         <>
             <p className="mb-0">
-                <Badge variant="secondary">Yes！</Badge>
-                次のリンクでイベント情報の修正ができます。
-                <Link id={"scheduleFillUrl"} className={"nav-link"} to={`/edit/${props.schedule_update_id}`}>
-                    `{location.href}edit/{props.schedule_update_id}`
-                </Link>
-                <OverlayTrigger
-                    placement={"bottom"}
-                    overlay={<Tooltip id={"tooltip-bottom"}>残念ですがバグがあり、まだ機能しません。</Tooltip>}
-                >
-                    <button
-                        type="submit"
-                        className="btn btn-outline-primary"
-                        onClick={() => {
-                            const scheduleFillUrl = document.getElementById("scheduleFillUrl");
-                            // 文字をすべて選択
-                            // @ts-ignore
-                            scheduleFillUrl.select();
-                            // コピー
-                            document.execCommand("copy");
-
-                            alert(
-                                "コピーできるようにしました。\nメール・チャット等で貼り付けてお知らせに貼り付けてご利用ください。"
-                            );
-                        }}
-                    >
-                        URLをクリップボードにコピー
-                    </button>
-                </OverlayTrigger>
+                次のURLでイベント情報の修正ができます。
+                <Form.Row className="align-items-center">
+                    <Col xs="auto">
+                        <Link to={`/edit/${props.schedule_update_id}`}>
+                            <Form.Label htmlFor="scheduleFillUrl" srOnly>
+                                URL
+                            </Form.Label>
+                            <Form.Control
+                                className="mb-2"
+                                id="scheduleFillUrl"
+                                defaultValue={`${location.href}edit/${props.schedule_update_id}`}
+                                readOnly
+                            />
+                        </Link>
+                    </Col>
+                    <Col xs="auto">
+                        <Button type="submit" className="mb-2" onClick={onClick}>
+                            URLをクリップボードにコピー
+                        </Button>
+                    </Col>
+                </Form.Row>
             </p>
         </>
     );
