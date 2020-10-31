@@ -27,8 +27,6 @@ function* runRequest(action) {
     const { result, error } = yield call(requestAddMoyooshiApi, payLoad);
     if (result && !error) {
         const moyooshiApiResponse: MoyooshiApiResponse = {
-            code: "yeah",
-            key: "01",
             succeed: true,
             returnObject: result.data.value,
         };
@@ -43,11 +41,11 @@ function* runRequest(action) {
     }
 }
 
-const requestReadMoyooshiApi = async (schedule_update_id: string) => {
+const requestReadMoyooshiApi = async (scheduleUpdateId: string) => {
     const url = "http://localhost:3000/moyooshi";
 
     try {
-        const result = await axios.get(`${url}?schedule_update_id=${schedule_update_id}`);
+        const result = await axios.get(`${url}?schedule_update_id=${scheduleUpdateId}`);
         return { result };
     } catch (error) {
         return { error };
@@ -60,8 +58,6 @@ function* runReadRequest(action) {
     const { result, error } = yield call(requestReadMoyooshiApi, payLoad);
     if (result && !error) {
         const moyooshiApiResponse: MoyooshiApiResponse = {
-            code: "yeah",
-            key: "01",
             succeed: true,
             returnObject: result.data.value,
         };
@@ -93,8 +89,6 @@ function* runUpdateRequest(action) {
     const { result, error } = yield call(requestUpdateMoyooshiApi, payLoad);
     if (result && !error) {
         const moyooshiApiResponse: MoyooshiApiResponse = {
-            code: "yeah",
-            key: "01",
             succeed: true,
             returnObject: result.data.value,
         };

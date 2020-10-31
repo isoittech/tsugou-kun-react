@@ -37,9 +37,7 @@ router.post("/moyooshi", async (req: Express.Request, res: Express.Response, nex
 // イベント情報更新用コントローラ
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 router.put("/moyooshi", async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
-    const { id, name, memo, nichiji_kouho, deleted_nichiji_kouho } = req.body;
-    const scheduleUpdateId: string = req.query.schedule_update_id as string;
-
+    const { id, name, memo, nichiji_kouho, deleted_nichiji_kouho, schedule_update_id } = req.body;
     const moyooshiServiceDto: MoyooshiServiceDto = {
         id: id,
         name: name,
@@ -50,7 +48,7 @@ router.put("/moyooshi", async (req: Express.Request, res: Express.Response, next
 
     const result: MoyooshiServiceOutputDto = await moyooshi_service.updateMoyooshi(
         moyooshiServiceDto,
-        scheduleUpdateId
+        schedule_update_id
     );
 
     return result.error_name || result.error_message

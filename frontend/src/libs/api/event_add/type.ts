@@ -1,6 +1,6 @@
 export type MoyooshiApiResponse = {
-    code: string;
-    key: string;
+    code?: string;
+    key?: string;
     succeed: boolean;
     returnObject?: any;
 };

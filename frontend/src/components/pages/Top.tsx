@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-import EventAddCard from "../../containers/organism/EventAddCard";
+import EventCard from "../../containers/organism/EventCard";
 
 export const Top: React.FC = () => {
     return (
@@ -11,7 +11,7 @@ export const Top: React.FC = () => {
             </Helmet>
             <div className=" row d-flex justify-content-center my-5">
                 <div className="col-sm-10">
-                    <EventAddCard />
+                    <EventCard />
                 </div>
             </div>
         </>

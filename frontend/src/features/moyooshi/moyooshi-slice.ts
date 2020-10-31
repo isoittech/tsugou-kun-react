@@ -16,7 +16,7 @@ const initialState: ApiExecutionState = {
 
 export const moyooshiSlice = createSlice({
     name: "moyooshi",
-    initialState: initialState,
+    initialState,
     reducers: {
         // immerを利用してstore内のstateを更新している。
         // --> 各reducerで何も返さない場合、immerが裏でstateを更新する。

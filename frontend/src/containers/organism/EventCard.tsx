@@ -1,26 +1,31 @@
 import React, { useState, useEffect, useRef, ElementRef } from "react";
-import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { DayValue } from "react-modern-calendar-datepicker";
 import { Badge } from "react-bootstrap";
+import { DayValue } from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import { withCookies } from "react-cookie";
+import { useParams } from "react-router";
 
 import { moyooshiSlice } from "../../features/moyooshi/moyooshi-slice";
 import { Moyooshi } from "../../features/moyooshi/moyooshi-type";
-import { CheckedBox, NichijiData, ValueOf } from "../../libs/common/declare";
+import { ValueOf, EventInfo, NichijiData, CheckedBox } from "../../libs/common/declare";
 import { ApiExecutionState, ApiExecutionStateType } from "../../store/moyooshi_api";
 import { ApiResultToast } from "../../components/molecules/ApiResultToast";
 import { EventNichijiKouho } from "../../components/molecules/EventNichijiKouho";
-import { EventEditCardPC } from "../../components/organism/EventEditCard";
+import { EventCardPC } from "../../components/organism/EventCard";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-// イベント編集フォーム（編集）
+// イベントフォーム
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-export const EventEditCard: React.FC = () => {
+export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
+    // ========================================================
+    // パラメータ
+    // ========================================================
     const { key } = useParams();
-    const schedule_update_id = key;
+    const paramScheduleUpdateId = key;
+    const isEditMode = key !== undefined && key !== null;
 
     // ========================================================
     // グローバルのState
@@ -32,11 +37,14 @@ export const EventEditCard: React.FC = () => {
         // @ts-ignore
         (state: ApiExecutionState) => state.moyooshi.moyooshiAddApiStatus
     ); // @ts-ignoreが無いとエラー（moyooshiがない）になる。
+    // const moyooshiAddApiSucceeded = useSelector<ApiExecutionState, ValueOf<typeof ApiExecutionStateType>> ((state) => state.moyooshiAddApiStatus);  // NG
+    // const moyooshiAddApiSucceeded = useSelector((state: ApiExecutionState) => state.moyooshiAddApiStatus); // NG
     // -------------------------------------
     // APIからの返却データ
     // -------------------------------------
     const moyooshiAddApiReturnData = useSelector((state) => state.moyooshi.returnObject); // @ts-ignoreなくてもエラーにならない。anyだから？
-    const readMoyooshi = moyooshiAddApiReturnData?.read_moyooshi;
+    const scheduleUpdateId = moyooshiAddApiReturnData?.schedule_update_id;
+    const readMoyooshi = moyooshiAddApiReturnData?.moyooshi;
 
     // ========================================================
     // コンポーネントのState
@@ -47,6 +55,7 @@ export const EventEditCard: React.FC = () => {
     const [eventName, setEventName] = useState("");
     const [eventNichijiKouho, setEventNichijiKouho] = useState("");
     const [eventMemo, setEventMemo] = useState("");
+
     const [eventNichijiKouhoDeleteTargets, setEventNichijiKouhoDeleteTargets] = useState<NichijiData[]>([]);
     const [eventNichijiKouhoDeleteTargetChecks, setEventNichijiKouhoDeleteTargetChecks] = useState<CheckedBox>({});
 
@@ -55,6 +64,7 @@ export const EventEditCard: React.FC = () => {
     // -------------------------------------
     const [validated, setValidated] = useState(false);
     const [eventNameIsValid, setEventNameIsValid] = useState(false);
+    const [eventNichijiKouhoIsValid, setEventNichijiKouhoIsValid] = useState(false);
 
     // -------------------------------------
     // Toast表示関係（登録完了のお知らせToast）
@@ -78,17 +88,83 @@ export const EventEditCard: React.FC = () => {
     const textArefRef: any = useRef<ElementRef<typeof EventNichijiKouho>>(null);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // 初回レンダリング時起動関数
+    // レンダリング初回にのみ起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     useEffect(() => {
-        dispatch(moyooshiSlice.actions.read(schedule_update_id));
+        // textArefRef.current.focus();
+        // textArefRef.current.onChange(); // 呼べない
+        // textArefRef.current.test("test"); // 呼べた
+        if (isEditMode) dispatch(moyooshiSlice.actions.read(paramScheduleUpdateId)); // 編集画面のみ
     }, []); // 「初回のみ」をこの行の[]で制御
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // API実行時起動関数
+    // 子コンポーネントの入力値検証結果変更時に起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     useEffect(() => {
-        if (moyooshiAddApiSucceeded === ApiExecutionStateType.UPDATE_SUCCEEDED) {
+        // 同じ入力フォーム群であっても、モードによって必須チェック対象が異なるため
+        if (isEditMode) setValidated(eventNameIsValid);
+        else setValidated(eventNameIsValid && eventNichijiKouhoIsValid);
+    }, [eventNameIsValid, eventNichijiKouhoIsValid]);
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // API（イベント新規登録）実行時起動関数
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    useEffect(() => {
+        if (moyooshiAddApiSucceeded === ApiExecutionStateType.SUCCEEDED) {
+            // ========================================================
+            // Toast表示内容設定処理
+            // ========================================================
+            // -------------------------------------
+            // ヘッダタイトル
+            // -------------------------------------
+            setToastHeader(<strong>イベントの新規登録に成功しました。</strong>);
+            // -------------------------------------
+            // 内容
+            // -------------------------------------
+            setToastMessage(<ApiResultToast schedule_update_id={scheduleUpdateId} />);
+
+            // ========================================================
+            // Cookie更新
+            // ========================================================
+            // -------------------------------------
+            // 設定用情報準備
+            // -------------------------------------
+            const moyooshiName = moyooshiAddApiReturnData.moyooshi.name;
+            const moyooshiTableId = moyooshiAddApiReturnData.moyooshi.id;
+            const scheduleUpdateIdForCookie = moyooshiAddApiReturnData.schedule_update_id;
+            const nichijiKouhos = moyooshiAddApiReturnData.nichiji_kouhos;
+            // -------------------------------------
+            // 更新関数実行
+            // -------------------------------------
+            updateCookie(moyooshiTableId, scheduleUpdateIdForCookie, moyooshiName, nichijiKouhos);
+
+            // ========================================================
+            // Toastを表示させる
+            // ========================================================
+            setShowA(true);
+        } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.FAILED) {
+            // ========================================================
+            // Toast表示内容設定処理
+            // ========================================================
+            // -------------------------------------
+            // ヘッダタイトル
+            // -------------------------------------
+            setToastHeader(<strong>イベントの新規登録中にエラーが発生しました。</strong>);
+            // -------------------------------------
+            // 内容
+            // -------------------------------------
+            setToastMessage(
+                <p className="mb-0">
+                    <Badge variant="danger">残念</Badge>
+                    えっと。。。また後日お試し下さい。。。
+                </p>
+            );
+
+            // ========================================================
+            // Toastを表示させる
+            // ========================================================
+            setShowA(true);
+        } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.UPDATE_SUCCEEDED) {
             // ========================================================
             // Toast表示内容設定処理
             // ========================================================
@@ -99,7 +175,22 @@ export const EventEditCard: React.FC = () => {
             // -------------------------------------
             // 内容
             // -------------------------------------
-            setToastMessage(<ApiResultToast schedule_update_id={schedule_update_id} />);
+            setToastMessage(<ApiResultToast schedule_update_id={paramScheduleUpdateId} />);
+
+            // ========================================================
+            // Cookie更新
+            // ========================================================
+            // -------------------------------------
+            // 設定用情報準備
+            // -------------------------------------
+            const moyooshiName = moyooshiAddApiReturnData.moyooshi.name;
+            const moyooshiTableId = moyooshiAddApiReturnData.moyooshi.id;
+            const scheduleUpdateIdForCookie = moyooshiAddApiReturnData.schedule_update_id;
+            const nichijiKouhos = moyooshiAddApiReturnData.nichiji_kouhos;
+            // -------------------------------------
+            // 更新関数実行
+            // -------------------------------------
+            updateCookie(moyooshiTableId, scheduleUpdateIdForCookie, moyooshiName, nichijiKouhos);
 
             // ========================================================
             // Toastを表示させる
@@ -109,7 +200,7 @@ export const EventEditCard: React.FC = () => {
             // ========================================================
             // 更新後の情報を取得するため再読込のためのディスパッチ
             // ========================================================
-            dispatch(moyooshiSlice.actions.read(schedule_update_id));
+            dispatch(moyooshiSlice.actions.read(paramScheduleUpdateId));
         } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.UPDATE_FAILED) {
             // ========================================================
             // Toast表示内容設定処理
@@ -191,6 +282,74 @@ export const EventEditCard: React.FC = () => {
     }, [moyooshiAddApiSucceeded]);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // API実行結果返却時に起動
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const updateCookie = (moyooshiTableId, scheduleUpdateIdForCookie, moyooshiName, nichijiKouhos) => {
+        if (moyooshiAddApiReturnData) {
+            // ========================================================
+            // Cookieへの設定値準備
+            // ========================================================
+            // -------------------------------------
+            // Cookie有効期限
+            // -------------------------------------
+            const expiredDate = new Date();
+            // expiredDate.setMonth(expiredDate.getMonth() + 3); // 有効期限：3ヶ月
+            // expiredDate.setDate(expiredDate.getDate() + 1); // 有効期限：1日
+            expiredDate.setMinutes(expiredDate.getMinutes() + 3); // 有効期限：3分
+
+            // -------------------------------------
+            // Cookieの器・設定値格納
+            // -------------------------------------
+            const eventInfo: EventInfo = {
+                name: moyooshiName,
+                scheduleUpdateId: scheduleUpdateIdForCookie,
+                nichijis: [],
+            };
+            // -------------------------------------
+            // イベント候補日時
+            // -------------------------------------
+            nichijiKouhos.map((kouho) => {
+                eventInfo.nichijis.push(kouho.kouho_nichiji);
+            });
+
+            // ========================================================
+            // Cookieへの設定
+            // ========================================================
+            cookies.set(`schedule_update_id_${moyooshiTableId}`, eventInfo, {
+                path: "/",
+                expires: expiredDate,
+            });
+        }
+    };
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // カレンダーがクリックされた時に起動
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const onCalendarClick = (dateAtClicked: DayValue) => {
+        const { year, month, day } = dateAtClicked;
+
+        let printedDate = null;
+        if (eventNichijiKouho) printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
+        else printedDate = `${year}/${month}/${day} 19:00～`;
+
+        // (1)
+        // 下記処理にてイベント日時候補テキストエリアの内容を変化させている。
+        // そのため、当該フォームのonChangeハンドラが起動されることを期待したがダメらしい。
+        // https://qiita.com/ayato077/items/a7c82a7f62b533fe45c2
+        // setEventNichijiKouho(printedDate);
+
+        // (2)
+        // なので代わりにDOM操作を行って手動（？）でイベント発火させる。
+        // const domEvent = new Event("change");
+        // const txtAreaNichijiKouho = document.getElementById("formEventNichijiKouho");
+        // txtAreaNichijiKouho.dispatchEvent(domEvent);
+        // -> 上記の試みではだめだった。
+
+        // (1)と(2)の組み合わせでだめだったので、下記で同時にやる。
+        textArefRef.current.onChangeInTextarea(printedDate);
+    };
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 送信ボタンクリックイベントハンドラ
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const handleSubmit = (event) => {
@@ -214,57 +373,47 @@ export const EventEditCard: React.FC = () => {
         // -------------------------------------
         const eventNichijiKouhoArray: string[] = eventNichijiKouho.split("\n");
 
-        // -------------------------------------
+        // ========================================================
         // モデルデータを作成してアクション実行
-        // -------------------------------------
-        const updatedMoyooshi: Moyooshi = {
-            id: readMoyooshi.id,
-            name: eventName,
-            memo: eventMemo,
-            nichiji_kouho: eventNichijiKouhoArray,
-            deleted_nichiji_kouho: eventNichijiKouhoDeleteTargetChecks,
-            schedule_update_id,
-        };
-        dispatch(moyooshiSlice.actions.updated(updatedMoyooshi));
-    };
-
-    const onCalendarClick = (dateAtClicked: DayValue) => {
-        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-        // カレンダーがクリックされた時に起動
-        // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-        const { year, month, day } = dateAtClicked;
-
-        let printedDate = null;
-        if (eventNichijiKouho) printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
-        else printedDate = `${year}/${month}/${day} 19:00～`;
-
-        // (1)
-        // 下記処理にてイベント日時候補テキストエリアの内容を変更させている。（この変更自体は成功）
-        // そのため、当該フォームのonChangeハンドラが起動されることを期待したがダメらしい。
-        // https://qiita.com/ayato077/items/a7c82a7f62b533fe45c2
-        // setEventNichijiKouho(printedDate);
-
-        // (2)
-        // なので代わりにDOM操作を行って手動（？）でイベント発火させる。
-        // const domEvent = new Event("change");
-        // const txtAreaNichijiKouho = document.getElementById("formEventNichijiKouho");
-        // txtAreaNichijiKouho.dispatchEvent(domEvent);
-        // -> 上記の試みではだめだった。
-
-        // (1)と(2)の組み合わせでだめだったので、下記で同時にやる。
-        textArefRef.current.onChangeInTextarea(printedDate);
+        // ========================================================
+        if (isEditMode) {
+            // -------------------------------------
+            // イベント情報編集
+            // -------------------------------------
+            const updatedMoyooshi: Moyooshi = {
+                id: readMoyooshi.id,
+                name: eventName,
+                memo: eventMemo,
+                nichiji_kouho: eventNichijiKouhoArray,
+                deleted_nichiji_kouho: eventNichijiKouhoDeleteTargetChecks,
+                schedule_update_id: paramScheduleUpdateId,
+            };
+            dispatch(moyooshiSlice.actions.updated(updatedMoyooshi));
+        } else {
+            // -------------------------------------
+            // イベント情報追加
+            // -------------------------------------
+            const addedMoyooshi: Moyooshi = {
+                name: eventName,
+                memo: eventMemo,
+                nichiji_kouho: eventNichijiKouhoArray,
+            };
+            dispatch(moyooshiSlice.actions.added(addedMoyooshi));
+        }
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
-        <EventEditCardPC
+        <EventCardPC
+            isAdd={!isEditMode}
             eventName={eventName}
             eventMemo={eventMemo}
-            eventNichijiKouho={eventNichijiKouho}
             eventNichijiKouhoDeleteTargets={eventNichijiKouhoDeleteTargets}
             eventNichijiKouhoDeleteTargetChecks={eventNichijiKouhoDeleteTargetChecks}
+            setEventNichijiKouhoDeleteTargetChecks={setEventNichijiKouhoDeleteTargetChecks}
+            eventNichijiKouho={eventNichijiKouho}
             showA={showA}
             toastHeader={toastHeader}
             toastMessage={toastMessage}
@@ -274,10 +423,12 @@ export const EventEditCard: React.FC = () => {
             setEventMemo={setEventMemo}
             setEventNichijiKouho={setEventNichijiKouho}
             setEventNameIsValid={setEventNameIsValid}
-            setEventNichijiKouhoDeleteTargetChecks={setEventNichijiKouhoDeleteTargetChecks}
+            setEventNichijiKouhoIsValid={setEventNichijiKouhoIsValid}
             toggleShowA={toggleShowA}
             handleSubmit={handleSubmit}
             onCalendarClick={onCalendarClick}
-        ></EventEditCardPC>
+        ></EventCardPC>
     );
 };
+
+export default withCookies(EventCard);
