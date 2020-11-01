@@ -32,29 +32,27 @@ export const ApiResultToast: React.FC<Props> = (props) => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
         <>
-            <p className="mb-0">
-                次のURLでイベント情報の修正ができます。
-                <Form.Row className="align-items-center">
-                    <Col xs="auto">
-                        <Link to={`/edit/${props.schedule_update_id}`}>
-                            <Form.Label htmlFor="scheduleFillUrl" srOnly>
-                                URL
-                            </Form.Label>
-                            <Form.Control
-                                className="mb-2"
-                                id="scheduleFillUrl"
-                                defaultValue={`${location.href}edit/${props.schedule_update_id}`}
-                                readOnly
-                            />
-                        </Link>
-                    </Col>
-                    <Col xs="auto">
-                        <Button type="submit" className="mb-2" onClick={onClick}>
-                            URLをクリップボードにコピー
-                        </Button>
-                    </Col>
-                </Form.Row>
-            </p>
+            次のURLでイベント情報の修正ができます。
+            <Form.Row className="align-items-center">
+                <Col xs="auto">
+                    <Link to={`/edit/${props.schedule_update_id}`}>
+                        <Form.Label htmlFor="scheduleFillUrl" srOnly>
+                            URL
+                        </Form.Label>
+                        <Form.Control
+                            className="mb-2"
+                            id="scheduleFillUrl"
+                            defaultValue={`${location.href}edit/${props.schedule_update_id}`}
+                            readOnly
+                        />
+                    </Link>
+                </Col>
+                <Col xs="auto">
+                    <Button type="submit" className="mb-2" onClick={onClick}>
+                        URLをクリップボードにコピー
+                    </Button>
+                </Col>
+            </Form.Row>
         </>
     );
 };
