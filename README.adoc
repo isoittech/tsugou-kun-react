@@ -308,11 +308,19 @@ $ npm i -D jest \
     @testing-library/jest-dom \
     @types/jest \
     @babel/preset-react \
-    babel-preset-react-app
+    @babel/preset-env \
+    @babel/preset-typescript \
+    babel-preset-react-app \
+    babel-jest \
+    react-test-renderer
+    
 ```
 
 ※ts-node：コンパイルした後にnodeで実行してくれるモジュール。 +
 　package.jsonのscriptsに `ts-node` を実行するコマンドを定義する。
+※react-test-renderer：スナップショットテスト用
+※Jestを単体で使用する：npm install jest --global
+
 
 ===== ○フォルダ構成
 [%hardbreaks]
