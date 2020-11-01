@@ -86,6 +86,8 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
     // Ref
     // -------------------------------------
     const textArefRef: any = useRef<ElementRef<typeof EventNichijiKouho>>(null);
+    // Formリセット用
+    const formRef = useRef(null);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダリング初回にのみ起動
@@ -142,6 +144,11 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             // Toastを表示させる
             // ========================================================
             setShowA(true);
+
+            // ========================================================
+            // フォームリセット
+            // ========================================================
+            formReset();
         } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.FAILED) {
             // ========================================================
             // Toast表示内容設定処理
@@ -196,6 +203,11 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             // Toastを表示させる
             // ========================================================
             setShowA(true);
+
+            // ========================================================
+            // フォームリセット
+            // ========================================================
+            formReset();
 
             // ========================================================
             // 更新後の情報を取得するため再読込のためのディスパッチ
@@ -403,6 +415,14 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // フォームリセット
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const formReset = () => {
+        formRef.current.reset();
+        setValidated(undefined);
+    };
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
@@ -419,6 +439,7 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             toastMessage={toastMessage}
             validated={validated}
             textArefRef={textArefRef}
+            formRef={formRef}
             setEventName={setEventName}
             setEventMemo={setEventMemo}
             setEventNichijiKouho={setEventNichijiKouho}

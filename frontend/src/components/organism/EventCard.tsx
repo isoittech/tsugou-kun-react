@@ -20,6 +20,7 @@ type Props = {
     toastMessage: JSX.Element;
     validated: boolean;
     textArefRef: MutableRefObject<HTMLTextAreaElement>;
+    formRef: MutableRefObject<HTMLFormElement>;
     isAdd?: boolean;
     setEventName: (value: string) => void;
     setEventMemo: (value: string) => void;
@@ -53,6 +54,7 @@ export const EventCardPC: React.FC<Props> = ({
     toastMessage,
     validated,
     textArefRef,
+    formRef,
     isAdd = true,
     setEventName,
     setEventMemo,
@@ -80,7 +82,7 @@ export const EventCardPC: React.FC<Props> = ({
             {isAdd && (
                 <Card className={"mt-5 shadow rounded"}>
                     <Card.Body>
-                        <Form noValidate onSubmit={handleSubmit}>
+                        <Form noValidate onSubmit={handleSubmit} ref={formRef}>
                             <Form.Row>
                                 <Form.Group as={Col} md="6">
                                     <EventName
@@ -112,7 +114,7 @@ export const EventCardPC: React.FC<Props> = ({
             {!isAdd && (
                 <Card className={"mt-5 shadow rounded"}>
                     <Card.Body>
-                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form noValidate onSubmit={handleSubmit} ref={formRef}>
                             <EventName
                                 value={eventName}
                                 displayMode={2}
