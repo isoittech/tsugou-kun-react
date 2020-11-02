@@ -277,6 +277,7 @@ $ npm i -D \
     webpack-dev-server \
     clean-webpack-plugin \
     html-webpack-plugin \
+    mini-css-extract-plugin \
     style-loader \
     css-loader \
     dotenv

@@ -1,6 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
 const dotenv = require("dotenv");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = () => {
     // frontend/.envに設定値が存在する
@@ -26,33 +28,37 @@ module.exports = () => {
             new webpack.DefinePlugin({
                 "process.env": JSON.stringify(env),
             }),
+            new HtmlWebpackPlugin({
+                template: "./src/index.html",
+                filename: "index.html",
+            }),
+            new MiniCssExtractPlugin(),
         ],
 
         module: {
             rules: [
                 {
-                    // 拡張子 .ts もしくは .tsx の場合
                     test: /\.tsx?$/,
-                    // test: [/\.ts$/, /\.tsx$/, /\.js$/],
-                    // TypeScript をコンパイルする
-                    // loader: ["babel-loader", "ts-loader"],
                     use: "ts-loader",
-                    // exclude: `${__dirname}/node_modules`,
                 },
                 {
-                    test: /\.css/,
-                    use: [
-                        // linkタグに出力する機能
-                        "style-loader",
-                        {
-                            loader: "css-loader",
-                            options: {
-                                // オプションでCSS内のurl()メソッドの取り込みを禁止する
-                                url: false,
-                            },
-                        },
-                    ],
+                    test: /\.css$/i,
+                    use: [MiniCssExtractPlugin.loader, "css-loader"],
                 },
+                // {
+                //     test: /\.css/,
+                //     use: [
+                //         // linkタグに出力する機能
+                //         "style-loader",
+                //         {
+                //             loader: "css-loader",
+                //             options: {
+                //                 // オプションでCSS内のurl()メソッドの取り込みを禁止する
+                //                 url: false,
+                //             },
+                //         },
+                //     ],
+                // },
             ],
         },
 
