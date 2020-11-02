@@ -11,7 +11,7 @@ const router = Express.Router();
 // ■機能
 // イベント情報登録用コントローラ
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-router.post("/moyooshi", async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
+router.post("/", async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     const { name, memo, nichiji_kouho } = req.body;
     const moyooshiServiceDto: MoyooshiServiceDto = {
         name: name,
@@ -36,7 +36,7 @@ router.post("/moyooshi", async (req: Express.Request, res: Express.Response, nex
 // ■機能
 // イベント情報更新用コントローラ
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-router.put("/moyooshi", async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
+router.put("/", async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     const { id, name, memo, nichiji_kouho, deleted_nichiji_kouho, schedule_update_id } = req.body;
     const moyooshiServiceDto: MoyooshiServiceDto = {
         id: id,
@@ -66,7 +66,7 @@ router.put("/moyooshi", async (req: Express.Request, res: Express.Response, next
 // ■機能
 // イベント情報取得用コントローラ
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-router.get("/moyooshi", async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
+router.get("/", async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     const scheduleUpdateId: string = req.query.schedule_update_id as string;
     const moyooshiId: number = endecode.decodeFromScheduleUpdateId(scheduleUpdateId);
 

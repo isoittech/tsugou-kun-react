@@ -25,7 +25,7 @@ app.use(access_log);
 // -----------------------------------
 // ルーティング
 // -----------------------------------
-app.use("/", router_moyooshi);
+app.use("/moyooshi", router_moyooshi);
 app.use(router);
 
 // -----------------------------------
