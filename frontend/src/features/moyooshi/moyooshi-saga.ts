@@ -11,7 +11,7 @@ import { moyooshiSlice } from "./moyooshi-slice";
 import { Moyooshi } from "./moyooshi-type";
 
 const requestAddMoyooshiApi = async (data: Moyooshi) => {
-    const url = "http://localhost:3000/moyooshi";
+    const url = `${process.env.HOST_URL}/moyooshi`;
 
     try {
         const result = await axios.post(url, data);
@@ -42,7 +42,7 @@ function* runRequest(action) {
 }
 
 const requestReadMoyooshiApi = async (scheduleUpdateId: string) => {
-    const url = "http://localhost:3000/moyooshi";
+    const url = `${process.env.HOST_URL}/moyooshi`;
 
     try {
         const result = await axios.get(`${url}?schedule_update_id=${scheduleUpdateId}`);
@@ -73,7 +73,7 @@ function* runReadRequest(action) {
 }
 
 const requestUpdateMoyooshiApi = async (data: Moyooshi) => {
-    const url = "http://localhost:3000/moyooshi";
+    const url = `${process.env.HOST_URL}/moyooshi`;
 
     try {
         const result = await axios.put(url, data);

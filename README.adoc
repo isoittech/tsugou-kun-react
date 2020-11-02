@@ -278,7 +278,8 @@ $ npm i -D \
     clean-webpack-plugin \
     html-webpack-plugin \
     style-loader \
-    css-loader
+    css-loader \
+    dotenv
 $ npm i \
     react \
     react-dom \

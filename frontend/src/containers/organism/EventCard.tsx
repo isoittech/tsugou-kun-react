@@ -307,7 +307,8 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             const expiredDate = new Date();
             // expiredDate.setMonth(expiredDate.getMonth() + 3); // 有効期限：3ヶ月
             // expiredDate.setDate(expiredDate.getDate() + 1); // 有効期限：1日
-            expiredDate.setMinutes(expiredDate.getMinutes() + 3); // 有効期限：3分
+            // expiredDate.setMinutes(expiredDate.getMinutes() + 3); // 有効期限：3分
+            expiredDate.setMinutes(expiredDate.getMinutes() + parseInt(process.env.COOKIE_EXPIRED_MINUTES, 10));
 
             // -------------------------------------
             // Cookieの器・設定値格納
