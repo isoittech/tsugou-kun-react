@@ -92,12 +92,18 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダリング初回にのみ起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // useEffect(() => {
+    //     // textArefRef.current.focus();
+    //     // textArefRef.current.onChange(); // 呼べない
+    //     // textArefRef.current.test("test"); // 呼べた
+    // }, []); // 「初回のみ」をこの行の[]で制御
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // 編集対象が変更された時に起動
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     useEffect(() => {
-        // textArefRef.current.focus();
-        // textArefRef.current.onChange(); // 呼べない
-        // textArefRef.current.test("test"); // 呼べた
         if (isEditMode) dispatch(moyooshiSlice.actions.read(paramScheduleUpdateId)); // 編集画面のみ
-    }, []); // 「初回のみ」をこの行の[]で制御
+    }, [paramScheduleUpdateId]);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 子コンポーネントの入力値検証結果変更時に起動
