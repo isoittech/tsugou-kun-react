@@ -4,9 +4,13 @@ const dotenv = require("dotenv");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const BACKEND_PJ_HOME = `${__dirname}/../backend`;
+
 module.exports = () => {
     // frontend/.envに設定値が存在する
     const env = dotenv.config().parsed;
+
+    const outputPath = env.NODE_ENV === "development" ? `${__dirname}/dist` : `${BACKEND_PJ_HOME}/build`;
 
     return {
         // モード値を production に設定すると最適化された状態出力される。
@@ -19,9 +23,12 @@ module.exports = () => {
         // ファイルの出力設定
         output: {
             //  出力ファイルのディレクトリ名
-            path: `${__dirname}/dist`,
+            path: outputPath,
             // 出力ファイル名
             filename: "main.js",
+            // HTMLのsrc/href属性出力時の先頭に付与する値
+            // ※先頭スラッシュを指定しない場合、更新やリロード時に404となる。
+            // publicPath: "/", // ---> やはり削った。テンプレートindex.htmlのhead/baseタグにてスラッシュを指定することにより不要となった。
         },
 
         plugins: [
@@ -45,20 +52,6 @@ module.exports = () => {
                     test: /\.css$/i,
                     use: [MiniCssExtractPlugin.loader, "css-loader"],
                 },
-                // {
-                //     test: /\.css/,
-                //     use: [
-                //         // linkタグに出力する機能
-                //         "style-loader",
-                //         {
-                //             loader: "css-loader",
-                //             options: {
-                //                 // オプションでCSS内のurl()メソッドの取り込みを禁止する
-                //                 url: false,
-                //             },
-                //         },
-                //     ],
-                // },
             ],
         },
 

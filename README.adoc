@@ -26,7 +26,7 @@ $ cd ${PJ_HOME}/backend/src/db
 $ ${PJ_HOME}/backend/node_modules/sequelize-cli/lib/sequelize db:migrate --env development
 $ mv ${PJ_HOME}/backend/src/db/data/tsugoukun_development.sqlite3 ${PJ_HOME}/backend/data/
 $ cd ${PJ_HOME}/backend
-$ npm start
+$ npm start  # またはVSCodeでF5で起動
 ```
 1. フロントエンドサーバセットアップのため、下記コマンドを実行する。
 +
@@ -214,6 +214,7 @@ $ npm i \
     sequelize \
     base64url \
     mocha \
+    connect-history-api-fallback \
     @types/mocha
 $ tsc --version
 $ tsc --init

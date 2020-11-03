@@ -1,6 +1,9 @@
 import express from "express";
+import path from "path";
 import router_moyooshi from "./controller/moyooshi_controller";
 import access_log from "./helper/access_log";
+
+const history = require("connect-history-api-fallback");
 
 const app: express.Express = express();
 const router: express.Router = express.Router();
@@ -25,7 +28,18 @@ app.use(access_log);
 // -----------------------------------
 // ルーティング
 // -----------------------------------
+app.use(express.static(path.join(__dirname, "../build")));
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
 app.use("/moyooshi", router_moyooshi);
+app.use(
+    history({
+        verbose: true,
+        // rewrites: [{ from: /\/.*/, to: "index.html" }],
+        // rewrites: [{ from: /\/.*/, to: "/" }],
+    })
+);
 app.use(router);
 
 // -----------------------------------
