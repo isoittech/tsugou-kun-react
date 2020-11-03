@@ -1,5 +1,6 @@
 import React from "react";
 import { withCookies } from "react-cookie";
+import { Link } from "react-router-dom";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -29,7 +30,7 @@ export const EventHistory: React.FC<{ cookies?: any }> = ({ cookies }) => {
                         eventHistories.map((cookie, idx) => (
                             <div key={idx} className="card shadow rounded col-3 my-1 mx-2 p-1">
                                 <div className="card-header">
-                                    <a href={`/edit/${cookie.value.scheduleUpdateId}`}>{cookie.value.name}</a>
+                                    <Link to={`/edit/${cookie.value.scheduleUpdateId}`}>{cookie.value.name}</Link>
                                 </div>
                                 <div className="card-body">
                                     {cookie.value.nichijis.map((nichiji, idx2) => (
