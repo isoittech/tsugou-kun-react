@@ -7,15 +7,42 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const BACKEND_PJ_HOME = `${__dirname}/../backend`;
 
 module.exports = () => {
-    // frontend/.envに設定値が存在する
+    // ------------------------------------------
+    // 環境変数読み込み
+    // ------------------------------------------
+    dotenv.config();
+    const envNodeEnv = process.env.NODE_ENV;
+    const envBackendHost = process.env.HOST_URL;
+    const envCookieExpiredMinutes = process.env.COOKIE_EXPIRED_MINUTES;
+
+    // ------------------------------------------
+    // 外部設定読み込み
+    // ------------------------------------------
+    // frontend/.envに存在する設定値をロード
     const env = dotenv.config().parsed;
 
-    const outputPath = env.NODE_ENV === "development" ? `${__dirname}/dist` : `${BACKEND_PJ_HOME}/build`;
+    // webpack起動時に環境変数が指定されていたらそれで.envの内容を上書き
+    if (envNodeEnv) env.NODE_ENV = envNodeEnv;
+    if (envBackendHost) env.HOST_URL = envBackendHost;
+    if (envCookieExpiredMinutes) env.COOKIE_EXPIRED_MINUTES = envCookieExpiredMinutes;
 
+    // ------------------------------------------
+    // モード・ビルド出力先決定
+    // ------------------------------------------
+    const outputPath = env.NODE_ENV === "production" ? `${BACKEND_PJ_HOME}/build` : `${__dirname}/dist`;
+    const webpackMode = env.NODE_ENV === "production" ? "production" : "development";
+
+    console.log(".env内容:");
+    console.log(env);
+    console.log(`webpackMode:${webpackMode}`);
+
+    // ------------------------------------------
+    // 本設定
+    // ------------------------------------------
     return {
         // モード値を production に設定すると最適化された状態出力される。
         // 一方、development に設定するとソースマップ有効でJSファイルが出力される。
-        mode: env.NODE_ENV,
+        mode: webpackMode,
 
         // メインとなるJavaScriptファイル（エントリーポイント）
         entry: "./src/main.tsx",
