@@ -1,10 +1,16 @@
 #!/bin/bash
 
+echo "0-----------------------------------" >> /tmp/start.sh.log
+
 for HOST in ${LETSENCRYPT_HOSTS}
 do
+echo "0b-----------------------------------" >> /tmp/start.sh.log
   if [ ! -d "/etc/letsencrypt/live/${HOST}" ]; then
+echo "1-----------------------------------" >> /tmp/start.sh.log
     mkdir -p /etc/letsencrypt/live/${HOST}
+echo "2-----------------------------------" >> /tmp/start.sh.log
     mkdir -p /var/lib/letsencrypt
+echo "3-----------------------------------" >> /tmp/start.sh.log
 
     crt_file="/etc/letsencrypt/live/${HOST}/fullchain.pem" &&
     key_file="/etc/letsencrypt/live/${HOST}/privkey.pem" &&
@@ -16,15 +22,21 @@ do
       -out "$crt_file" \
       -keyout "$key_file" &&
     chmod 400 "$key_file"
+echo "5-----------------------------------" >> /tmp/start.sh.log
   fi
 done
 
+echo "6-----------------------------------" >> /tmp/start.sh.log
 nginx
 
+echo "7-----------------------------------" >> /tmp/start.sh.log
 for HOST in ${LETSENCRYPT_HOSTS}
 do
+echo "8-----------------------------------" >> /tmp/start.sh.log
   if [ ! -e "/etc/letsencrypt/initialize" ]; then
+echo "9-----------------------------------" >> /tmp/start.sh.log
     rm -rf /etc/letsencrypt/live/${HOST}
+echo "10-----------------------------------" >> /tmp/start.sh.log
     # certbot certonly: 3ヶ月で失効する SSL/TLSサーバ証明書を自動で更新します
     # -n: インタラクティブ設定をオフにします
     # --keep-until-expiring: ?
@@ -41,16 +53,24 @@ do
       --webroot --webroot-path /var/lib/letsencrypt \
       -m ${LETSENCRYPT_MAIL} -d ${HOST} \
       --dry-run
+echo "11-----------------------------------" >> /tmp/start.sh.log
   fi
 done
 
+echo "12-----------------------------------" >> /tmp/start.sh.log
 touch /etc/letsencrypt/initialize
-# certbot renew
+echo "13-----------------------------------" >> /tmp/start.sh.log
+#certbot renew
 certbot renew --dry-run
+echo "14-----------------------------------" >> /tmp/start.sh.log
 
 nginx -s reload
+echo "15-----------------------------------" >> /tmp/start.sh.log
 
 while true
 do
+echo "16-----------------------------------" >> /tmp/start.sh.log
     sleep 7
+echo "17-----------------------------------" >> /tmp/start.sh.log
 done
+echo "18-----------------------------------" >> /tmp/start.sh.log
