@@ -1,16 +1,17 @@
-version: "3.3"
+version: "3.8"
 
 services:
   #############################################
   # Appサーバ
   #############################################
   express:
-    # appディレクトリの中から`Dockerfile`を探す
-    build: ./backend
-    # Dockerfileが期待する引数
-    args:
-      - HOST_URL=${HOST_URL}
-      - COOKIE_EXPIRED_MINUTES=${COOKIE_EXPIRED_MINUTES:-86400}
+    build: 
+      # appディレクトリの中から`Dockerfile`を探す
+      context: ./backend
+      # Dockerfileが期待する引数
+      args:
+        - HOST_URL=${HOST_URL}
+        - COOKIE_EXPIRED_MINUTES=${COOKIE_EXPIRED_MINUTES:-86400}
     # サービス起動後に入力されるコマンドを設定
     # command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     # データを永続化させる場合の設定。`host:container`でパスを記載
