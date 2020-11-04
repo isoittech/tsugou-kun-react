@@ -5,6 +5,7 @@ services:
   # Appサーバ
   #############################################
   react-tsugou-kun-express:
+    container_name: react-tsugou-kun-express
     build: 
       # appディレクトリの中から`Dockerfile`を探す
       context: ./backend
@@ -30,7 +31,7 @@ services:
   # Webサーバ
   #############################################
   react-tsugou-kun-nginx:
-    container_name: react-tsugou-kun-express
+    container_name: react-tsugou-kun-nginx
     build:
       context: ./nginx
     environment:
