@@ -49,5 +49,5 @@ EXPOSE 3000
 # ----------------------------
 # コンテナ起動時処理
 # ----------------------------
-WORKDIR /opt/tsugou-kun/app/backend
-ENTRYPOINT ["node", "--nolazy", "-r", "ts-node/register/transpile-only", "src/index.ts"]
+#WORKDIR /opt/tsugou-kun/app/backend
+#ENTRYPOINT ["node", "--nolazy", "-r", "ts-node/register/transpile-only", "src/index.ts"]

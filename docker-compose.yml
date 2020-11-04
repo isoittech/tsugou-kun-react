@@ -19,8 +19,8 @@ services:
     command: node --nolazy -r ts-node/register/transpile-only src/index.ts
     #tty: true
     # 開放するポートを指定。`host:container`でポートを記載
-    expose:
-      - 3000
+    ports:
+      - "3000:3000"
 
   #############################################
   # Webサーバ
@@ -40,5 +40,7 @@ services:
     depends_on:
       - react-tsugou-kun-express
     volumes:
+      # nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       # log directory
       - /var/log/nginx:/var/log/nginx
