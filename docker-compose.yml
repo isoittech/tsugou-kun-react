@@ -10,7 +10,7 @@ services:
     # Dockerfileが期待する引数
     args:
       - HOST_URL=${HOST_URL}
-      - COOKIE_EXPIRED_MINUTES=${COOKIE_EXPIRED_MINUTES:86400}
+      - COOKIE_EXPIRED_MINUTES=${COOKIE_EXPIRED_MINUTES:-86400}
     # サービス起動後に入力されるコマンドを設定
     # command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     # データを永続化させる場合の設定。`host:container`でパスを記載
