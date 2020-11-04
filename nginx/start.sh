@@ -39,14 +39,14 @@ do
     # -d: SSL/TLSサーバ証明書の取得を申請するドメイン名を指定します
     certbot certonly -n --keep-until-expiring --agree-tos \
       --webroot --webroot-path /var/lib/letsencrypt \
-      -m ${LETSENCRYPT_MAIL} -d ${HOST} 
-      #--dry-run
+      -m ${LETSENCRYPT_MAIL} -d ${HOST} \
+      --dry-run
   fi
 done
 
 touch /etc/letsencrypt/initialize
-certbot renew
-#certbot renew --dry-run
+# certbot renew
+certbot renew --dry-run
 
 nginx -s reload
 
