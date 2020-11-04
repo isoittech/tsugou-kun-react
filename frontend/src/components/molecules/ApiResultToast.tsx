@@ -1,63 +1,58 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {Calendar, DayValue} from 'react-modern-calendar-datepicker';
-import {Alert, Badge, Button, Card, Col, Form, OverlayTrigger, Row, Toast, Tooltip} from 'react-bootstrap';
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-
-import {Link} from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Badge, Button, Col, Form } from "react-bootstrap";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 type Props = {
     schedule_update_id: string;
-}
+};
 
-
-// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // API実行結果周知Toast
-// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+// ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 export const ApiResultToast: React.FC<Props> = (props) => {
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // Clickイベントハンドラ
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const onClick = () => {
+        const scheduleFillUrl = document.getElementById("scheduleFillUrl");
+        // 文字をすべて選択
+        // @ts-ignore
+        scheduleFillUrl.select();
+        // コピー
+        document.execCommand("copy");
+
+        alert("URLをコピーしました。\nメール・チャットで貼り付ける等、お知らせ用にご利用ください。");
+    };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     return (
         <>
-            <p className="mb-0">
-                <Badge variant="secondary">Yes！</Badge>
-                次のリンクでイベント情報の修正ができます。
-                <Link
-                    id={"schedule_fill_url"} className={"nav-link"}
-                    to={`/edit/${props.schedule_update_id}`}>
-                    `{location.href}edit/{props.schedule_update_id}`
-                </Link>
-
-                <OverlayTrigger
-                    placement={'bottom'}
-                    overlay={
-                        <Tooltip id={'tooltip-bottom'}>
-                            残念ですがバグがあり、まだ機能しません。
-                        </Tooltip>
-                    }
-                >
-                    <button type="submit" className="btn btn-outline-primary"
-                            onClick={() => {
-                                const schedule_fill_url = document.getElementById('schedule_fill_url');
-                                // 文字をすべて選択
-                                // @ts-ignore
-                                schedule_fill_url.select();
-                                // コピー
-                                document.execCommand("copy");
-
-                                alert('コピーできるようにしました。\nメール・チャット等で貼り付けてお知らせに貼り付けてご利用ください。');
-                            }}>
+            次のURLでイベント情報の修正ができます。
+            <Form.Row className="align-items-center">
+                <Col xs="auto">
+                    <Link to={`/edit/${props.schedule_update_id}`}>
+                        <Form.Label htmlFor="scheduleFillUrl" srOnly>
+                            URL
+                        </Form.Label>
+                        <Form.Control
+                            className="mb-2"
+                            id="scheduleFillUrl"
+                            defaultValue={`${location.href}edit/${props.schedule_update_id}`}
+                            readOnly
+                        />
+                    </Link>
+                </Col>
+                <Col xs="auto">
+                    <Button type="submit" className="mb-2" onClick={onClick}>
                         URLをクリップボードにコピー
-                    </button>
-                </OverlayTrigger>
-
-
-
-            </p>
+                    </Button>
+                </Col>
+            </Form.Row>
         </>
-    )
-}
+    );
+};

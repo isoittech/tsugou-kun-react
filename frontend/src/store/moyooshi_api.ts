@@ -1,18 +1,17 @@
-import {ValueOf} from "../libs/common/declare";
+import { ValueOf } from "../libs/common/declare";
 
 export const ApiExecutionStateType = {
-    MI: 'MI',
-    JIKKOU_CHU: 'JIKKOU_CHU',
-    SUCCEEDED: 'SUCCEEDED',
-    FAILED: 'FAILED',
-    READ_SUCCEEDED: 'READ_SUCCEEDED',
-    READ_FAILED: 'READ_FAILED',
-    UPDATE_SUCCEEDED: 'UPDATE_SUCCEEDED',
-    UPDATE_FAILED: 'UPDATE_FAILED',
+    MI: "MI",
+    JIKKOU_CHU: "JIKKOU_CHU",
+    SUCCEEDED: "SUCCEEDED",
+    FAILED: "FAILED",
+    READ_SUCCEEDED: "READ_SUCCEEDED",
+    READ_FAILED: "READ_FAILED",
+    UPDATE_SUCCEEDED: "UPDATE_SUCCEEDED",
+    UPDATE_FAILED: "UPDATE_FAILED",
 } as const;
 // 「as const」というConstアサーションを利用。
 // これを利用することで、後続の宣言EventAction.typeの型が「string」ではなくリテラル型の「ADD_EVENT|SUCCESS_～|FAIL_～…」となる。
-
 
 // ValueOf: 「keyof 型」という文で、オブジェクトの型からキーを取り出してくれる自前の型。
 export type ApiExecutionState = {

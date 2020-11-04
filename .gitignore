@@ -81,6 +81,8 @@ typings/
 # Nuxt.js build / generate output
 .nuxt
 dist
+!index.html
+!app.css
 
 # Gatsby files
 .cache/
@@ -106,3 +108,7 @@ dist
 frontend/**/*.js
 .idea/workspace.xml
 *.sqlite3
+backend/src/controller/*js
+backend/src/helper/*js 
+backend/src/service/*js
+backend/src/index.js

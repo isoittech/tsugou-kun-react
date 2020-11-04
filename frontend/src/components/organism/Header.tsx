@@ -1,29 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch} from "react-redux";
-import {Navbar, Nav, NavItem, NavDropdown, Button, FormControl, Form} from 'react-bootstrap';
-import {Link} from "react-router-dom";
+import React from "react";
+import { Navbar, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-type Props = {
-    foo: string;
-}
-
-export const Header: React.FC<Props> = (props) => {
-
-    const [count, setCount] = useState(0);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        console.log("Headerがよばれたよー")
-    });
-
+export const Header: React.FC = () => {
     return (
         <>
             <Navbar className={"navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-5 shadow"} expand="lg">
-                <Navbar.Brand href="/" className={"navbar-brand"}>都合くん「この日空いてるっすか。」</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                <Navbar.Brand href="/" className={"navbar-brand"}>
+                    都合くん「この日空いてるっすか。」
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Link to="/" className={"nav-link"}>Home</Link>
+                        <Link to="/" className={"nav-link"}>
+                            Home
+                        </Link>
                         {/*<Nav.Link href="/">Home</Nav.Link>*/}
                         {/*<Nav.Link href="/edit/aieuo">Edit</Nav.Link>*/}
                         {/*                       <NavDropdown title="Dropdown" id="basic-nav-dropdown">
@@ -41,5 +32,5 @@ export const Header: React.FC<Props> = (props) => {
                 </Navbar.Collapse>
             </Navbar>
         </>
-    )
-}
+    );
+};

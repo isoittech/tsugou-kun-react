@@ -1,25 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch} from "react-redux";
+import React from "react";
 
-type Props = {
-    foo: string;
-}
-
-export const Footer: React.FC<Props> = (props) => {
-
-    const [count, setCount] = useState(0);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        console.log("Footerがよばれたよー")
-    });
-
+export const Footer: React.FC = () => {
     return (
         <>
-            <footer className="footer bg-dark mt-2 text-center">
-                <span>Developed by <a href="https://github.com/isoittech/tsugou-kun-react">isoittech</a></span>
-                <a className="text-secondary" href="https://chouseisan.com/">Respect For Chouseisan</a>
+            <footer className="footer bg-dark mt-4 text-center">
+                <span>
+                    Developed by <a href="https://github.com/isoittech/tsugou-kun-react">isoittech</a>
+                </span>
+                <br />
+                <a className="text-secondary" href="https://chouseisan.com/">
+                    Respect For Chouseisan
+                </a>
             </footer>
         </>
-    )
-}
+    );
+};

@@ -1,12 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {Helmet} from "react-helmet";
+import React from "react";
+import { Helmet } from "react-helmet";
 
-import {EventAddCard} from "../organism/EventAddCard";
+import EventCard from "../../containers/organism/EventCard";
 
-export const Top: React.FC = (props) => {
-
-    console.log("★Top画面");
-
+export const Top: React.FC = () => {
     return (
         <>
             <Helmet>
@@ -14,9 +11,9 @@ export const Top: React.FC = (props) => {
             </Helmet>
             <div className=" row d-flex justify-content-center my-5">
                 <div className="col-sm-10">
-                    <EventAddCard/>
+                    <EventCard />
                 </div>
             </div>
         </>
-    )
-}
+    );
+};

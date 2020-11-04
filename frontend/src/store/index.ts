@@ -1,16 +1,16 @@
-import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
-import createSagaMiddleware from 'redux-saga'
-import {all} from "redux-saga/effects";
+import { combineReducers, configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import createSagaMiddleware from "redux-saga";
+import { all } from "redux-saga/effects";
 
-import {moyooshiSlice} from "../features/moyooshi/moyooshi-slice";
-import {moyooshiSaga} from "../features/moyooshi/moyooshi-saga";
+import { moyooshiSlice } from "../features/moyooshi/moyooshi-slice";
+import { moyooshiSaga } from "../features/moyooshi/moyooshi-saga";
 
 const rootReducer = combineReducers({
     moyooshi: moyooshiSlice.reducer,
 });
 
 function* rootSaga() {
-    yield all([...moyooshiSaga])
+    yield all([...moyooshiSaga]);
 }
 
 export default function setupStore() {
@@ -23,4 +23,4 @@ export default function setupStore() {
     });
     sagaMiddleware.run(rootSaga);
     return store;
-};
+}
