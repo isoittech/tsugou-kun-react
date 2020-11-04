@@ -5,6 +5,8 @@
 [%hardbreaks]
 調整さん （https://chouseisan.com/ ）のパクりサービス。リスペクト！
 React・TypeScript・Expressの習得用に開発している。
+※有識者レビュー対象：
+　　https://github.com/isoittech/tsugou-kun-react/releases/tag/REL_0.5.0
 
 
 == ■ローカル環境動作手順
