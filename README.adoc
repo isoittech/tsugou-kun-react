@@ -38,6 +38,28 @@ $ npm ci
 $ npm start
 ```
 
+== ■本番環境リリース
+
+....
+# # cloneする
+# cd tsugou-kun-react
+# export HOST_URL=https://XXXXXXX
+# docker-compose build --no-cache
+# docker-compose up -d
+# # ---------------------
+# docker-compose logs                        # ログ確認
+# docker-compose exec nginx /bin/bash        # ログインして確認
+
+# # ---------------------
+# # 再起動
+# docker-compose restart
+# # ---------------------
+# # 削除
+# docker-compose down --rmi all --volumes --remove-orphans
+# # or
+# docker stop xxxx && docker rm xxxx
+....
+
 == ■ISSUE・TODO
 * 参加日記入機能開発
 * イベント情報登録後、フォームクリアが働かない
@@ -290,7 +312,8 @@ $ npm i -D \
     mini-css-extract-plugin \
     style-loader \
     css-loader \
-    dotenv
+    dotenv \
+    cross-env
 $ npm i \
     react \
     react-dom \
@@ -352,3 +375,4 @@ https://qiita.com/tashxii/items/0515f00ec641d52f879b[React+Redux+APIサーバー
 * https://blog.capilano-fw.com/?p=5582[保存版！「sequelize」モデルの使い方実例・全59件]
 * https://numb86-tech.hatenablog.com/entry/2019/12/05/111342[React Ref の基本]
 * https://numb86-tech.hatenablog.com/entry/2019/12/06/122217[forwardRef と useImperativeHandle]
+* https://qiita.com/ohs30359-nobuhara/items/bdc06b2db1bef7af2439[脱create-react-app ~ 真面目に express × react 環境を構築する~]

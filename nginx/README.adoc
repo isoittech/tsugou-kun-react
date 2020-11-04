@@ -50,12 +50,19 @@ crontab -e
 $ cd <nginx>
 
 # 初めて起動
-$ docker-compose --env-file docker-compose.***.env build
-$ docker-compose --env-file docker-compose.***.env up -d
-$ docker-compose --env-file docker-compose.***.env logs     # ログ確認
+$ docker-compose build
+$ docker-compose up -d
+$ docker-compose logs     # ログ確認
 $ docker-compose exec nginx /bin/bash           # ログインして確認
 
 # 再起動
-$ docker-compose --env-file docker-compose.***.env restart
+$ docker-compose restart
+
+# 削除系
+$ docker-compose down --rmi all --volumes --remove-orphans
+  ※ --rmiオプションは、削除するイメージの種類を指定する。allはすべてのイメージ。localはフィールドにカスタムタグのないイメージのみを削除する。--rmiオプションを省略すると、イメージは消されない。
+  ※ --volumesオプションは、docker-compose.ymlのvolumesセクションに書かれた名前付きボリュームとコンテナにアタッチされたanonymous volumeが削除される。
+  ※ --remove-orphansオプションは、docker-compose.ymlで定義から削除されたサービス用の未定義コンテナも削除される。
+  ※ これら3つのオプションをつけないと、削除されるのはコンテナとネットワークだけとなる。
 
 ```
