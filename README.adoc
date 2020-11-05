@@ -335,8 +335,7 @@ $ tsc --version
 $ tsc --init
 ※React Routerについてはβ版の6を使用。競合のReach Routerとの合併版であり、便利かつ直感的であるため。正式版がリリースされ次第「@next」を除去する。
 # for test
-$ npm i -D jest \
-    ts-jest \
+$ npm i -D ts-jest \
     jest-environment-jsdom-fourteen \
     @testing-library/react \
     @testing-library/user-event \
@@ -347,14 +346,19 @@ $ npm i -D jest \
     @babel/preset-typescript \
     babel-preset-react-app \
     babel-jest \
+    enzyme \
+    jest-enzyme \
+    enzyme-adapter-react-16 \
     react-test-renderer
     
 ```
-
-※ts-node：コンパイルした後にnodeで実行してくれるモジュール。 +
+[%hardbreaks]
+※jestはグローバルインストール（ `npm i -g jest` ）しておく。
+※ts-node：コンパイルした後にnodeで実行してくれるモジュール。
 　package.jsonのscriptsに `ts-node` を実行するコマンドを定義する。
 ※react-test-renderer：スナップショットテスト用
 ※Jestを単体で使用する：npm install jest --global
+※enzymeとtesting-libraryを競合不具合検証のために両方入れている。
 
 
 ===== ○フォルダ構成
