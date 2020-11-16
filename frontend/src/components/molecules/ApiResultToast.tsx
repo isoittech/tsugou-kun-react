@@ -35,7 +35,7 @@ export const ApiResultToast: React.FC<Props> = (props) => {
             次のURLでイベント情報の修正ができます。
             <Form.Row className="align-items-center">
                 <Col xs="auto">
-                    <Link to={`/edit/${props.schedule_update_id}`}>
+                    <Link to={`/edit/${props.schedule_update_id}`} data-testid="linkEdit">
                         <Form.Label htmlFor="scheduleFillUrl" srOnly>
                             URL
                         </Form.Label>
@@ -44,6 +44,7 @@ export const ApiResultToast: React.FC<Props> = (props) => {
                             id="scheduleFillUrl"
                             defaultValue={`${location.href}edit/${props.schedule_update_id}`}
                             readOnly
+                            data-testid="txtFormEditUrl"
                         />
                     </Link>
                 </Col>
