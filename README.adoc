@@ -360,6 +360,12 @@ $ npm i -D ts-jest \
 ※Jestを単体で使用する：npm install jest --global
 ※enzymeとtesting-libraryを競合不具合検証のために両方入れている。
 
+```shell
+# for Storybook
+# https://storybook.js.org/docs/react/api/cli-options
+$ npx sb init # Storybookインストール開始コマンド。
+
+```
 
 ===== ○フォルダ構成
 [%hardbreaks]

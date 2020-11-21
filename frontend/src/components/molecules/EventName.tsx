@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
-type Props = {
+export type EventNameProps = {
     value?: string;
     valueSetter: (value: string) => void;
     validStatusSetter: (flg: boolean) => void;
@@ -14,7 +14,7 @@ type Props = {
 // イベント名編集フォーム部品
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-const EventNameForm: React.FC<Props> = ({ valueSetter, validStatusSetter, displayMode = 1, value = "" }) => {
+const EventNameForm: React.FC<EventNameProps> = ({ valueSetter, validStatusSetter, displayMode = 1, value = "" }) => {
     // ========================================================
     // コンポーネントのState
     // ========================================================
@@ -61,7 +61,7 @@ const EventNameForm: React.FC<Props> = ({ valueSetter, validStatusSetter, displa
 // イベント名編集フォーム
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-export const EventName: React.FC<Props> = ({ displayMode = 1, ...props }: Props) => {
+export const EventName: React.FC<EventNameProps> = ({ displayMode = 1, ...props }: EventNameProps) => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
