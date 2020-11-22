@@ -11,9 +11,9 @@ import { CheckedBox, NichijiData } from "../../libs/common/declare";
 import { EventNichijiKouhoDelete } from "../molecules/EventNichijiKouhoDelete";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-// Props
+// EventCardProps
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-type Props = {
+export type EventCardProps = {
     eventNichijiKouho: string;
     showA: boolean;
     toastHeader: JSX.Element;
@@ -43,7 +43,7 @@ type Props = {
 // イベント編集フォーム（新規追加）
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-export const EventCardPC: React.FC<Props> = ({
+export const EventCardPC: React.FC<EventCardProps> = ({
     eventName,
     eventMemo,
     eventNichijiKouhoDeleteTargets,

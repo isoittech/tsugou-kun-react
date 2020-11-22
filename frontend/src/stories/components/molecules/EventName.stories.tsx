@@ -7,13 +7,26 @@ import { EventName, EventNameProps } from "../../../components/molecules/EventNa
 export default {
     title: "EventName",
     component: EventName,
-    argTypes: {
-        backgroundColor: { control: "color" },
-    },
 } as Meta;
 
 const Template: Story<EventNameProps> = (args) => <EventName {...args} />;
 
-export const Default = Template.bind({});
-Default.args = {
+export const Mode1Default = Template.bind({});
+Mode1Default.args = {
+};
+
+export const Mode1ValueSet = Template.bind({});
+Mode1ValueSet.args = {
+  value: 'サンプルイベント',
+};
+
+export const Mode2Default = Template.bind({});
+Mode2Default.args = {
+  displayMode: 2
+};
+
+export const Mode2ValueSet = Template.bind({});
+Mode2ValueSet.args = {
+  value: 'サンプルイベント',
+  displayMode: 2
 };
