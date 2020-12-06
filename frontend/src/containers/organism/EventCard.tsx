@@ -248,7 +248,7 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             // イベント日時候補
             // -------------------------------------
             const tempArray: NichijiData[] = [];
-            readMoyooshi.MoyooshiKouhoNichijis.forEach((moyooshiKouhoNichiji) => {
+            readMoyooshi.moyooshiKouhoNichijis.forEach((moyooshiKouhoNichiji) => {
                 if (moyooshiKouhoNichiji.kouho_nichiji) {
                     // サーバ側ではレコードを物理削除ではなく論理削除している。
                     // そのため、「論理削除されていない」レコードを表示対象とする。
