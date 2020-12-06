@@ -230,15 +230,19 @@ $ npm i -D \
     tslint \
     @types/node \
     @types/express \
-    @types/sqlite3
+    @types/sqlite3 \
+    @types/validator \
+    @types/bluebird \
+    mocha \
+    @types/mocha \
+    reflect-metadata
 $ npm i \
     express \
     sqlite3 \
-    sequelize \
+    sequelize@5.22.3 \      # 6.xはバグのため低いバージョンを使用
+    sequelize-typescript \
     base64url \
-    mocha \
     connect-history-api-fallback \
-    @types/mocha
 $ tsc --version
 $ tsc --init
 ```

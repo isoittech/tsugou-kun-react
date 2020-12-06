@@ -1,7 +1,5 @@
 import * as Express from "express";
 import * as moyooshi_service from "../service/moyooshi_service";
-// @ts-ignore
-import models from "../models";
 import { MoyooshiServiceDto, MoyooshiServiceOutputDto } from "../service/moyooshi_service";
 import * as endecode from "../helper/endecode";
 
