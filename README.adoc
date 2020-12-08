@@ -245,6 +245,13 @@ $ npm i \
     connect-history-api-fallback \
 $ tsc --version
 $ tsc --init
+
+# GraphQL導入用
+$ npm i \
+    express-graphql \
+    graphql \
+    type-graphql
+
 ```
 
 ===== ○DBマイグレーション・モデル初期構築
