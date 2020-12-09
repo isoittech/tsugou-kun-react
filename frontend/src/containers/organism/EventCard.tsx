@@ -125,7 +125,12 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             // -------------------------------------
             // ヘッダタイトル
             // -------------------------------------
-            setToastHeader(<strong className={"mr-auto"}>イベントの新規登録に成功しました。</strong>);
+            setToastHeader(
+                <strong className={"mr-auto"}>
+                    <Badge variant="success">やったね</Badge>
+                    イベントの新規登録に成功しました。
+                </strong>
+            );
             // -------------------------------------
             // 内容
             // -------------------------------------
@@ -184,7 +189,11 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             // -------------------------------------
             // ヘッダタイトル
             // -------------------------------------
-            setToastHeader(<strong className={"mr-auto"}>イベント情報の更新に成功しました。</strong>);
+            setToastHeader(
+                <strong className={"mr-auto"}>
+                    <Badge variant="success">やったね</Badge>イベント情報の更新に成功しました。
+                </strong>
+            );
             // -------------------------------------
             // 内容
             // -------------------------------------
@@ -206,11 +215,6 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             updateCookie(moyooshiTableId, scheduleUpdateIdForCookie, moyooshiName, nichijiKouhos);
 
             // ========================================================
-            // Toastを表示させる
-            // ========================================================
-            setShowA(true);
-
-            // ========================================================
             // フォームリセット
             // ========================================================
             formReset();
@@ -219,6 +223,11 @@ export const EventCard: React.FC<{ cookies?: any }> = ({ cookies }) => {
             // 更新後の情報を取得するため再読込のためのディスパッチ
             // ========================================================
             dispatch(moyooshiSlice.actions.read(paramScheduleUpdateId));
+
+            // ========================================================
+            // Toastを表示させる
+            // ========================================================
+            setShowA(true);
         } else if (moyooshiAddApiSucceeded === ApiExecutionStateType.UPDATE_FAILED) {
             // ========================================================
             // Toast表示内容設定処理
