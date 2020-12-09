@@ -17,14 +17,7 @@ export class MoyooshiResolver {
     async Moyooshi(@Arg("schedule_update_id") schedule_update_id: string) {
         const moyooshiId: number = endecode.decodeFromScheduleUpdateId(schedule_update_id);
         const serviceOutput: MoyooshiServiceOutputDto = await moyooshi_service.readMoyooshi(moyooshiId);
-
-        const result: Moyooshi = new Moyooshi();
-        result.name = serviceOutput.moyooshi!.name;
-        result.memo = serviceOutput.moyooshi!.memo;
-        result.schedule_update_id = serviceOutput.moyooshi!.schedule_update_id;
-        result.moyooshiKouhoNichijis = serviceOutput.nichiji_kouhos!;
-
-        return Promise.resolve(result);
+        return Promise.resolve(serviceOutput.moyooshi);
     }
 
     // @Mutation((returns) => Moyooshi)
