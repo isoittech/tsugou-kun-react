@@ -341,7 +341,11 @@ $ npm i \
     bootstrap \
     react-modern-calendar-datepicker \
     react-helmet \
-    react-cookie
+    react-cookie \
+    # Material-UIに変更する
+    @material-ui/core \
+    @material-ui/styles \
+    react-hook-form 
 $ tsc --version
 $ tsc --init
 ※React Routerについてはβ版の6を使用。競合のReach Routerとの合併版であり、便利かつ直感的であるため。正式版がリリースされ次第「@next」を除去する。
@@ -361,6 +365,12 @@ $ npm i -D ts-jest \
     jest-enzyme \
     enzyme-adapter-react-16 \
     react-test-renderer
+
+# GraphQL導入用
+$ npm i \
+    @apollo/client \
+    graphql
+
     
 ```
 [%hardbreaks]

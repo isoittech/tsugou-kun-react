@@ -1,15 +1,3 @@
-/* .wrapperのdisplay・flex-flow・min-height、.containerのflexの指定は、footerを最下部に固定するCSS */
-.wrapper {
-    display: flex;
-    flex-flow: column;
-    min-height: 100vh;
-}
-
-/* .wrapperのdisplay・flex-flow・min-height、.containerのflexの指定は、footerを最下部に固定するCSS */
-.container {
-    flex: 1;
-}
-
 .errorlist {
     position: relative;
     color: #f00;

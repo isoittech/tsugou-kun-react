@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router";
 
-import { Header } from "./components/organism/Header";
-import { Footer } from "./components/organism/Footer";
-import { Top } from "./components/pages/Top";
+import { Header } from "./components2/organism/Header";
+import { Footer } from "./components2/organism/Footer";
+import { Top } from "./components2/pages/Top";
 import { Edit } from "./components/pages/Edit";
 import EventHistory from "./components/organism/EventHistory";
+import { CssBaseline } from "@material-ui/core";
 
 export const App: React.FC = () => {
     useEffect(() => {
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
 
     return (
         <>
+            <CssBaseline />
             <Header></Header>
             <div className="container">
                 <Routes>
