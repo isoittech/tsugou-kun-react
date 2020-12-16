@@ -63,9 +63,23 @@ export const Top: React.FC<TopProps> = () => {
         if (eventNichijiKouho) printedDate = `${eventNichijiKouho}\n${year}/${month}/${day} 19:00～`;
         else printedDate = `${year}/${month}/${day} 19:00～`;
 
-        // textArefRef.current.onChangeInTextarea(printedDate);
         setEventNichijiKouho(printedDate);
     };
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // イベント日時候補テキストフィールドの値変化時に起動
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const onChangedOnNichijiKouho = (event) => {
+        setEventNichijiKouho(event.target.value);
+    };
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // 必須項目フォームの入力内容変化時に起動
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    useEffect(() => {
+        const disabled = eventName === "" || eventNichijiKouho === "";
+        setButtonDisabled(disabled);
+    }, [eventName, eventNichijiKouho]);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // 未分類
@@ -78,13 +92,8 @@ export const Top: React.FC<TopProps> = () => {
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // 必須項目フォームの入力内容変化時に起動
+    // レンダリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    useEffect(() => {
-        const disabled = eventName === "" || eventNichijiKouho === "";
-        setButtonDisabled(disabled);
-    }, [eventName, eventNichijiKouho]);
-
     return (
         <>
             <Helmet>
@@ -135,13 +144,14 @@ export const Top: React.FC<TopProps> = () => {
                                             id="eventMemo"
                                             label="イベント日時候補"
                                             helperText="必須項目です。開催日時の候補を1行ごとに書いてください。"
-                                            defaultValue={eventNichijiKouho}
+                                            value={eventNichijiKouho}
                                             required
                                             multiline
                                             rows={5}
                                             variant="outlined"
                                             fullWidth
-                                            onChange={(e) => setEventNichijiKouho(e.target.value)}
+                                            onChange={onChangedOnNichijiKouho}
+                                            InputLabelProps={{ shrink: eventNichijiKouho !== "" }}
                                         />
                                     </Box>
                                 </Grid>
