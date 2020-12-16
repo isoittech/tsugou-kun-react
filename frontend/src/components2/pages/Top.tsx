@@ -56,8 +56,15 @@ export const Top: React.FC<TopProps> = () => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // Submit押下時に起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onSubmit = () => {
-        console.log(`[${new Date()}]onSubmit`);
+    const onSubmit = ({ eventName: val1, eventMemo: val2, eventNichijiKouho: val3 }, e) => {
+        console.log(`[${new Date()}]A eventName:${val1}, eventMemo:${val2}, eventNichijiKouho:${val3}`);
+        e.target.reset();
+        setEventName("");
+        setEventMemo("");
+        setEventNichijiKouho("");
+        console.log(
+            `[${new Date()}]B eventName:${eventName}, eventMemo:${eventMemo}, eventNichijiKouho:${eventNichijiKouho}`
+        );
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -71,13 +78,6 @@ export const Top: React.FC<TopProps> = () => {
         else printedDate = `${year}/${month}/${day} 19:00～`;
 
         setEventNichijiKouho(printedDate);
-    };
-
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // イベント日時候補テキストフィールドの値変化時に起動
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onChangedOnNichijiKouho = (event) => {
-        setEventNichijiKouho(event.target.value);
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -125,6 +125,8 @@ export const Top: React.FC<TopProps> = () => {
                                             variant="outlined"
                                             fullWidth
                                             onChange={(e) => setEventName(e.target.value)}
+                                            InputLabelProps={{ shrink: eventName !== "" }}
+                                            inputRef={register}
                                         />
                                     </Box>
                                 </Grid>
@@ -132,6 +134,7 @@ export const Top: React.FC<TopProps> = () => {
                                     <Box marginTop={2}>
                                         <TextField
                                             id="eventMemo"
+                                            name="eventMemo"
                                             label="イベント内容"
                                             helperText="このイベントについて告知したいことを書いてください。"
                                             multiline
@@ -139,13 +142,16 @@ export const Top: React.FC<TopProps> = () => {
                                             variant="outlined"
                                             fullWidth
                                             onChange={(e) => setEventMemo(e.target.value)}
+                                            InputLabelProps={{ shrink: eventMemo !== "" }}
+                                            inputRef={register}
                                         />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Box marginTop={2}>
                                         <TextField
-                                            id="eventMemo"
+                                            id="eventNichijiKouho"
+                                            name="eventNichijiKouho"
                                             label="イベント日時候補"
                                             helperText="必須項目です。開催日時の候補を1行ごとに書いてください。"
                                             value={eventNichijiKouho}
@@ -154,8 +160,9 @@ export const Top: React.FC<TopProps> = () => {
                                             rows={5}
                                             variant="outlined"
                                             fullWidth
-                                            onChange={onChangedOnNichijiKouho}
+                                            onChange={(e) => setEventNichijiKouho(e.target.value)}
                                             InputLabelProps={{ shrink: eventNichijiKouho !== "" }}
+                                            inputRef={register}
                                         />
                                     </Box>
                                 </Grid>
