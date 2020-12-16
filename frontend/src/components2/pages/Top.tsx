@@ -41,17 +41,24 @@ const useStyles = makeStyles((theme) => ({
 export type TopProps = {};
 
 export const Top: React.FC<TopProps> = () => {
-    // ========================================================
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // コンポーネントのState
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // ========================================================
-    // -------------------------------------
     // フォームの値・状態
-    // -------------------------------------
+    // ========================================================
     const [selectedDay, setSelectedDay] = useState<DayValue>(null);
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [eventName, setEventName] = useState("");
     const [eventNichijiKouho, setEventNichijiKouho] = useState("");
     const [eventMemo, setEventMemo] = useState("");
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // Submit押下時に起動
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const onSubmit = () => {
+        console.log(`[${new Date()}]onSubmit`);
+    };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // カレンダーがクリックされた時に起動
@@ -87,9 +94,6 @@ export const Top: React.FC<TopProps> = () => {
     const classes = useStyles();
     const commonClasses = useCommonStyles();
     const { register, handleSubmit } = useForm();
-    const onSubmit = () => {
-        console.log("onSubmit");
-    };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダリング
@@ -162,6 +166,7 @@ export const Top: React.FC<TopProps> = () => {
                                         className={classes.button}
                                         fullWidth
                                         disabled={buttonDisabled}
+                                        type="submit"
                                     >
                                         イベントを登録する
                                     </Button>
