@@ -178,9 +178,13 @@ export const Top: React.FC<TopProps> = () => {
                                             }}
                                             shouldHighlightWeekends
                                             minimumDate={getToday()}
+                                            calendarClassName="custom-calendar"
                                         />
-                                        <Typography className={commonClasses.helperText}>
-                                            クリックして日時候補を入力できます
+                                        <Typography
+                                            className={commonClasses.helperText}
+                                            style={{ marginLeft: "1.2em", marginTop: "0.5em" }}
+                                        >
+                                            クリックして日時候補を入力できます。
                                         </Typography>
                                     </Box>
                                 </Grid>
