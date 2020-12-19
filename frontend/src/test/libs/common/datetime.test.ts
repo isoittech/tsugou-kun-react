@@ -1,4 +1,4 @@
-import { getToday } from "../../../libs/common/datetime";
+import { getToday } from "../../../main/libs/common/datetime";
 
 describe("getToday関数", () => {
     it("正しい年月日を返却する", () => {

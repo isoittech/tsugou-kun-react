@@ -45,7 +45,7 @@ module.exports = () => {
         mode: webpackMode,
 
         // メインとなるJavaScriptファイル（エントリーポイント）
-        entry: "./src/main.tsx",
+        entry: "./src/main/main.tsx",
 
         // ファイルの出力設定
         output: {
@@ -63,7 +63,7 @@ module.exports = () => {
                 "process.env": JSON.stringify(env),
             }),
             new HtmlWebpackPlugin({
-                template: "./src/index.html",
+                template: "./src/main/index.html",
                 filename: "index.html",
             }),
             new MiniCssExtractPlugin(),

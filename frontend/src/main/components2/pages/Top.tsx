@@ -56,8 +56,13 @@ export const Top: React.FC<TopProps> = () => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // Submit押下時に起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onSubmit = ({ eventName: val1, eventMemo: val2, eventNichijiKouho: val3 }, e) => {
-        console.log(`[${new Date()}]A eventName:${val1}, eventMemo:${val2}, eventNichijiKouho:${val3}`);
+    const onSubmit = (
+        { eventName: argEventName, eventMemo: argEventMemo, eventNichijiKouho: argEventNichijiKouho },
+        e
+    ) => {
+        console.log(
+            `[${new Date()}]A eventName:${argEventName}, eventMemo:${argEventMemo}, eventNichijiKouho:${argEventNichijiKouho}`
+        );
         e.target.reset();
         setEventName("");
         setEventMemo("");

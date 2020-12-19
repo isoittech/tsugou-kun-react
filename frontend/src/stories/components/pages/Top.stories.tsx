@@ -2,11 +2,11 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Story, Meta } from "@storybook/react/types-6-0";
 
-import { Top, TopProps } from "../../../components2/pages/Top";
-import { Header } from "../../../components2/organism/Header";
-import { Footer } from "../../../components2/organism/Footer";
+import { Top, TopProps } from "../../../main/components2/pages/Top";
+import { Header } from "../../../main/components2/organism/Header";
+import { Footer } from "../../../main/components2/organism/Footer";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
-import { theme } from "../../../AppCss";
+import { theme } from "../../../main/AppCss";
 
 export default {
     title: "Top",
