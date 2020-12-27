@@ -73,10 +73,6 @@ export const Top: React.FC<TopProps> = () => {
         { eventName: argEventName, eventMemo: argEventMemo, eventNichijiKouho: argEventNichijiKouho },
         e
     ) => {
-        console.log(
-            `[${new Date()}]A eventName:${argEventName}, eventMemo:${argEventMemo}, eventNichijiKouho:${argEventNichijiKouho}`
-        );
-
         await addMoyooshiMutation({
             variables: {
                 moyooshi: { name: argEventName, memo: argEventMemo, moyooshiKouhoNichijis: argEventNichijiKouho },
@@ -87,9 +83,6 @@ export const Top: React.FC<TopProps> = () => {
         setEventName("");
         setEventMemo("");
         setEventNichijiKouho("");
-        console.log(
-            `[${new Date()}]B eventName:${eventName}, eventMemo:${eventMemo}, eventNichijiKouho:${eventNichijiKouho}, data:${data}`
-        );
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -119,14 +112,7 @@ export const Top: React.FC<TopProps> = () => {
     // ========================================================
     // フォームの値レンダリング部品1
     // ========================================================
-    let tag;
-    if (loading) {
-        tag = <div>Now Loading...</div>;
-    } else if (error) {
-        tag = <div>error....</div>;
-    } else if (data) {
-        tag = <div>{data.addMoyooshi.name}</div>;
-    }
+    // delete
 
     // ========================================================
     // レンダリング
@@ -136,8 +122,6 @@ export const Top: React.FC<TopProps> = () => {
             <Helmet>
                 <title>イベント新規登録 - 都合くん「この日空いてるっすか。」</title>
             </Helmet>
-
-            <div>{tag}</div>
 
             <main className={classes.layout}>
                 <Paper className={classes.paper} elevation={2}>
