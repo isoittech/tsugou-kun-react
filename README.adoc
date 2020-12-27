@@ -369,8 +369,15 @@ $ npm i -D ts-jest \
 # GraphQL導入用
 $ npm i \
     @apollo/client \
-    graphql
+    graphql \
+    react-apollo-hooks \
+    cors # ApolloClientではこれを使わないとだめだった
 
+$ npm i -D \
+    @graphql-codegen/cli \
+    @graphql-codegen/typescript \
+    @graphql-codegen/typescript-operations \
+    @graphql-codegen/typescript-react-apollo
     
 ```
 [%hardbreaks]

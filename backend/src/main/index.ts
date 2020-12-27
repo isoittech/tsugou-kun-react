@@ -2,6 +2,7 @@ import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import path from "path";
 import { buildSchema } from "type-graphql";
+const cors = require("cors");
 
 import router_moyooshi from "./controller/moyooshi_controller";
 import access_log from "./helper/access_log";
@@ -13,12 +14,14 @@ const main = async () => {
     // -----------------------------------
     // CORSの許可
     // -----------------------------------
-    app.use((req, res, next) => {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        next();
-    });
+    app.use(cors());
+    // ApolloClientからのリクエストでは下記設定を行ってCORS関連エラーが出てしまうため、上記corsモジュールを使っている。
+    // app.use((req, res, next) => {
+    //     res.header("Access-Control-Allow-Origin", "*");
+    //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    //     next();
+    // });
 
     // -----------------------------------
     // body-parserに基づいた着信リクエストの解析

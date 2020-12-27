@@ -5,21 +5,21 @@ import Moyooshi from "../models/moyooshi";
 import * as endecode from "../helper/endecode";
 import { MoyooshiServiceDto, MoyooshiServiceOutputDto } from "../service/moyooshi_service";
 import * as moyooshi_service from "../service/moyooshi_service";
-import MoyooshiKouhoNichiji from "../models/moyooshi_kouho_nichiji";
 
 @InputType()
 export class MoyooshiInput {
     @Field()
-    schedule_update_id!: string;
-
-    @Field()
     name!: string;
 
     @Field()
-    memo?: string;
+    memo: string;
 
     @Field((type) => [String])
     moyooshiKouhoNichijis!: string[];
+
+    constructor() {
+        this.memo = "";
+    }
 }
 
 @Resolver((of) => Moyooshi)
@@ -40,6 +40,7 @@ export class MoyooshiResolver {
         };
 
         const serviceOutput: MoyooshiServiceOutputDto = await moyooshi_service.createMoyooshi(moyooshiServiceDto);
+        serviceOutput.moyooshi!.moyooshiKouhoNichijis = serviceOutput.nichiji_kouhos!;
 
         return Promise.resolve(serviceOutput.moyooshi!);
     }

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Card, CardActions, CardContent, Button, Typography, Paper, Grid, TextField, Box } from "@material-ui/core";
+import { Button, Typography, Paper, Grid, TextField, Box } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
 import { Calendar, DayValue } from "react-modern-calendar-datepicker";
 
 import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
+import { useAddMoyooshiMutation } from "../../features/moyooshi/moyooshi-graphql";
+
+export type TopProps = {};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,9 +41,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export type TopProps = {};
-
 export const Top: React.FC<TopProps> = () => {
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // スタイリング
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const classes = useStyles();
+    const commonClasses = useCommonStyles();
+
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // コンポーネントのState
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -54,21 +61,34 @@ export const Top: React.FC<TopProps> = () => {
     const [eventMemo, setEventMemo] = useState("");
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // ハンドラ系
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const { register, handleSubmit } = useForm();
+    const [addMoyooshiMutation, { data, loading, error }] = useAddMoyooshiMutation();
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // Submit押下時に起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const onSubmit = (
+    const onSubmit = async (
         { eventName: argEventName, eventMemo: argEventMemo, eventNichijiKouho: argEventNichijiKouho },
         e
     ) => {
         console.log(
             `[${new Date()}]A eventName:${argEventName}, eventMemo:${argEventMemo}, eventNichijiKouho:${argEventNichijiKouho}`
         );
+
+        await addMoyooshiMutation({
+            variables: {
+                moyooshi: { name: argEventName, memo: argEventMemo, moyooshiKouhoNichijis: argEventNichijiKouho },
+            },
+        });
+
         e.target.reset();
         setEventName("");
         setEventMemo("");
         setEventNichijiKouho("");
         console.log(
-            `[${new Date()}]B eventName:${eventName}, eventMemo:${eventMemo}, eventNichijiKouho:${eventNichijiKouho}`
+            `[${new Date()}]B eventName:${eventName}, eventMemo:${eventMemo}, eventNichijiKouho:${eventNichijiKouho}, data:${data}`
         );
     };
 
@@ -94,20 +114,30 @@ export const Top: React.FC<TopProps> = () => {
     }, [eventName, eventNichijiKouho]);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // 未分類
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const classes = useStyles();
-    const commonClasses = useCommonStyles();
-    const { register, handleSubmit } = useForm();
-
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // ========================================================
+    // フォームの値レンダリング部品1
+    // ========================================================
+    let tag;
+    if (loading) {
+        tag = <div>Now Loading...</div>;
+    } else if (error) {
+        tag = <div>error....</div>;
+    } else if (data) {
+        tag = <div>{data.addMoyooshi.name}</div>;
+    }
+
+    // ========================================================
+    // レンダリング
+    // ========================================================
     return (
         <>
             <Helmet>
                 <title>イベント新規登録 - 都合くん「この日空いてるっすか。」</title>
             </Helmet>
+
+            <div>{tag}</div>
 
             <main className={classes.layout}>
                 <Paper className={classes.paper} elevation={2}>

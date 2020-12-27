@@ -12,10 +12,9 @@ type Moyooshi {
 }
 
 input MoyooshiInput {
-  memo: String!
+  memo: String = ""
   moyooshiKouhoNichijis: [String!]!
   name: String!
-  schedule_update_id: String!
 }
 
 type MoyooshiKouhoNichiji {
