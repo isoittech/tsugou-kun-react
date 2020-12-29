@@ -55,7 +55,7 @@ table#kaitou_table > tbody > tr > td {
 }
 
 .custom-calendar {
-    box-shadow: 0 1em 1em rgba(0, 0, 0, 0.1);
+    box-shadow: 1em 1em 1em rgba(0, 0, 0, 0.1);
     border-radius: 0.5em;
     padding-top: 1.2em; /* default */
     margin-left: 1.2em;

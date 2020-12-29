@@ -8,38 +8,9 @@ import { Calendar, DayValue } from "react-modern-calendar-datepicker";
 import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
 import { useAddMoyooshiMutation } from "../../features/moyooshi/moyooshi-graphql";
+import { ApiResultToast } from "../molecules/ApiResultToast";
 
 export type TopProps = {};
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        minWidth: 275,
-    },
-    layout: {
-        width: "auto",
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
-        [theme.breakpoints.up(820 + theme.spacing(2) * 2)]: {
-            width: 820,
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-    },
-    paper: {
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-        padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            marginTop: theme.spacing(6),
-            marginBottom: theme.spacing(6),
-            padding: theme.spacing(3),
-        },
-    },
-    button: {
-        marginTop: theme.spacing(3),
-        marginLeft: theme.spacing(1),
-    },
-}));
 
 export const Top: React.FC<TopProps> = () => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -67,8 +38,11 @@ export const Top: React.FC<TopProps> = () => {
     const [addMoyooshiMutation, { data, loading, error }] = useAddMoyooshiMutation();
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // Submit押下時に起動
+    // Submit押下イベントハンドリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // ========================================================
+    // API実行
+    // ========================================================
     const onSubmit = async (
         { eventName: argEventName, eventMemo: argEventMemo, eventNichijiKouho: argEventNichijiKouho },
         e
@@ -84,6 +58,27 @@ export const Top: React.FC<TopProps> = () => {
         setEventMemo("");
         setEventNichijiKouho("");
     };
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // Submit押下結果イベントハンドリング
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    let noticeTag;
+    if (loading) {
+        // ========================================================
+        // API実行中
+        // ========================================================
+        noticeTag = <div>Now Loading...</div>;
+    } else if (error) {
+        noticeTag = <div>error....</div>;
+        // ========================================================
+        // API実行失敗時
+        // ========================================================
+    } else if (data) {
+        // ========================================================
+        // API実行成功時
+        // ========================================================
+        // noticeTag = <div>{data.addMoyooshi.name}</div>;
+        noticeTag = <ApiResultToast schedule_update_id={data.addMoyooshi.schedule_update_id}></ApiResultToast>;
+    }
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // カレンダーがクリックされた時に起動
@@ -124,7 +119,8 @@ export const Top: React.FC<TopProps> = () => {
             </Helmet>
 
             <main className={classes.layout}>
-                <Paper className={classes.paper} elevation={2}>
+                {noticeTag}
+                <Paper className={classes.paper} elevation={3}>
                     <Typography component="h1" variant="h4" align="center">
                         さぁ催しましょう
                     </Typography>
@@ -227,3 +223,30 @@ export const Top: React.FC<TopProps> = () => {
         </>
     );
 };
+
+const useStyles = makeStyles((theme) => ({
+    layout: {
+        width: "auto",
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up(820 + theme.spacing(2) * 2)]: {
+            width: 820,
+            marginLeft: "auto",
+            marginRight: "auto",
+        },
+    },
+    paper: {
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+        padding: theme.spacing(2),
+        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+            marginTop: theme.spacing(6),
+            marginBottom: theme.spacing(6),
+            padding: theme.spacing(3),
+        },
+    },
+    button: {
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(1),
+    },
+}));
