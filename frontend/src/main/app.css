@@ -62,3 +62,12 @@ table#kaitou_table > tbody > tr > td {
     max-width: 90vw; /* default */
     min-height: 36.7em; /* default */
 }
+
+.custom-calendar-in-edit {
+    box-shadow: 1em 1em 1em rgba(0, 0, 0, 0.1);
+    border-radius: 0.5em;
+    padding-top: 0em;
+    margin-left: 0em;
+    max-width: 90vw; /* default */
+    min-height: 36.7em; /* default */
+}

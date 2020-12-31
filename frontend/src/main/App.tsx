@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router";
+import { CssBaseline } from "@material-ui/core";
 
 import { Header } from "./components2/organism/Header";
 import { Footer } from "./components2/organism/Footer";
 import { Top } from "./components2/pages/Top";
-import { Edit } from "./components/pages/Edit";
+import { Edit } from "./components2/pages/Edit";
 import EventHistory from "./components/organism/EventHistory";
-import { CssBaseline } from "@material-ui/core";
 
 export const App: React.FC = () => {
     useEffect(() => {
