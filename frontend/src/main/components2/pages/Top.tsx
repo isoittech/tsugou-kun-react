@@ -4,6 +4,7 @@ import { Button, Typography, Paper, Grid, TextField, Box } from "@material-ui/co
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
 import { Calendar, DayValue } from "react-modern-calendar-datepicker";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
