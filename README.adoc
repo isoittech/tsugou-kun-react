@@ -342,6 +342,10 @@ $ npm i \
     react-modern-calendar-datepicker \
     react-helmet \
     react-cookie \
+    winston \
+    moment \
+    @types/winston \
+    @types/moment \
     # Material-UIに変更する
     @material-ui/core \
     @material-ui/styles \

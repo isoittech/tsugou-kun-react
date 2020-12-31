@@ -104,5 +104,14 @@ module.exports = () => {
         // developmentモードｘdevtool指定なし：2MB
         //  ※デバッグ時、見にくいコードになる。余計な文字列が変数名・関数名に付く。
         // productionモード：500KB
+
+        // 下記エラーへの対処
+        // Module not found: Error: Can't resolve 'fs' in '...'
+        // ※Node用モジュールをポリフィルもしくはモックして、ブラウザーでも実行できるようにする。
+        // 　emptyは空のオブジェクトを提供するという意味なので、dotenv内のfsは何もしない空モジュールという事になる。
+        // 　ブラウザ用ではfsは利用しないのでこれでOK。
+        node: {
+            fs: "empty",
+        },
     };
 };
