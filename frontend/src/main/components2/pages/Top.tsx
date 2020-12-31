@@ -182,18 +182,6 @@ export const Top: React.FC<TopProps> = () => {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.button}
-                                        fullWidth
-                                        disabled={buttonDisabled}
-                                        type="submit"
-                                    >
-                                        イベントを登録する
-                                    </Button>
-                                </Grid>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Grid item xs={12}>
@@ -216,6 +204,18 @@ export const Top: React.FC<TopProps> = () => {
                                         </Typography>
                                     </Box>
                                 </Grid>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled={buttonDisabled}
+                                    type="submit"
+                                >
+                                    イベントを登録する
+                                </Button>
                             </Grid>
                         </Grid>
                     </form>
