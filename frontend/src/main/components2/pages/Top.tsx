@@ -48,9 +48,14 @@ export const Top: React.FC<TopProps> = () => {
         { eventName: argEventName, eventMemo: argEventMemo, eventNichijiKouho: argEventNichijiKouho },
         e
     ) => {
+        // -------------------------------------
+        // イベント日時候補テキストエリアの内容を改行コードで分割
+        // -------------------------------------
+        const eventNichijiKouhoArray: string[] = argEventNichijiKouho.split("\n");
+
         await addMoyooshiMutation({
             variables: {
-                moyooshi: { name: argEventName, memo: argEventMemo, moyooshiKouhoNichijis: argEventNichijiKouho },
+                moyooshi: { name: argEventName, memo: argEventMemo, moyooshiKouhoNichijis: eventNichijiKouhoArray },
             },
         });
 
@@ -105,14 +110,6 @@ export const Top: React.FC<TopProps> = () => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // ========================================================
-    // フォームの値レンダリング部品1
-    // ========================================================
-    // delete
-
-    // ========================================================
-    // レンダリング
-    // ========================================================
     return (
         <>
             <Helmet>
