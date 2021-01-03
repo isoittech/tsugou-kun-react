@@ -106,10 +106,8 @@ export const updateMoyooshi = async (
         // ------------------------
         const deleteTargetInfos = moyooshiServiceDto.deleted_nichiji_kouho;
         const deleteTargetIds: number[] = [];
-        for (const [key, value] of Object.entries(deleteTargetInfos)) {
-            if (key.startsWith("id_del_eve_dt_kouho_id_") && value) {
-                deleteTargetIds.push(Number(key.replace("id_del_eve_dt_kouho_id_", "")));
-            }
+        for (const id_del_eve_dt_kouho_id of deleteTargetInfos) {
+            deleteTargetIds.push(Number(id_del_eve_dt_kouho_id));
         }
 
         // ------------------------

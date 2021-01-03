@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography, Paper, Grid, TextField, Box } from "@material-ui/core";
+import {
+    Button,
+    Typography,
+    Paper,
+    Grid,
+    TextField,
+    Box,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormHelperText,
+} from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
 import { Calendar, DayValue } from "react-modern-calendar-datepicker";
@@ -8,12 +21,20 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
-import { useAddMoyooshiMutation } from "../../features/moyooshi/moyooshi-graphql";
-import { ApiResultToast } from "../molecules/ApiResultToast";
+import { useUpdateMoyooshiMutation, useMoyooshiQuery } from "../../features/moyooshi/moyooshi-graphql";
+import { CheckedBox, NichijiData } from "../../libs/common/declare";
+import { logger } from "../../libs/common/logging";
+import { MoyooshiDocument } from "../../generated/graphql";
 
 export type EditProps = {};
 
 export const Edit: React.FC<EditProps> = () => {
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // パラメータ
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const { key } = useParams();
+    const paramScheduleUpdateId = key;
+
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // スタイリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -31,55 +52,105 @@ export const Edit: React.FC<EditProps> = () => {
     const [eventName, setEventName] = useState("");
     const [eventNichijiKouho, setEventNichijiKouho] = useState("");
     const [eventMemo, setEventMemo] = useState("");
+    const [eventNichijiKouhoDeleteTargets, setEventNichijiKouhoDeleteTargets] = useState<NichijiData[]>([]);
+    const [eventNichijiKouhoDeleteTargetChecks, setEventNichijiKouhoDeleteTargetChecks] = useState<CheckedBox>({});
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // その他Hooks
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const { register, handleSubmit } = useForm();
-    const [addMoyooshiMutation, { data, loading, error }] = useAddMoyooshiMutation();
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // Submit押下イベントハンドリング
+    // 初期値データ読み込み
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const { data: initialData, loading: initialLoading, error: initialLoadingError } = useMoyooshiQuery({
+        variables: {
+            schedule_update_id: paramScheduleUpdateId,
+        },
+    });
+    logger.debug("initialData:", initialData);
+    useEffect(() => {
+        if (!initialData) return;
+
+        // -------------------------------------
+        // イベント名
+        // -------------------------------------
+        setEventName(initialData.Moyooshi.name);
+        // -------------------------------------
+        // イベントメモ
+        // -------------------------------------
+        setEventMemo(initialData.Moyooshi.memo);
+        // -------------------------------------
+        // イベント日時候補
+        // -------------------------------------
+        const tempArray: NichijiData[] = [];
+        initialData.Moyooshi.moyooshiKouhoNichijis.forEach((moyooshiKouhoNichiji) => {
+            if (moyooshiKouhoNichiji.kouho_nichiji) {
+                // サーバ側ではレコードを物理削除ではなく論理削除している。
+                // そのため、「論理削除されていない」レコードを表示対象とする。
+                tempArray.push({
+                    id: moyooshiKouhoNichiji.id,
+                    nichiji: moyooshiKouhoNichiji.kouho_nichiji,
+                });
+            }
+        });
+        setEventNichijiKouhoDeleteTargets(tempArray);
+    }, [initialData]);
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // 削除対象イベント日時候補のチェックボックスの状態に変化があったら起動
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const onChangeOnCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // checkedItemsのstateをセット
+        setEventNichijiKouhoDeleteTargetChecks({
+            ...eventNichijiKouhoDeleteTargetChecks,
+            [e.target.name]: e.target.checked,
+        });
+    };
+    logger.debug("eventNichijiKouhoDeleteTargetChecks:", eventNichijiKouhoDeleteTargetChecks);
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // Submit押下
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // ========================================================
     // API実行
     // ========================================================
+    const [
+        updateMoyooshiMutation,
+        { data: updateData, loading: updateLoading, error: updateError },
+    ] = useUpdateMoyooshiMutation({
+        refetchQueries: [
+            {
+                query: MoyooshiDocument,
+                variables: {
+                    schedule_update_id: paramScheduleUpdateId,
+                },
+            },
+        ],
+    });
     const onSubmit = async (
         { eventName: argEventName, eventMemo: argEventMemo, eventNichijiKouho: argEventNichijiKouho },
         e
     ) => {
-        await addMoyooshiMutation({
+        const deleteTargetIds = [];
+        for (const [key, value] of Object.entries(eventNichijiKouhoDeleteTargetChecks)) {
+            if (key.startsWith("id_del_eve_dt_kouho_id_") && value) {
+                deleteTargetIds.push(Number(key.replace("id_del_eve_dt_kouho_id_", "")));
+            }
+        }
+
+        await updateMoyooshiMutation({
             variables: {
-                moyooshi: { name: argEventName, memo: argEventMemo, moyooshiKouhoNichijis: argEventNichijiKouho },
+                updateMoyooshi: {
+                    name: argEventName,
+                    memo: argEventMemo,
+                    moyooshiKouhoNichijis: argEventNichijiKouho,
+                    schedule_update_id: paramScheduleUpdateId,
+                    deleted_nichiji_kouho: deleteTargetIds,
+                },
             },
         });
-
-        e.target.reset();
-        setEventName("");
-        setEventMemo("");
-        setEventNichijiKouho("");
     };
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // Submit押下結果イベントハンドリング
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    let noticeTag;
-    if (loading) {
-        // ========================================================
-        // API実行中
-        // ========================================================
-        noticeTag = <div>Now Loading...</div>;
-    } else if (error) {
-        noticeTag = <div>error....</div>;
-        // ========================================================
-        // API実行失敗時
-        // ========================================================
-    } else if (data) {
-        // ========================================================
-        // API実行成功時
-        // ========================================================
-        // noticeTag = <div>{data.addMoyooshi.name}</div>;
-        noticeTag = <ApiResultToast schedule_update_id={data.addMoyooshi.schedule_update_id}></ApiResultToast>;
-    }
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // カレンダーがクリックされた時に起動
@@ -139,6 +210,7 @@ export const Edit: React.FC<EditProps> = () => {
                                         fullWidth
                                         onChange={(e) => setEventName(e.target.value)}
                                         inputRef={register}
+                                        value={eventName}
                                     />
                                 </Box>
                             </Grid>
@@ -161,6 +233,7 @@ export const Edit: React.FC<EditProps> = () => {
                                         fullWidth
                                         onChange={(e) => setEventMemo(e.target.value)}
                                         inputRef={register}
+                                        value={eventMemo}
                                     />
                                 </Box>
                             </Grid>
@@ -173,17 +246,28 @@ export const Edit: React.FC<EditProps> = () => {
                             </Grid>
                             <Grid item xs={12} md={9}>
                                 <Box marginTop={2}>
-                                    <TextField
-                                        id="eventMemo"
-                                        name="eventMemo"
-                                        helperText="削除したい日時をチェックしてください。"
-                                        multiline
-                                        rows={5}
-                                        variant="outlined"
-                                        fullWidth
-                                        onChange={(e) => setEventMemo(e.target.value)}
-                                        inputRef={register}
-                                    />
+                                    <FormControl component="fieldset" className={classes.checkboxes}>
+                                        <FormGroup row>
+                                            {eventNichijiKouhoDeleteTargets.map((nichijiData) => {
+                                                return (
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                checked={
+                                                                    eventNichijiKouhoDeleteTargetChecks[nichijiData.id]
+                                                                }
+                                                                onChange={onChangeOnCheckbox}
+                                                                name={`del_eve_dt_kouho_id_${nichijiData.id}`}
+                                                                value={nichijiData.id}
+                                                            />
+                                                        }
+                                                        label={nichijiData.nichiji}
+                                                    />
+                                                );
+                                            })}
+                                        </FormGroup>
+                                        <FormHelperText>取り消したい日時があれば選択してください。</FormHelperText>
+                                    </FormControl>
                                 </Box>
                             </Grid>
                             <Grid item xs={12} md={3}>

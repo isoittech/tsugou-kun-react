@@ -1,6 +1,7 @@
 # --------------------------------------
 # ■生成コマンド：
-# npm run --config graphql-codegen.yml
+# npm run codegen
+# ※graphql-codegen --config graphql-codegen.yml
 # ■参考：
 # https://graphql-code-generator.com/docs/getting-started/codegen-config
 # https://qiita.com/sky0621/items/f03631f0309f5c375b1d#%E5%AE%9F%E8%B7%B5

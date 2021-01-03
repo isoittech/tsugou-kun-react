@@ -43,6 +43,7 @@ export type Moyooshi = {
 
 export type MoyooshiKouhoNichiji = {
   __typename?: 'MoyooshiKouhoNichiji';
+  id: Scalars['Float'];
   kouho_nichiji: Scalars['String'];
   schedule_update_id: Scalars['String'];
   sankaNichiji: Array<SankaNichiji>;
@@ -54,6 +55,14 @@ export type MoyooshiInput = {
   name: Scalars['String'];
   memo?: Maybe<Scalars['String']>;
   moyooshiKouhoNichijis: Array<Scalars['String']>;
+};
+
+export type UpdateMoyooshiInput = {
+  name: Scalars['String'];
+  memo?: Maybe<Scalars['String']>;
+  moyooshiKouhoNichijis: Array<Scalars['String']>;
+  schedule_update_id?: Maybe<Scalars['String']>;
+  deleted_nichiji_kouho?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Query = {
@@ -69,11 +78,17 @@ export type QueryMoyooshiArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   addMoyooshi: Moyooshi;
+  updateMoyooshi: Moyooshi;
 };
 
 
 export type MutationAddMoyooshiArgs = {
   Moyooshi: MoyooshiInput;
+};
+
+
+export type MutationUpdateMoyooshiArgs = {
+  Moyooshi: UpdateMoyooshiInput;
 };
 
 export type MoyooshiQueryVariables = Exact<{
@@ -88,7 +103,7 @@ export type MoyooshiQuery = (
     & Pick<Moyooshi, 'name' | 'memo' | 'schedule_update_id'>
     & { moyooshiKouhoNichijis: Array<(
       { __typename: 'MoyooshiKouhoNichiji' }
-      & Pick<MoyooshiKouhoNichiji, 'kouho_nichiji'>
+      & Pick<MoyooshiKouhoNichiji, 'id' | 'kouho_nichiji'>
     )> }
   ) }
 );
@@ -110,6 +125,23 @@ export type AddMoyooshiMutation = (
   ) }
 );
 
+export type UpdateMoyooshiMutationVariables = Exact<{
+  updateMoyooshi: UpdateMoyooshiInput;
+}>;
+
+
+export type UpdateMoyooshiMutation = (
+  { __typename?: 'Mutation' }
+  & { updateMoyooshi: (
+    { __typename: 'Moyooshi' }
+    & Pick<Moyooshi, 'name' | 'memo' | 'schedule_update_id'>
+    & { moyooshiKouhoNichijis: Array<(
+      { __typename?: 'MoyooshiKouhoNichiji' }
+      & Pick<MoyooshiKouhoNichiji, 'id' | 'kouho_nichiji'>
+    )> }
+  ) }
+);
+
 
 export const MoyooshiDocument = gql`
     query Moyooshi($schedule_update_id: String!) {
@@ -119,6 +151,7 @@ export const MoyooshiDocument = gql`
     schedule_update_id
     __typename
     moyooshiKouhoNichijis {
+      id
       kouho_nichiji
       __typename
     }
@@ -189,3 +222,42 @@ export function useAddMoyooshiMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddMoyooshiMutationHookResult = ReturnType<typeof useAddMoyooshiMutation>;
 export type AddMoyooshiMutationResult = Apollo.MutationResult<AddMoyooshiMutation>;
 export type AddMoyooshiMutationOptions = Apollo.BaseMutationOptions<AddMoyooshiMutation, AddMoyooshiMutationVariables>;
+export const UpdateMoyooshiDocument = gql`
+    mutation updateMoyooshi($updateMoyooshi: UpdateMoyooshiInput!) {
+  updateMoyooshi(Moyooshi: $updateMoyooshi) {
+    __typename
+    name
+    memo
+    schedule_update_id
+    moyooshiKouhoNichijis {
+      id
+      kouho_nichiji
+    }
+  }
+}
+    `;
+export type UpdateMoyooshiMutationFn = Apollo.MutationFunction<UpdateMoyooshiMutation, UpdateMoyooshiMutationVariables>;
+
+/**
+ * __useUpdateMoyooshiMutation__
+ *
+ * To run a mutation, you first call `useUpdateMoyooshiMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMoyooshiMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMoyooshiMutation, { data, loading, error }] = useUpdateMoyooshiMutation({
+ *   variables: {
+ *      updateMoyooshi: // value for 'updateMoyooshi'
+ *   },
+ * });
+ */
+export function useUpdateMoyooshiMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMoyooshiMutation, UpdateMoyooshiMutationVariables>) {
+        return Apollo.useMutation<UpdateMoyooshiMutation, UpdateMoyooshiMutationVariables>(UpdateMoyooshiDocument, baseOptions);
+      }
+export type UpdateMoyooshiMutationHookResult = ReturnType<typeof useUpdateMoyooshiMutation>;
+export type UpdateMoyooshiMutationResult = Apollo.MutationResult<UpdateMoyooshiMutation>;
+export type UpdateMoyooshiMutationOptions = Apollo.BaseMutationOptions<UpdateMoyooshiMutation, UpdateMoyooshiMutationVariables>;

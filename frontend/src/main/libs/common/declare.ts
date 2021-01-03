@@ -2,7 +2,7 @@
 export type ValueOf<T> = T[keyof T];
 
 export type NichijiData = {
-    id: string;
+    id: string | number;
     nichiji: string;
 };
 

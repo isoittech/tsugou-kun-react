@@ -1,6 +1,8 @@
 import { gql, useQuery } from "@apollo/client";
 
 export { useAddMoyooshiMutation } from "../../generated/graphql";
+export { useMoyooshiQuery } from "../../generated/graphql";
+export { useUpdateMoyooshiMutation } from "../../generated/graphql";
 
 export const GQ_GET_MOYOOSHI = gql`
     query Moyooshi($schedule_update_id: String!) {
@@ -10,6 +12,7 @@ export const GQ_GET_MOYOOSHI = gql`
             schedule_update_id
             __typename
             moyooshiKouhoNichijis {
+                id
                 kouho_nichiji
                 __typename
             }
@@ -25,6 +28,21 @@ export const GQ_ADD_MOYOOSHI = gql`
             memo
             schedule_update_id
             moyooshiKouhoNichijis {
+                kouho_nichiji
+            }
+        }
+    }
+`;
+
+export const GQ_UPDATE_MOYOOSHI = gql`
+    mutation updateMoyooshi($updateMoyooshi: UpdateMoyooshiInput!) {
+        updateMoyooshi(Moyooshi: $updateMoyooshi) {
+            __typename
+            name
+            memo
+            schedule_update_id
+            moyooshiKouhoNichijis {
+                id
                 kouho_nichiji
             }
         }

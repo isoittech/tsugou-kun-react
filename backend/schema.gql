@@ -18,6 +18,7 @@ input MoyooshiInput {
 }
 
 type MoyooshiKouhoNichiji {
+  id: Float!
   kouho_nichiji: String!
   moyooshi: Moyooshi!
   moyooshi_id: Float!
@@ -27,6 +28,7 @@ type MoyooshiKouhoNichiji {
 
 type Mutation {
   addMoyooshi(Moyooshi: MoyooshiInput!): Moyooshi!
+  updateMoyooshi(Moyooshi: UpdateMoyooshiInput!): Moyooshi!
 }
 
 type Query {
@@ -48,4 +50,12 @@ type Sankasha {
   moyooshi_id: Float!
   name: String!
   sankaNichiji: [SankaNichiji!]!
+}
+
+input UpdateMoyooshiInput {
+  deleted_nichiji_kouho: [String!] = []
+  memo: String = ""
+  moyooshiKouhoNichijis: [String!]!
+  name: String!
+  schedule_update_id: String = ""
 }
