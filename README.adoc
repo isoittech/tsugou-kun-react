@@ -243,6 +243,10 @@ $ npm i \
     sequelize-typescript \
     base64url \
     connect-history-api-fallback \
+    winston \ # Logger
+    moment \ # Logger
+    @types/winston \ # Logger
+    @types/moment  # Logger
 $ tsc --version
 $ tsc --init
 
