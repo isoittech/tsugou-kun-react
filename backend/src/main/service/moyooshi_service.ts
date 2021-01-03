@@ -2,8 +2,10 @@ import * as endecode from "../helper/endecode";
 import { sequelize } from "../db/config";
 import MoyooshiKouhoNichiji from "../models/moyooshi_kouho_nichiji";
 import Moyooshi from "../models/moyooshi";
+import { logger } from "../helper/logging";
 
 export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Promise<MoyooshiServiceOutputDto> => {
+    logger.info("[START]createMoyooshi()");
     const t = await sequelize.transaction();
 
     try {
@@ -70,7 +72,7 @@ export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Pr
         } as MoyooshiServiceOutputDto;
     } catch (error) {
         await t.rollback();
-        console.log(`[ERROR]createMoyooshiでエラーが発生。${JSON.stringify(error)}`);
+        logger.error(`[ERROR]createMoyooshiでエラーが発生。${JSON.stringify(error)}`);
 
         return {
             error_name: error.name,
@@ -83,6 +85,7 @@ export const updateMoyooshi = async (
     moyooshiServiceDto: MoyooshiServiceDto,
     scheduleUpdateId: string
 ): Promise<MoyooshiServiceOutputDto> => {
+    logger.info("[START]updateMoyooshi()");
     const t = await sequelize.transaction();
 
     try {
@@ -138,14 +141,17 @@ export const updateMoyooshi = async (
                 transaction: t,
             });
         }
+        logger.debug("[DONE]イベント日時候補（レコード削除）");
 
         // ------------------------
         // イベント
         // ------------------------
+        logger.debug(`[DO]イベント（更新）, id:${moyooshiModel.id}`);
         await Moyooshi.update(moyooshiModel, {
             where: { id: moyooshiModel.id },
             transaction: t,
         });
+        logger.debug(`[DONE]イベント（更新）, id:${moyooshiModel.id}`);
 
         // ------------------------
         // イベント日時候補
@@ -153,6 +159,7 @@ export const updateMoyooshi = async (
         if (addedMoyooshiKouhoNichijis.length != 0) {
             await MoyooshiKouhoNichiji.bulkCreate(addedMoyooshiKouhoNichijis, { transaction: t });
         }
+        logger.debug("[DONE]イベント日時候補（追加）");
 
         await t.commit();
 
@@ -184,7 +191,7 @@ export const updateMoyooshi = async (
         } as MoyooshiServiceOutputDto;
     } catch (error) {
         await t.rollback();
-        console.log(`[ERROR]updateMoyooshiでエラーが発生。${JSON.stringify(error)}`);
+        logger.error(`[ERROR]updateMoyooshiでエラーが発生。${JSON.stringify(error)}`);
 
         return {
             error_name: error.name,
@@ -194,6 +201,7 @@ export const updateMoyooshi = async (
 };
 
 export const readMoyooshi = async (moyooshiId: number): Promise<MoyooshiServiceOutputDto> => {
+    logger.info("[START]readMoyooshi()");
     try {
         // ===================================================
         // DBデータ取得
@@ -216,13 +224,14 @@ export const readMoyooshi = async (moyooshiId: number): Promise<MoyooshiServiceO
         // ===================================================
         // 終了処理
         // ===================================================
+        logger.info("[END]readMoyooshi()");
         return {
             moyooshi: moyooshi,
             nichiji_kouhos: moyooshi.moyooshiKouhoNichijis,
             schedule_update_id: moyooshi.schedule_update_id,
         } as MoyooshiServiceOutputDto;
     } catch (error) {
-        console.log(`[ERROR]readMoyooshiでエラーが発生。${JSON.stringify(error)}`);
+        logger.error(`[ERROR]readMoyooshiでエラーが発生。${JSON.stringify(error)}`);
 
         return {
             error_name: error.name,

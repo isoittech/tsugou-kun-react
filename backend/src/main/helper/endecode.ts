@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 import base64url from "base64url";
+import { logger } from "./logging";
 
 const ALGORITHM = "aes-256-ctr";
 const ENCRYPTION_KEY = "CRYPT_SEED_FOR_ID";
@@ -12,7 +13,7 @@ export const createScheduleUpdateId = (scheduleUpdateIdSeed: number): string => 
 
         return base64url.fromBase64(crypted);
     } catch (error) {
-        console.log(`[ERROR] create_schedule_update_idでエラー。引数:${scheduleUpdateIdSeed}`);
+        logger.error(`[ERROR] create_schedule_update_idでエラー。引数:${scheduleUpdateIdSeed}`);
         throw error;
     }
 };
@@ -27,7 +28,7 @@ export const decodeFromScheduleUpdateId = (scheduleUpdateId: string): number => 
 
         return dec;
     } catch (error) {
-        console.log(`[ERROR] decode_from_schedule_update_idでエラー。引数:${scheduleUpdateId}`);
+        logger.error(`[ERROR] decode_from_schedule_update_idでエラー。引数:${scheduleUpdateId}`);
         throw error;
     }
 };

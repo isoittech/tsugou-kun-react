@@ -1,4 +1,5 @@
 import * as Express from "express";
+import { logger } from "./logging";
 
 export default (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     // ipアドレス
@@ -17,7 +18,7 @@ export default (req: Express.Request, res: Express.Response, next: Express.NextF
     // リクエストユーザーーエージェント
     var ua = req.headers["user-agent"];
     // ログ出力
-    console.log(`${ipaddress} [${date}] "${method} ${url}" - ${ua}`);
+    logger.info(`${ipaddress} [${date}] "${method} ${url}" - ${ua}`);
     // 次のミドルウェアを呼ぶ
     next();
 };

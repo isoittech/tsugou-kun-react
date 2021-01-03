@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
+import { logger } from "../../helper/logging";
 
 const env = process.env.NODE_ENV || "development";
 const config = require("./config.json")[env];
@@ -10,9 +11,9 @@ sequelize.addModels([__dirname + "/../../models/*.ts"]);
 sequelize
     .authenticate()
     .then(() => {
-        console.log("Config:", config);
-        console.log("Connection has been established successfully.");
+        logger.info("Config:", config);
+        logger.info("Connection has been established successfully.");
     })
     .catch((err) => {
-        console.error("Unable to connect to the database:", err);
+        logger.error("Unable to connect to the database:", err);
     });

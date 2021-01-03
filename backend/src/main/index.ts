@@ -6,6 +6,7 @@ const cors = require("cors");
 
 import router_moyooshi from "./controller/moyooshi_controller";
 import access_log from "./helper/access_log";
+import { logger } from "./helper/logging";
 
 const main = async () => {
     const app: express.Express = express();
@@ -63,15 +64,15 @@ const main = async () => {
     // 3000番ポートでAPIサーバ起動
     // -----------------------------------
     let NOW = new Date().toLocaleString();
-    console.log("-----------------------------------------");
-    console.log("NOW:" + NOW);
-    console.log("-----------------------------------------");
+    logger.info("-----------------------------------------");
+    logger.info("NOW:" + NOW);
+    logger.info("-----------------------------------------");
 
     app.listen(3000, () => {
-        console.log("Example app listening on port 3000!");
+        logger.info("Example app listening on port 3000!");
     });
 };
 
 main().catch((error) => {
-    console.log(error, "error");
+    logger.error(error, "error");
 });
