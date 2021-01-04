@@ -183,7 +183,6 @@ export const Edit: React.FC<EditProps> = () => {
             </Helmet>
 
             <main className={classes.layout}>
-                {noticeTag}
                 <Paper className={classes.paper} elevation={3}>
                     <Typography component="h1" variant="h4" align="center">
                         イベント情報編集
@@ -246,7 +245,7 @@ export const Edit: React.FC<EditProps> = () => {
                             </Grid>
                             <Grid item xs={12} md={9}>
                                 <Box marginTop={2}>
-                                    <FormControl component="fieldset" className={classes.checkboxes}>
+                                    <FormControl component="fieldset">
                                         <FormGroup row>
                                             {eventNichijiKouhoDeleteTargets.map((nichijiData) => {
                                                 return (
