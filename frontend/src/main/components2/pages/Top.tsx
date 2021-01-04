@@ -225,6 +225,7 @@ export const Top: React.FC<TopProps> = () => {
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
+        marginTop: "100px",
         marginLeft: theme.spacing(2),
         marginRight: theme.spacing(2),
         [theme.breakpoints.up(820 + theme.spacing(2) * 2)]: {

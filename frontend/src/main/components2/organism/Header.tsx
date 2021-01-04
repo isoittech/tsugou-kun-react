@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="secondary">
+            <AppBar position="fixed" color="secondary">
                 <Toolbar>
                     <Link to="/" color="inherit">
                         <Typography variant="h6" className={classes.title} color="textSecondary">

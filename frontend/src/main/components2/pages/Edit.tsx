@@ -335,6 +335,7 @@ export const Edit: React.FC<EditProps> = () => {
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
+        marginTop: "100px",
         marginLeft: theme.spacing(2),
         marginRight: theme.spacing(2),
         [theme.breakpoints.up(920 + theme.spacing(2) * 2)]: {
