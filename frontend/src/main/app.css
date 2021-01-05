@@ -1,3 +1,19 @@
+a:link,
+a:visited,
+a:link:hover,
+a:visited:hover {
+    text-decoration: none;
+}
+
+a:link,
+a:visited {
+    color: #edf5e1;
+}
+a:link:hover,
+a:visited:hover {
+    color: #ffffff;
+}
+
 .errorlist {
     position: relative;
     color: #f00;

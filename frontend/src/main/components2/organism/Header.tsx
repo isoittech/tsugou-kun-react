@@ -10,9 +10,6 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             // flexGrow: 1,
         },
-        title: {
-            // flexGrow: 1,
-        },
     })
 );
 
@@ -20,13 +17,11 @@ export const Header: React.FC = () => {
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
-            <AppBar position="fixed" color="secondary">
+        <div>
+            <AppBar>
                 <Toolbar>
-                    <Link to="/" color="inherit">
-                        <Typography variant="h6" className={classes.title} color="textSecondary">
-                            都合くん「この日空いてるっすか。」
-                        </Typography>
+                    <Link to="/">
+                        <Typography variant="h6">都合くん「この日空いてるっすか。」</Typography>
                     </Link>
                 </Toolbar>
             </AppBar>

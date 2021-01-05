@@ -250,6 +250,7 @@ export const Edit: React.FC<EditProps> = () => {
                                             {eventNichijiKouhoDeleteTargets.map((nichijiData) => {
                                                 return (
                                                     <FormControlLabel
+                                                        key={nichijiData.id}
                                                         control={
                                                             <Checkbox
                                                                 checked={

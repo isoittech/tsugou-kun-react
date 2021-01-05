@@ -1,13 +1,18 @@
 import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
-import { teal } from "@material-ui/core/colors";
 
 export const theme = createMuiTheme({
     palette: {
         primary: {
-            main: teal[500],
+            light: "#42629a",
+            main: "#05386b",
+            dark: "#001340",
+            contrastText: "#edf5e1",
         },
         secondary: {
-            main: "#00bcd4",
+            light: "#92ffc6",
+            main: "#5cdb95",
+            dark: "#1aa867",
+            contrastText: "#05386b",
         },
     },
 });
