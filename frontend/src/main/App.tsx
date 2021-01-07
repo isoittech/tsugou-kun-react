@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router";
-import { CssBaseline } from "@material-ui/core";
+import { Box, Container, CssBaseline, makeStyles } from "@material-ui/core";
 
 import { Header } from "./components2/organism/Header";
 import { Footer } from "./components2/organism/Footer";
@@ -26,12 +26,13 @@ export const App: React.FC = () => {
         //
         // runFetchEvent();
     });
+    const classes = useStyles();
 
     return (
-        <>
+        <Container maxWidth={false} disableGutters className={classes.layout}>
             <CssBaseline />
             <Header></Header>
-            <div className="container">
+            <Box>
                 <Routes>
                     <Route path="/" element={<Top />} />
                     <Route path="/edit/:key" element={<Edit />} />
@@ -40,8 +41,17 @@ export const App: React.FC = () => {
                     {/*<Route path="*" element={<Navigate to="/" replace/>}/>;*/}
                 </Routes>
                 <EventHistory></EventHistory>
-            </div>
+            </Box>
             <Footer></Footer>
-        </>
+        </Container>
     );
 };
+
+const useStyles = makeStyles((theme) => ({
+    layout: {
+        display: "grid",
+        height: "100vh",
+        gridTemplateRows: "auto 1fr auto",
+        position: "relative",
+    },
+}));

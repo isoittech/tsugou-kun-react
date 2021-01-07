@@ -5,29 +5,36 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            // flexGrow: 1,
-        },
-    })
-);
-
 export const Header: React.FC = () => {
     const classes = useStyles();
 
     return (
-        <div>
-            <AppBar>
-                <Toolbar>
-                    <Link to="/">
-                        <Typography variant="h6">都合くん「この日空いてるっすか。」</Typography>
-                    </Link>
-                </Toolbar>
-            </AppBar>
-        </div>
+        <AppBar>
+            <Toolbar>
+                <Link to="/">
+                    <Typography variant="h6">都合くん「この日空いてるっすか。」</Typography>
+                </Link>
+            </Toolbar>
+        </AppBar>
     );
 };
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            position: "fixed",
+            top: 0,
+            width: "100%",
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+            padding: theme.spacing(2),
+            "& a:hover": {
+                textDecoration: "underline",
+                color: theme.palette.secondary.main,
+            },
+        },
+    })
+);
 
 // import React from "react";
 // import { Navbar, Nav } from "react-bootstrap";
