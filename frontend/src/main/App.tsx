@@ -49,8 +49,14 @@ export const App: React.FC = () => {
 
 const useStyles = makeStyles((theme) => ({
     layout: {
-        display: "grid",
-        height: "100vh",
+        // CSSのGrid機能を利用
+        // 参考： https://www.archetyp.jp/blog/css-grid-2/
+        display: "grid", // このコンテナ要素の直接の子要素がグリッド要素になる
+        height: "100vh", // コンテンツ領域の高さをブラウザ表示高さいっぱいにする
+        // auto：コンテンツ領域に合わせて伸縮。
+        // [x]fr：auto指定した要素分の高さを除いた部分を、等分分割した要素をx個分の高さを割り当てる。
+        // 下記だと、上部・中央・下部の3つの領域があり、上部・下部が自動計算、中央部がその残りが割り当てられる。
+        // auto 1fr 3fr autoだった場合、上部・下部を除いた余りを4分割し、中央1に1個分・中央2に3個分が割り当てられる。
         gridTemplateRows: "auto 1fr auto",
         position: "relative",
     },
