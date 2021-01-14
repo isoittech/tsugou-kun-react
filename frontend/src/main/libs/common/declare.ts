@@ -14,4 +14,5 @@ export type EventInfo = {
     name: string;
     scheduleUpdateId: string;
     nichijis: string[];
+    memo?: string;
 };

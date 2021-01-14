@@ -6,7 +6,7 @@ import { Header } from "./components2/organism/Header";
 import { Footer } from "./components2/organism/Footer";
 import { Top } from "./components2/pages/Top";
 import { Edit } from "./components2/pages/Edit";
-import EventHistory from "./components/organism/EventHistory";
+import { EventHistory } from "./containers2/organism/EventHistory";
 
 export const App: React.FC = () => {
     useEffect(() => {

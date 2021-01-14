@@ -9,7 +9,7 @@
         "prod": "cross-env NODE_ENV=production webpack",
         "watch": "webpack -w",
         "start": "webpack-dev-server",
-        "storybook": "start-storybook -p 6006 --no-dll -s src",
+        "storybook": "start-storybook -p 6006 --no-dll -s src/main",
         "build-storybook": "build-storybook --no-dll",
         "codegen": "graphql-codegen --config graphql-codegen.yml"
     },

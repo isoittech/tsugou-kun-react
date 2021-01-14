@@ -10,6 +10,7 @@ import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
 import { useAddMoyooshiMutation } from "../../features/moyooshi/moyooshi-graphql";
 import { ApiResultToast } from "../molecules/ApiResultToast";
+import { useMoyooshiCookie } from "../../containers2/organism/EventHistory";
 
 export type TopProps = {};
 
@@ -67,6 +68,7 @@ export const Top: React.FC<TopProps> = () => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // Submit押下結果イベントハンドリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const { updateMoyooshiCookie } = useMoyooshiCookie();
     let noticeTag;
     if (loading) {
         // ========================================================
@@ -84,6 +86,21 @@ export const Top: React.FC<TopProps> = () => {
         // ========================================================
         // noticeTag = <div>{data.addMoyooshi.name}</div>;
         noticeTag = <ApiResultToast schedule_update_id={data.addMoyooshi.schedule_update_id}></ApiResultToast>;
+
+        // ========================================================
+        // Cookie更新
+        // ========================================================
+        // -------------------------------------
+        // 設定用情報準備
+        // -------------------------------------
+        const moyooshiName = data.addMoyooshi.name;
+        const scheduleUpdateIdForCookie = data.addMoyooshi.schedule_update_id;
+        const nichijiKouhos = data.addMoyooshi.moyooshiKouhoNichijis;
+        const moyooshiMemo = data.addMoyooshi.memo;
+        // -------------------------------------
+        // 更新関数実行
+        // -------------------------------------
+        updateMoyooshiCookie(scheduleUpdateIdForCookie, moyooshiName, nichijiKouhos, moyooshiMemo);
     }
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
