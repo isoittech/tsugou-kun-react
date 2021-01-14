@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { shallow, mount } from "enzyme";
 import { render, fireEvent, screen } from "@testing-library/react";
 
-import { ApiResultToast } from "../../../components/molecules/ApiResultToast";
+import { ApiResultToast } from "../../../main/components/molecules/ApiResultToast";
 
 const sel = (id) => `[data-test="${id}"]`;
 

@@ -1,0 +1,23 @@
+# --------------------------------------
+# ■生成コマンド：
+# npm run codegen
+# ※graphql-codegen --config graphql-codegen.yml
+# ■参考：
+# https://graphql-code-generator.com/docs/getting-started/codegen-config
+# https://qiita.com/sky0621/items/f03631f0309f5c375b1d#%E5%AE%9F%E8%B7%B5
+# --------------------------------------  
+overwrite: true
+schema: http://localhost:3000/graphql
+documents: src/main/**/*graphql.ts
+generates:
+  ./src/main/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      # 下の3つはtypescript-react-apolloのオプション
+      withHOC: false # HOCは要らないので
+      withComponent: false # falseなので出力ファイル拡張子が.tsでもいい。
+                           # このオプションを設定しないとデフォルトtrueなので、.tsx拡張子にしろとエラーが出る
+      withHooks: true # 上のdocumentsの設定があればこれでhookが自動生成される

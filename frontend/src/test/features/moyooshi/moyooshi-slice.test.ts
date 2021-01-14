@@ -1,5 +1,5 @@
-import { moyooshiSlice } from "../../../features/moyooshi/moyooshi-slice";
-import { ApiExecutionStateType } from "../../../store/moyooshi_api";
+import { moyooshiSlice } from "../../../main/features/moyooshi/moyooshi-slice";
+import { ApiExecutionStateType } from "../../../main/store/moyooshi_api";
 
 describe("reducers", () => {
     describe("added", () => {

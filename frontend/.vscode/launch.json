@@ -11,9 +11,8 @@
             "url": "http://localhost:8787",
             "webRoot": "${workspaceFolder}/dist",
             "sourceMapPathOverrides": {
-                "webpack:///./src/*": "${workspaceRoot}/src/*",
-            },
-                
+                "webpack:///./src/*": "${workspaceRoot}/src/main/*"
+            }
         }
     ]
 }

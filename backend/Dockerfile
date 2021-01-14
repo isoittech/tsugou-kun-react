@@ -33,9 +33,9 @@ ENV PJ_HOME=/opt/tsugou-kun/app
 RUN git clone https://github.com/isoittech/tsugou-kun-react.git app && \
     cd ${PJ_HOME}/backend && \
     npm ci && \
-    cd ${PJ_HOME}/backend/src/db && \
+    cd ${PJ_HOME}/backend/src/main/db && \
     ${PJ_HOME}/backend/node_modules/sequelize-cli/lib/sequelize db:migrate --env development && \
-    mv ${PJ_HOME}/backend/src/db/data/tsugoukun_development.sqlite3 ${PJ_HOME}/backend/data/ && \
+    mv ${PJ_HOME}/backend/src/main/db/data/tsugoukun_development.sqlite3 ${PJ_HOME}/backend/data/ && \
     cd ${PJ_HOME}/frontend && \
     npm ci && \
     touch .env && \
@@ -50,4 +50,4 @@ EXPOSE 3000
 # コンテナ起動時処理
 # ----------------------------
 #WORKDIR /opt/tsugou-kun/app/backend
-#ENTRYPOINT ["node", "--nolazy", "-r", "ts-node/register/transpile-only", "src/index.ts"]
+#ENTRYPOINT ["node", "--nolazy", "-r", "ts-node/register/transpile-only", "src/main/index.ts"]

@@ -24,9 +24,9 @@ React・TypeScript・Expressの習得用に開発している。
 $ PJ_HOME=`pwd`/tsugou-kun-react
 $ cd ${PJ_HOME}/backend
 $ npm ci
-$ cd ${PJ_HOME}/backend/src/db
+$ cd ${PJ_HOME}/backend/src/main/db
 $ ${PJ_HOME}/backend/node_modules/sequelize-cli/lib/sequelize db:migrate --env development
-$ mv ${PJ_HOME}/backend/src/db/data/tsugoukun_development.sqlite3 ${PJ_HOME}/backend/data/
+$ mv ${PJ_HOME}/backend/src/main/db/data/tsugoukun_development.sqlite3 ${PJ_HOME}/backend/data/
 $ cd ${PJ_HOME}/backend
 $ npm start  # またはVSCodeでF5で起動
 ```
@@ -243,6 +243,10 @@ $ npm i \
     sequelize-typescript \
     base64url \
     connect-history-api-fallback \
+    winston \ # Logger
+    moment \ # Logger
+    @types/winston \ # Logger
+    @types/moment  # Logger
 $ tsc --version
 $ tsc --init
 
@@ -257,8 +261,8 @@ $ npm i \
 ===== ○DBマイグレーション・モデル初期構築
 
 ```shell
-$ mkdir src/db
-$ cd src/db
+$ mkdir src/main/db
+$ cd src/main/db
 $ ../../node_modules/sequelize-cli/lib/sequelize init
 $ ls
 config/  migrations/  models/  seeders/
@@ -293,7 +297,7 @@ $ ../../node_modules/sequelize-cli/lib/sequelize model:create \
         ,sankasha_id:bigint"
 ＜ここで、migration/とmodels/配下のソースに、非null制約・外部キー関連の設定（キーワード：associate, references）を行う＞
 $ ../../node_modules/sequelize-cli/lib/sequelize db:migrate --env development
-＜ここで、src/db/data配下に出力される.sqlite3ファイルを、data/に移動する＞
+＜ここで、src/main/db/data配下に出力される.sqlite3ファイルを、data/に移動する＞
 
 ```
 
@@ -341,7 +345,15 @@ $ npm i \
     bootstrap \
     react-modern-calendar-datepicker \
     react-helmet \
-    react-cookie
+    react-cookie \
+    winston \
+    moment \
+    @types/winston \
+    @types/moment \
+    # Material-UIに変更する
+    @material-ui/core \
+    @material-ui/styles \
+    react-hook-form 
 $ tsc --version
 $ tsc --init
 ※React Routerについてはβ版の6を使用。競合のReach Routerとの合併版であり、便利かつ直感的であるため。正式版がリリースされ次第「@next」を除去する。
@@ -361,6 +373,19 @@ $ npm i -D ts-jest \
     jest-enzyme \
     enzyme-adapter-react-16 \
     react-test-renderer
+
+# GraphQL導入用
+$ npm i \
+    @apollo/client \
+    graphql \
+    react-apollo-hooks \
+    cors # ApolloClientではこれを使わないとだめだった
+
+$ npm i -D \
+    @graphql-codegen/cli \
+    @graphql-codegen/typescript \
+    @graphql-codegen/typescript-operations \
+    @graphql-codegen/typescript-react-apollo
     
 ```
 [%hardbreaks]

@@ -11,14 +11,16 @@
             "runtimeExecutable": "node",
             "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
             "preLaunchTask": "tsc",
-            "args": ["src/index.ts"],
+            "args": ["src/main/index.ts"],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",
             "skipFiles": ["<node_internals>/**", "node_modules/**"],
             // 出力されたJavaScriptに対してデバッグ実行できることを確認するため、
             // 実行するソースコードの1行目からステップ実行させる
             // "stopOnEntry": true,
-            "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
+            "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
+            // デバッグアダプタに対し、デバッグコンソールにstdout/stderr出力を表示させるようにする
+            "outputCapture": "std"
         }
     ]
 }
