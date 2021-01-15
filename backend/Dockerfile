@@ -34,6 +34,7 @@ RUN git clone https://github.com/isoittech/tsugou-kun-react.git app && \
     cd ${PJ_HOME}/backend && \
     npm ci && \
     cd ${PJ_HOME}/backend/src/main/db && \
+    mkdir data && \
     ${PJ_HOME}/backend/node_modules/sequelize-cli/lib/sequelize db:migrate --env development && \
     mv ${PJ_HOME}/backend/src/main/db/data/tsugoukun_development.sqlite3 ${PJ_HOME}/backend/data/ && \
     cd ${PJ_HOME}/frontend && \
