@@ -58,6 +58,8 @@ $ npm start
 # docker-compose down --rmi all --volumes --remove-orphans
 # # or
 # docker stop xxxx && docker rm xxxx
+# # アプリバージョンアップ
+# # ＝削除-->リリース手順実施
 ....
 
 == ■ISSUE・TODO
@@ -261,7 +263,7 @@ $ npm i \
 ===== ○DBマイグレーション・モデル初期構築
 
 ```shell
-$ mkdir src/main/db
+$ mkdir -p src/main/db/data
 $ cd src/main/db
 $ ../../node_modules/sequelize-cli/lib/sequelize init
 $ ls
