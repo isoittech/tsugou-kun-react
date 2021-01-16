@@ -12,7 +12,7 @@ import setupStore from "./store";
 import { theme } from "./AppCss";
 
 const client = new ApolloClient({
-    uri: "http://localhost:3000/graphql",
+    uri: `${process.env.HOST_URL}/graphql`,
     cache: new InMemoryCache(),
 });
 
