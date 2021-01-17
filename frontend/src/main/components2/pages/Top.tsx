@@ -8,7 +8,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
-import { useAddMoyooshiMutation } from "../../features/moyooshi/moyooshi-graphql";
+import { useAddMoyooshiMutation } from "../../features2/moyooshi/moyooshi-graphql";
 import { ApiResultToast } from "../molecules/ApiResultToast";
 import { useMoyooshiCookie } from "../../containers2/organism/EventHistory";
 

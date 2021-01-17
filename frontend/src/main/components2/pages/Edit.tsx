@@ -21,7 +21,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
-import { useUpdateMoyooshiMutation, useMoyooshiQuery } from "../../features/moyooshi/moyooshi-graphql";
+import { useUpdateMoyooshiMutation, useMoyooshiQuery } from "../../features2/moyooshi/moyooshi-graphql";
 import { CheckedBox, NichijiData } from "../../libs/common/declare";
 import { logger } from "../../libs/common/logging";
 import { MoyooshiDocument } from "../../generated/graphql";
