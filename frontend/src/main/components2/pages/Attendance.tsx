@@ -1,41 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { useState } from "react";
 import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 import {
     Button,
     Typography,
     Paper,
-    Grid,
     TextField,
     Box,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormHelperText,
     Table,
     TableBody,
     TableContainer,
     TableHead,
     TableRow,
     TableCell,
+    Collapse,
+    Radio,
 } from "@material-ui/core";
-import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
-import { Calendar, DayValue } from "react-modern-calendar-datepicker";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
-import { getToday } from "../../libs/common/datetime";
-import { theme, useCommonStyles } from "../../AppCss";
-import { CheckedBox, NichijiData, Sankasha } from "../../libs/common/declare";
+import { Sankasha } from "../../libs/common/declare";
 import { logger } from "../../libs/common/logging";
-import { MoyooshiDocument } from "../../generated/graphql";
+import { useRef } from "react";
 
 export type EventNichijiTableRow = {
     eventNichiji: string;
     maru: number;
     sankaku: number;
     batsu: number;
+    eventNichiziKouhoId: string;
 };
 
 export type AttendancePCProps = {
@@ -50,6 +42,29 @@ export const AttendancePC: React.FC<AttendancePCProps> = (props: AttendancePCPro
     // スタイリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const classes = useStyles();
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // 「参加可否を入力する」ボタン押下イベント関連
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const [opened, setOpend] = useState(false);
+
+    // -------------------------------------
+    // 自動スクロール
+    // -------------------------------------
+    // ref を作成しスクロールさせたい場所にある Element にセット
+    const scrollRef = useRef();
+    // このコールバックを呼び出して ref.current.scrollIntoView() を呼び出してスクロール
+    // @ts-ignore: ts2325(scrollRefがundefinedかもしれない)
+    const scrollToForm = (behavior = "smooth") => scrollRef.current.scrollIntoView({ behavior });
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // 出欠用Radioフォーム関連
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const [selectedValue, setSelectedValue] = React.useState("");
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedValue(event.target.value);
+    };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダリング
@@ -135,9 +150,109 @@ export const AttendancePC: React.FC<AttendancePCProps> = (props: AttendancePCPro
                             </Table>
                         </TableContainer>
                     </Box>
-                    <Box></Box>
+                    {/* 「参加可否を入力する」ボタン押下時、ちょうどよい位置にスクロールするため、ここにdivを仕込む。 */}
+                    <div ref={scrollRef} />
                     <Box>
-                        <form noValidate></form>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            onClick={() => {
+                                setOpend(!opened);
+                                logger.debug("isOpening");
+                            }}
+                        >
+                            参加可否を入力する
+                        </Button>
+                    </Box>
+
+                    <Box marginTop={5}>
+                        <Collapse
+                            in={opened}
+                            onExited={() => {
+                                logger.debug("onExited.");
+                            }}
+                            onEntered={() => {
+                                logger.debug("onEntered.");
+                                scrollToForm();
+                            }}
+                        >
+                            <Paper elevation={4}>
+                                <Box padding={2}>
+                                    <Box padding={2}>
+                                        <TextField
+                                            id="sankashaName"
+                                            name="sankashaName"
+                                            helperText="必須項目です。"
+                                            required
+                                            autoFocus
+                                            label="お名前"
+                                            variant="outlined"
+                                            fullWidth
+                                            // onChange={(e) => setsankashaName(e.target.value)}
+                                            // InputLabelProps={{ shrink: sankashaName !== "" }}
+                                            // inputRef={register}
+                                        />
+                                    </Box>
+                                    <Box padding={2}>
+                                        <TableContainer component={Paper}>
+                                            <Table className={classes.table} aria-label="simple table">
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <StyledTableCell>日時</StyledTableCell>
+                                                        <StyledTableCell align="center">◯</StyledTableCell>
+                                                        <StyledTableCell align="center">△</StyledTableCell>
+                                                        <StyledTableCell align="center">✕</StyledTableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {props.eventNichijiRows.map((row) => (
+                                                        <StyledTableRow key={row.eventNichiji}>
+                                                            <StyledTableCell component="th" scope="row">
+                                                                {row.eventNichiji}
+                                                            </StyledTableCell>
+                                                            <StyledTableCell align="center">
+                                                                <Radio
+                                                                    checked={selectedValue === "MARU"}
+                                                                    onChange={handleChange}
+                                                                    value="MARU"
+                                                                    name={`event_nichizi_kouho_id_${row.eventNichiziKouhoId}`}
+                                                                    inputProps={{ "aria-label": "◯" }}
+                                                                />
+                                                            </StyledTableCell>
+                                                            <StyledTableCell align="center">
+                                                                {row.sankaku}
+                                                            </StyledTableCell>
+                                                            <StyledTableCell align="center">
+                                                                {row.batsu}
+                                                            </StyledTableCell>
+                                                        </StyledTableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
+                                    <Box padding={2}>
+                                        <TextField
+                                            id="sankashaComment"
+                                            name="sankashaComment"
+                                            helperText="任意項目です。コメント・言い訳・感謝、何でもどうぞ。"
+                                            label="コメント"
+                                            variant="outlined"
+                                            fullWidth
+                                            // onChange={(e) => setsankashaComment(e.target.value)}
+                                            // InputLabelProps={{ shrink: sankashaComment !== "" }}
+                                            // inputRef={register}
+                                        />
+                                    </Box>
+                                    <Box>
+                                        <Button variant="contained" color="primary" fullWidth>
+                                            出欠を回答する
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            </Paper>
+                        </Collapse>
                     </Box>
                 </Paper>
             </main>
