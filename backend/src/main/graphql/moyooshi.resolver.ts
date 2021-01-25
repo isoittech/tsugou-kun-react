@@ -3,8 +3,8 @@ import { Resolver, Mutation, Arg, InputType, Field, Query } from "type-graphql";
 
 import Moyooshi from "../models/moyooshi";
 import * as endecode from "../helper/endecode";
-import { MoyooshiServiceDto, MoyooshiServiceOutputDto } from "../service/moyooshi_service";
 import * as moyooshi_service from "../service/moyooshi_service";
+import { MoyooshiServiceOutputDto, MoyooshiServiceDto } from "../types";
 
 @InputType()
 export class MoyooshiInput {

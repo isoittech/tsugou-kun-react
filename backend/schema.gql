@@ -28,6 +28,7 @@ type MoyooshiKouhoNichiji {
 
 type Mutation {
   addMoyooshi(Moyooshi: MoyooshiInput!): Moyooshi!
+  addSankasha(Sankasha: SankashaInput!): Sankasha!
   updateMoyooshi(Moyooshi: UpdateMoyooshiInput!): Moyooshi!
 }
 
@@ -35,12 +36,23 @@ type Query {
   Moyooshi(schedule_update_id: String!): Moyooshi!
 }
 
+input SankaKahiInput {
+  moyooshiNichijiKouhoId: Float!
+  sankaKahi: SankaKahiType!
+}
+
+enum SankaKahiType {
+  BATSU
+  MARU
+  MIKAITOU
+  SANKAKU
+}
+
 type SankaNichiji {
   moyooshi_kouho_nichiji_id: Float!
-  MoyooshiKouhoNichiji: MoyooshiKouhoNichiji!
-  moyooshiKouhoNichijiId: Float!
+  moyooshiKouhoNichiji: MoyooshiKouhoNichiji!
   sanka_kahi: String!
-  Sankasha: Sankasha!
+  sankasha: Sankasha!
   sankasha_id: Float!
 }
 
@@ -52,10 +64,27 @@ type Sankasha {
   sankaNichiji: [SankaNichiji!]!
 }
 
+input SankashaInput {
+  comment: String = ""
+  name: String!
+  sankaKahis: [SankaKahiInput!]!
+  sankashaId: Float = 0
+  schedule_update_id: String = ""
+}
+
 input UpdateMoyooshiInput {
   deleted_nichiji_kouho: [String!] = []
   memo: String = ""
   moyooshiKouhoNichijis: [String!]!
   name: String!
+  schedule_update_id: String = ""
+}
+
+input UpdateSankashaInput {
+  comment: String = ""
+  deleted_nichiji_kouho: [String!] = []
+  name: String!
+  sankaKahis: [SankaKahiInput!]!
+  sankashaId: Float = 0
   schedule_update_id: String = ""
 }

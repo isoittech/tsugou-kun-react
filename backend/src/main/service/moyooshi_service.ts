@@ -3,6 +3,7 @@ import { sequelize } from "../db/config";
 import MoyooshiKouhoNichiji from "../models/moyooshi_kouho_nichiji";
 import Moyooshi from "../models/moyooshi";
 import { logger } from "../helper/logging";
+import { MoyooshiServiceDto, MoyooshiServiceOutputDto } from "../types";
 
 export const createMoyooshi = async (moyooshiServiceDto: MoyooshiServiceDto): Promise<MoyooshiServiceOutputDto> => {
     logger.info("[START]createMoyooshi()");
@@ -236,20 +237,4 @@ export const readMoyooshi = async (moyooshiId: number): Promise<MoyooshiServiceO
             error_message: error.message,
         } as MoyooshiServiceOutputDto;
     }
-};
-
-export type MoyooshiServiceDto = {
-    id?: number;
-    name: string;
-    memo?: string;
-    nichiji_kouho: string[];
-    deleted_nichiji_kouho?: any /*{ [key: string]: boolean }*/; // TODO anyから相応しい型に直す
-};
-
-export type MoyooshiServiceOutputDto = {
-    moyooshi?: Moyooshi;
-    error_name?: string;
-    error_message?: string;
-    schedule_update_id?: string;
-    nichiji_kouhos?: MoyooshiKouhoNichiji[];
 };

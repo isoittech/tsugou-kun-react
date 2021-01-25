@@ -1,7 +1,8 @@
 import * as Express from "express";
+
 import * as moyooshi_service from "../service/moyooshi_service";
-import { MoyooshiServiceDto, MoyooshiServiceOutputDto } from "../service/moyooshi_service";
 import * as endecode from "../helper/endecode";
+import { MoyooshiServiceDto, MoyooshiServiceOutputDto } from "../types";
 
 const router = Express.Router();
 

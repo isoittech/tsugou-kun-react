@@ -16,7 +16,7 @@ export default class Sankasha extends Model<Sankasha> {
 
     @Field((type) => [SankaNichiji])
     @HasMany(() => SankaNichiji)
-    sankaNichiji!: SankaNichiji[];
+    sankaNichiji?: SankaNichiji[];
 
     @Field()
     @ForeignKey(() => Moyooshi)
