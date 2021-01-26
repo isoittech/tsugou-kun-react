@@ -17,6 +17,8 @@ services:
     working_dir: /opt/tsugou-kun/app/backend
     # サービス起動後に入力されるコマンドを設定
     command: node --nolazy -r ts-node/register/transpile-only src/main/index.ts
+    volumes:
+      - ./backend/data/tsugoukun_development.sqlite3:/opt/tsugou-kun/app/backend/data/tsugoukun_development.sqlite3
     #tty: true
     # 開放するポートを指定。`host:container`でポートを記載
     ports:
