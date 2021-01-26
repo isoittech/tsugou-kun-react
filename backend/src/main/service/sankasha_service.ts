@@ -62,7 +62,7 @@ export const createSankasha = async (sankashaServiceDto: SankashaServiceDto): Pr
         // 更新時における古いデータを消す。更新対象データを特定する処理が面倒なので消して、あとで追加。
         await SankaNichiji.destroy({
             where: {
-                id: updatedSankasha.id,
+                sankasha_id: updatedSankasha.id,
             },
             transaction: t,
         });
