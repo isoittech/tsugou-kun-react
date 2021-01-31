@@ -11,10 +11,14 @@ import { useCommonStyles } from "../../AppCss";
 import { useAddMoyooshiMutation } from "../../features2/moyooshi/moyooshi-graphql";
 import { ApiResultToast } from "../molecules/ApiResultToast";
 import { useMoyooshiCookie } from "../../containers2/organism/EventHistory";
+import { logger } from "../../libs/common/logging";
+import { useCookies } from "react-cookie";
+import { EventInfo, EventInfoCookies } from "../../libs/common/declare";
 
 export type TopProps = {};
 
 export const Top: React.FC<TopProps> = () => {
+    logger.info("[START]Top");
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // スタイリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -34,10 +38,15 @@ export const Top: React.FC<TopProps> = () => {
     const [eventMemo, setEventMemo] = useState("");
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // Cookie
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const [cookies, setCookie] = useCookies(["moyooshi"]);
+    const moyooshiCookies = cookies.moyooshi ?? ({} as EventInfoCookies);
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // その他Hooks
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const { register, handleSubmit } = useForm();
-    const [addMoyooshiMutation, { data, loading, error }] = useAddMoyooshiMutation();
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // Submit押下イベントハンドリング
@@ -45,10 +54,75 @@ export const Top: React.FC<TopProps> = () => {
     // ========================================================
     // API実行
     // ========================================================
+    const [addMoyooshiMutation, { data, loading, error }] = useAddMoyooshiMutation({
+        onCompleted: (dataOnCompleted: any) => {
+            // ========================================================
+            // Cookie更新準備
+            // ========================================================
+            // -------------------------------------
+            // 設定用情報準備
+            // -------------------------------------
+            const moyooshiName = dataOnCompleted.addMoyooshi.name;
+            const scheduleUpdateIdForCookie = dataOnCompleted.addMoyooshi.schedule_update_id;
+            const nichijiKouhos = dataOnCompleted.addMoyooshi.moyooshiKouhoNichijis;
+            const moyooshiMemo = dataOnCompleted.addMoyooshi.memo;
+            // -------------------------------------
+            // 更新関数実行
+            // -------------------------------------
+            // updateMoyooshiCookie(scheduleUpdateIdForCookie, moyooshiName, nichijiKouhos, moyooshiMemo);
+
+            // -------------------------------------
+            // 以前の情報を取得
+            // -------------------------------------
+            const eventInfoOld: EventInfo = moyooshiCookies[`schedule_update_id_${scheduleUpdateIdForCookie}`];
+
+            // -------------------------------------
+            // Cookie有効期限
+            // -------------------------------------
+            const expiredDate = new Date();
+            expiredDate.setMinutes(expiredDate.getMinutes() + parseInt(process.env.COOKIE_EXPIRED_MINUTES, 10));
+
+            // -------------------------------------
+            // Cookieの内容設定
+            // ※過去設定されたものがある場合は、新しい値で上書きする。
+            // -------------------------------------
+            let eventInfo: EventInfo;
+            if (eventInfoOld)
+                eventInfo = {
+                    name: eventInfoOld.name,
+                    memo: eventInfoOld.memo,
+                    scheduleUpdateId: eventInfoOld.scheduleUpdateId,
+                    nichijis: eventInfoOld.nichijis,
+                };
+            else
+                eventInfo = {
+                    name: moyooshiName,
+                    scheduleUpdateId: scheduleUpdateIdForCookie,
+                    nichijis: nichijiKouhos.map((kouho) => kouho.kouho_nichiji),
+                };
+
+            if (moyooshiMemo) {
+                let memo = moyooshiMemo;
+                if (memo.length > 18) memo = memo.substring(0, 19) + "...";
+                eventInfo.memo = memo;
+            }
+
+            // ========================================================
+            // Cookieへの設定
+            // ========================================================
+            moyooshiCookies[`schedule_update_id_${scheduleUpdateIdForCookie}`] = eventInfo;
+            setCookie("moyooshi", moyooshiCookies, {
+                path: "/",
+                expires: expiredDate,
+            });
+        },
+    });
     const onSubmit = async (
         { eventName: argEventName, eventMemo: argEventMemo, eventNichijiKouho: argEventNichijiKouho },
         e
     ) => {
+        logger.info("[START]Top.onSubmit");
+
         // -------------------------------------
         // イベント日時候補テキストエリアの内容を改行コードで分割
         // -------------------------------------
@@ -86,21 +160,6 @@ export const Top: React.FC<TopProps> = () => {
         // ========================================================
         // noticeTag = <div>{data.addMoyooshi.name}</div>;
         noticeTag = <ApiResultToast schedule_update_id={data.addMoyooshi.schedule_update_id}></ApiResultToast>;
-
-        // ========================================================
-        // Cookie更新
-        // ========================================================
-        // -------------------------------------
-        // 設定用情報準備
-        // -------------------------------------
-        const moyooshiName = data.addMoyooshi.name;
-        const scheduleUpdateIdForCookie = data.addMoyooshi.schedule_update_id;
-        const nichijiKouhos = data.addMoyooshi.moyooshiKouhoNichijis;
-        const moyooshiMemo = data.addMoyooshi.memo;
-        // -------------------------------------
-        // 更新関数実行
-        // -------------------------------------
-        updateMoyooshiCookie(scheduleUpdateIdForCookie, moyooshiName, nichijiKouhos, moyooshiMemo);
     }
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -120,6 +179,8 @@ export const Top: React.FC<TopProps> = () => {
     // 必須項目フォームの入力内容変化時に起動
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     useEffect(() => {
+        logger.info("[START]Top.useEffect[eventName, eventNichijiKouho]");
+
         const disabled = eventName === "" || eventNichijiKouho === "";
         setButtonDisabled(disabled);
     }, [eventName, eventNichijiKouho]);
@@ -127,6 +188,7 @@ export const Top: React.FC<TopProps> = () => {
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    logger.info("[START]Top.render");
     return (
         <>
             <Helmet>

@@ -5,6 +5,7 @@ import Sankasha from "../models/sankasha";
 import * as endecode from "../helper/endecode";
 import * as sankasha_service from "../service/sankasha_service";
 import { SankashaServiceOutputDto, SankashaServiceDto, SankaKahi, SankaKahiType } from "../types";
+import MoyooshiKouhoNichiji from "../models/moyooshi_kouho_nichiji";
 
 @InputType()
 export class SankaKahiInput {
@@ -40,39 +41,41 @@ export class SankashaInput {
 }
 
 @InputType()
-export class UpdateSankashaInput extends SankashaInput {
+export class UpdateSankashaInput extends SankashaInput {}
+
+@ObjectType()
+export class CalculatedSankaNichiji {
+    @Field((type) => MoyooshiKouhoNichiji)
+    moyooshiKouhoNichiji!: MoyooshiKouhoNichiji;
+
     @Field()
-    schedule_update_id!: string;
+    maruCount!: number;
 
-    @Field((type) => [String])
-    deleted_nichiji_kouho: string[];
+    @Field()
+    sankakuCount!: number;
 
-    constructor() {
-        super();
-        this.schedule_update_id = "";
-        this.deleted_nichiji_kouho = [];
-    }
+    @Field()
+    batsuCount!: number;
 }
 
 @Resolver((of) => Sankasha)
 export class SankashaResolver {
-    // @Query((returns) => Sankasha)
-    // async Sankasha(@Arg("schedule_update_id") schedule_update_id: string) {
-    //     const sankashaId: number = endecode.decodeFromScheduleUpdateId(schedule_update_id);
-    //     const serviceOutput: SankashaServiceOutputDto = await sankasha_service.readSankasha(sankashaId);
-    //     return Promise.resolve(serviceOutput.sankasha);
-    // }
-    // export type SankashaServiceDto = {
-    //     sankasha_id?: number;
-    //     name: string;
-    //     comment?: string;
-    //     moyooshiId: number;
-    //     nichiji_kouho_ids: number[];
-    //     sanka_nichijis: SankaNichiji[];
-    // };
+    @Query((returns) => [CalculatedSankaNichiji])
+    async getCalculatedSankanichijis(@Arg("schedule_update_id") schedule_update_id: string) {
+        const moyooshiId: number = endecode.decodeFromScheduleUpdateId(schedule_update_id);
+        const serviceOutput: SankashaServiceOutputDto = await sankasha_service.getCalculatedSankanichijis(moyooshiId);
+        return Promise.resolve(serviceOutput.calculatedSankanichijis);
+    }
+
+    @Query((returns) => [Sankasha])
+    async getSankashas(@Arg("schedule_update_id") schedule_update_id: string) {
+        const moyooshiId: number = endecode.decodeFromScheduleUpdateId(schedule_update_id);
+        const serviceOutput: SankashaServiceOutputDto = await sankasha_service.readSankashas(moyooshiId);
+        return Promise.resolve(serviceOutput.sankashas);
+    }
 
     @Mutation((returns) => Sankasha)
-    async addSankasha(@Arg("Sankasha") sankashaInput: SankashaInput): Promise<Sankasha> {
+    async addSankasha(@Arg("Sankasha") sankashaInput: UpdateSankashaInput): Promise<Sankasha> {
         const sankashaServiceDto: SankashaServiceDto = {
             sankasha_id: sankashaInput.sankashaId,
             name: sankashaInput.name,
@@ -82,9 +85,9 @@ export class SankashaResolver {
         };
 
         const serviceOutput: SankashaServiceOutputDto = await sankasha_service.createSankasha(sankashaServiceDto);
-        serviceOutput.addedSankasha!.sankaNichiji = serviceOutput.addedSankashaNichijis;
+        serviceOutput.sankasha!.sankaNichiji = serviceOutput.sankashaNichijis;
 
-        return Promise.resolve(serviceOutput.addedSankasha!);
+        return Promise.resolve(serviceOutput.sankasha!);
     }
 
     // @Mutation((returns) => Sankasha)

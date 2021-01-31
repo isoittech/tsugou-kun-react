@@ -1,10 +1,8 @@
+import { CalculatedSankaNichiji } from "./graphql/sankasha.resolver";
 import Moyooshi from "./models/moyooshi";
 import MoyooshiKouhoNichiji from "./models/moyooshi_kouho_nichiji";
 import Sankasha from "./models/sankasha";
 import SankaNichiji from "./models/sanka_nichiji";
-
-// 「keyof 型」という文で、オブジェクトの型からキーを取り出してくれる。
-export type ValueOf<T> = T[keyof T];
 
 export enum SankaKahiType {
     MIKAITOU = "MIKAITOU",
@@ -12,13 +10,6 @@ export enum SankaKahiType {
     SANKAKU = "SANKAKU",
     BATSU = "BATSU",
 }
-
-export const SankaKahiTypeConst = {
-    MIKAITOU: "MIKAITOU",
-    MARU: "MARU",
-    SANKAKU: "SANKAKU",
-    BATSU: "BATSU",
-} as const;
 
 export type MoyooshiServiceDto = {
     id?: number;
@@ -52,6 +43,8 @@ export type SankashaServiceDto = {
 };
 
 export type SankashaServiceOutputDto = {
-    addedSankasha?: Sankasha;
-    addedSankashaNichijis?: SankaNichiji[];
+    sankasha?: Sankasha;
+    sankashas?: Sankasha[];
+    sankashaNichijis?: SankaNichiji[];
+    calculatedSankanichijis?: CalculatedSankaNichiji[];
 };

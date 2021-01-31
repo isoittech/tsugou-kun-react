@@ -133,6 +133,7 @@ export const Edit: React.FC<EditProps> = () => {
         e
     ) => {
         const deleteTargetIds = [];
+        // tslint:disable-next-line: no-shadowed-variable
         for (const [key, value] of Object.entries(eventNichijiKouhoDeleteTargetChecks)) {
             if (key.startsWith("id_del_eve_dt_kouho_id_") && value) {
                 deleteTargetIds.push(Number(key.replace("id_del_eve_dt_kouho_id_", "")));

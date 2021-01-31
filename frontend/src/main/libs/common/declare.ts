@@ -1,4 +1,4 @@
-import { resultKeyNameFromField } from "@apollo/client/utilities";
+import { SankaNichiji, SankaKahiType, Sankasha } from "../../generated/graphql";
 
 // 「keyof 型」という文で、オブジェクトの型からキーを取り出してくれる。
 export type ValueOf<T> = T[keyof T];
@@ -19,47 +19,24 @@ export type EventInfo = {
     memo?: string;
 };
 
-// 「as const」というConstアサーションを利用。
-// これとValueOf※を利用することで、後続の宣言SankaNichiji.sankaKahiの型が「string」ではなく
-// リテラル型の「MARU|SANKAKU|BATSU」となる。
-// ※ValueOf: 「keyof 型」という文で、オブジェクトの型からキーを取り出してくれる自前の型。
-export const SankaKahiType = {
-    MARU: "MARU",
-    SANKAKU: "SANKAKU",
-    BATSU: "BATSU",
-} as const;
+export type EventInfoCookies = { [scheduleUpdateId: string]: EventInfo };
 
-export class Sankasha {
-    name: string;
-    comment: string;
-    sankaNichijis: SankaNichiji[];
-
-    constructor(public _name: string, public _comment: string, public _sankaNichijis: SankaNichiji[]) {
-        this.name = _name;
-        this.comment = _comment;
-        this.sankaNichijis = _sankaNichijis;
-    }
-
-    public getSankaKahi(nichiji: string): string {
-        let result: string = "-";
-
-        for (let index = 0; index < this.sankaNichijis.length; index++) {
-            const sankaNichiji = this.sankaNichijis[index];
-
-            if (sankaNichiji.nichiji != nichiji) continue;
-
-            if (sankaNichiji.sankaKahi == SankaKahiType.MARU) result = "◯";
-            else if (sankaNichiji.sankaKahi == SankaKahiType.SANKAKU) result = "△";
-            else if (sankaNichiji.sankaKahi == SankaKahiType.BATSU) result = "✕";
-            else result = "-";
-        }
-        return result;
-    }
-}
-
-export type SankaNichiji = {
-    nichiji: string;
-    // 下記は、sankaKahiの型を、EventActionTypeの中で定義したリテラル型の「ADD_EVENT|SUCCESS_～|FAIL_～…」にしてくれる。
-    // ※前述「as const」と組み合わせる必要あり。
-    sankaKahi?: ValueOf<typeof SankaKahiType>;
+export type SankashaCookie = {
+    sankashaId: number;
+    sankashaName: string;
+    sankashaComment: string;
 };
+
+export type SankashaCookies = { [scheduleUpdateId: string]: SankashaCookie };
+
+export type EventNichijiTableRow = {
+    eventNichiji: string;
+    maru: number;
+    sankaku: number;
+    batsu: number;
+    eventNichijiKouhoId: number;
+};
+
+export type PickedSankaNichiji = Pick<SankaNichiji, "sanka_kahi" | "moyooshi_kouho_nichiji_id">;
+
+export type SankashaTableRow = Pick<Sankasha, "name" | "comment"> & { sankaNichijis: PickedSankaNichiji[] };

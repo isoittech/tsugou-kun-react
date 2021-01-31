@@ -3,6 +3,13 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CalculatedSankaNichiji {
+  batsuCount: Float!
+  maruCount: Float!
+  moyooshiKouhoNichiji: MoyooshiKouhoNichiji!
+  sankakuCount: Float!
+}
+
 type Moyooshi {
   memo: String!
   moyooshiKouhoNichijis: [MoyooshiKouhoNichiji!]!
@@ -28,11 +35,13 @@ type MoyooshiKouhoNichiji {
 
 type Mutation {
   addMoyooshi(Moyooshi: MoyooshiInput!): Moyooshi!
-  addSankasha(Sankasha: SankashaInput!): Sankasha!
+  addSankasha(Sankasha: UpdateSankashaInput!): Sankasha!
   updateMoyooshi(Moyooshi: UpdateMoyooshiInput!): Moyooshi!
 }
 
 type Query {
+  getCalculatedSankanichijis(schedule_update_id: String!): [CalculatedSankaNichiji!]!
+  getSankashas(schedule_update_id: String!): [Sankasha!]!
   Moyooshi(schedule_update_id: String!): Moyooshi!
 }
 
@@ -51,13 +60,14 @@ enum SankaKahiType {
 type SankaNichiji {
   moyooshi_kouho_nichiji_id: Float!
   moyooshiKouhoNichiji: MoyooshiKouhoNichiji!
-  sanka_kahi: String!
+  sanka_kahi: SankaKahiType!
   sankasha: Sankasha!
   sankasha_id: Float!
 }
 
 type Sankasha {
   comment: String!
+  id: Float!
   moyooshi: Moyooshi!
   moyooshi_id: Float!
   name: String!
@@ -82,7 +92,6 @@ input UpdateMoyooshiInput {
 
 input UpdateSankashaInput {
   comment: String = ""
-  deleted_nichiji_kouho: [String!] = []
   name: String!
   sankaKahis: [SankaKahiInput!]!
   sankashaId: Float = 0

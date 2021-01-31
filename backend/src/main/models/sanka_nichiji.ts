@@ -7,13 +7,13 @@ import Sankasha from "./sankasha";
 @ObjectType()
 @Table({ tableName: "sanka_nichijis" })
 export default class SankaNichiji extends Model<SankaNichiji> {
-    @Field()
+    @Field((type) => SankaKahiType)
     @Default("MIKAITOU")
     @Column({
         type: DataType.ENUM,
         values: [SankaKahiType.MIKAITOU, SankaKahiType.MARU, SankaKahiType.SANKAKU, SankaKahiType.BATSU],
     }) // @Columnはプロパティの直前にしないとエラーになる。
-    sanka_kahi!: string;
+    sanka_kahi!: SankaKahiType;
 
     @Field()
     @ForeignKey(() => Sankasha)

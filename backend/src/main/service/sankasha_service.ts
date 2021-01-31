@@ -3,8 +3,9 @@ import Sankasha from "../models/sankasha";
 import { logger } from "../helper/logging";
 import Moyooshi from "../models/moyooshi";
 import MoyooshiKouhoNichiji from "../models/moyooshi_kouho_nichiji";
-import { SankaKahi, SankashaServiceDto, SankashaServiceOutputDto } from "../types";
+import { SankaKahi, SankaKahiType, SankashaServiceDto, SankashaServiceOutputDto } from "../types";
 import SankaNichiji from "../models/sanka_nichiji";
+import { CalculatedSankaNichiji } from "../graphql/sankasha.resolver";
 
 export const createSankasha = async (sankashaServiceDto: SankashaServiceDto): Promise<SankashaServiceOutputDto> => {
     logger.info("[START]createSankasha()");
@@ -106,12 +107,134 @@ export const createSankasha = async (sankashaServiceDto: SankashaServiceDto): Pr
         // 終了処理
         // ===================================================
         return {
-            addedSankasha: updatedSankasha,
-            addedSankashaNichijis: addedSankaNichijis,
+            sankasha: updatedSankasha,
+            sankashaNichijis: addedSankaNichijis,
         } as SankashaServiceOutputDto;
     } catch (error) {
         await t.rollback();
         logger.error(`[ERROR]createSankashaでエラーが発生。${JSON.stringify(error)}`);
+
+        return {
+            error_name: error.name,
+            error_message: error.message,
+        } as SankashaServiceOutputDto;
+    }
+};
+
+export const readSankashas = async (moyooshiId: number): Promise<SankashaServiceOutputDto> => {
+    logger.info("[START]readSankashas()");
+    try {
+        // ===================================================
+        // DBデータ取得
+        // ===================================================
+        // ------------------------
+        // 参加者テーブル
+        // ------------------------
+        // ------------------------
+        // 参加日時テーブル
+        // ※同時取得
+        // ------------------------
+
+        const sankashas: Sankasha[] | null = await Sankasha.findAll({
+            where: {
+                moyooshi_id: moyooshiId,
+            },
+            include: [{ model: SankaNichiji }],
+        });
+
+        // ===================================================
+        // 終了処理
+        // ===================================================
+        logger.info("[END]readSankashas()");
+        return {
+            sankashas: sankashas,
+        } as SankashaServiceOutputDto;
+    } catch (error) {
+        logger.error(`[ERROR]readSankashasでエラーが発生。${JSON.stringify(error)}`);
+
+        return {
+            error_name: error.name,
+            error_message: error.message,
+        } as SankashaServiceOutputDto;
+    }
+};
+
+export const getCalculatedSankanichijis = async (moyooshiId: number): Promise<SankashaServiceOutputDto> => {
+    logger.info("[START]getCalculatedSankanichijis()");
+    try {
+        // ===================================================
+        // DBデータ取得
+        // ===================================================
+        // ------------------------
+        // イベントレコード
+        // ------------------------
+        // ------------------------
+        // イベント日時候補レコード
+        // ※同時取得
+        // ------------------------
+
+        const moyooshi: Moyooshi | null = await Moyooshi.findByPk(moyooshiId, {
+            include: [{ model: MoyooshiKouhoNichiji }],
+        });
+        if (moyooshi === null) {
+            throw Error(`[ERROR]Moyooshのデータ取得に失敗しました。 moyooshId:${moyooshiId}`);
+        }
+
+        // ===================================================
+        // 集計（DBデータ取得もあり）
+        // ===================================================
+        // 返却用
+        const calculatedSankanichijis: CalculatedSankaNichiji[] = [];
+
+        // ------------------------
+        // 参加日時テーブル
+        // ※集計関数等は使わずループでQueって取得・集計する。ループ回数とヒットするデータが少ない（であろう）ため。
+        // ------------------------
+        for (let moyooshiKouhoNichiji of moyooshi.moyooshiKouhoNichijis) {
+            // async/awaitをforEach内で使っても機能しない！！
+            // ※参考：https://qiita.com/frameair/items/e7645066075666a13063
+            // moyooshi.moyooshiKouhoNichijis.forEach(async (moyooshiKouhoNichiji) => {
+            let [maruCount, sankakuCount, batsuCount, miCount] = [0, 0, 0, 0];
+            const sankaNichijis: SankaNichiji[] | null = await SankaNichiji.findAll({
+                where: {
+                    moyooshi_kouho_nichiji_id: moyooshiKouhoNichiji.id,
+                },
+            });
+
+            sankaNichijis.forEach((sankaNichiji) => {
+                switch (sankaNichiji.sanka_kahi) {
+                    case SankaKahiType.MARU:
+                        maruCount++;
+                        break;
+                    case SankaKahiType.SANKAKU:
+                        sankakuCount++;
+                        break;
+                    case SankaKahiType.BATSU:
+                        batsuCount++;
+                        break;
+                    default:
+                        miCount++;
+                        break;
+                }
+            });
+
+            calculatedSankanichijis.push({
+                moyooshiKouhoNichiji,
+                maruCount,
+                sankakuCount,
+                batsuCount,
+            } as CalculatedSankaNichiji);
+        }
+
+        // ===================================================
+        // 終了処理
+        // ===================================================
+        logger.info("[END]getCalculatedSankanichijis()");
+        return {
+            calculatedSankanichijis,
+        } as SankashaServiceOutputDto;
+    } catch (error) {
+        logger.error(`[ERROR]getCalculatedSankanichijisでエラーが発生。${JSON.stringify(error)}`);
 
         return {
             error_name: error.name,
