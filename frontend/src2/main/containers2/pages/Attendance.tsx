@@ -43,7 +43,7 @@ export const Attendance: React.FC = () => {
     const [cookies, _] = useCookies(["sankasha"]);
     // tslint:disable-next-line: no-string-literal
     const sankashaCookies = cookies["sankasha"];
-    const sankashaCookie = sankashaCookies[`schedule_update_id_${paramScheduleUpdateId}`];
+    const sankashaCookie = sankashaCookies ? sankashaCookies[`schedule_update_id_${paramScheduleUpdateId}`] : undefined;
 
     const sankashaIdFrCookie = sankashaCookie?.sankashaId;
     const sankashaNameFrCookie = sankashaCookie?.sankashaName;
