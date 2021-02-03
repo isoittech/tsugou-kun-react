@@ -21,7 +21,7 @@ import "react-modern-calendar-datepicker/lib/DatePicker.css";
 
 import { getToday } from "../../libs/common/datetime";
 import { useCommonStyles } from "../../AppCss";
-import { useUpdateMoyooshiMutation, useMoyooshiQuery } from "../../features/moyooshi/moyooshi-graphql";
+import { useUpdateMoyooshiMutation, useMoyooshiQuery } from "../../features2/moyooshi/moyooshi-graphql";
 import { CheckedBox, NichijiData } from "../../libs/common/declare";
 import { logger } from "../../libs/common/logging";
 import { MoyooshiDocument } from "../../generated/graphql";
@@ -133,6 +133,7 @@ export const Edit: React.FC<EditProps> = () => {
         e
     ) => {
         const deleteTargetIds = [];
+        // tslint:disable-next-line: no-shadowed-variable
         for (const [key, value] of Object.entries(eventNichijiKouhoDeleteTargetChecks)) {
             if (key.startsWith("id_del_eve_dt_kouho_id_") && value) {
                 deleteTargetIds.push(Number(key.replace("id_del_eve_dt_kouho_id_", "")));

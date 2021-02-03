@@ -1,12 +1,13 @@
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import path from "path";
-import { buildSchema } from "type-graphql";
+import { buildSchema, registerEnumType } from "type-graphql";
 const cors = require("cors");
 
 import router_moyooshi from "./controller/moyooshi_controller";
 import access_log from "./helper/access_log";
 import { logger } from "./helper/logging";
+import { SankaKahiType } from "./types";
 
 const main = async () => {
     const app: express.Express = express();
@@ -34,6 +35,10 @@ const main = async () => {
     // -----------------------------------
     // GraphQL
     // -----------------------------------
+    // enumをGraphQL上で利用できるようにする
+    registerEnumType(SankaKahiType, {
+        name: "SankaKahiType",
+    });
     const schema = await buildSchema({
         resolvers: [__dirname + "/graphql/*.resolver.ts"],
         emitSchemaFile: true,

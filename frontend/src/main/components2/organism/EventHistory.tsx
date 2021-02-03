@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Container, makeStyles, Paper, Typography } from "@material-ui/core";
+import { EventInfoCookies } from "../../libs/common/declare";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -8,7 +9,7 @@ import { Box, Container, makeStyles, Paper, Typography } from "@material-ui/core
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 
-export type EventHistoryPCProps = { eventHistories: { [key: string]: any }[] };
+export type EventHistoryPCProps = { eventHistories: EventInfoCookies };
 
 export const EventHistoryPC: React.FC<EventHistoryPCProps> = (args: EventHistoryPCProps) => {
     const eventHistories = args.eventHistories;
@@ -17,6 +18,41 @@ export const EventHistoryPC: React.FC<EventHistoryPCProps> = (args: EventHistory
     // スタイリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const classes = useStyles();
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // 部品
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    let eventHistoryPapers;
+    if (Object.keys(eventHistories).length > 0) {
+        eventHistoryPapers = Object.entries(eventHistories).map(([key, eventInfo]) => {
+            return (
+                <Paper className={classes.paper_frame_one_event} elevation={3} key={key}>
+                    <Link
+                        to={`/attendance/${key.replace("schedule_update_id_", "")}`}
+                        className={classes.event_name_link}
+                    >
+                        <Typography variant="h6" className={classes.event_name}>
+                            {eventInfo.name}
+                        </Typography>
+                    </Link>
+                    <Typography variant="caption" className={classes.event_memo}>
+                        {eventInfo.memo}
+                    </Typography>
+                    {eventInfo.nichijis.map((nichiji, idx2) => (
+                        <Paper className={classes.paper_frame_one_nichiji} elevation={3} key={idx2}>
+                            {nichiji}
+                        </Paper>
+                    ))}
+                </Paper>
+            );
+        });
+    } else {
+        eventHistoryPapers = (
+            <Typography className={classes.no_cookie_msg} component="h6">
+                今のところありません
+            </Typography>
+        );
+    }
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // レンダー
@@ -29,31 +65,7 @@ export const EventHistoryPC: React.FC<EventHistoryPCProps> = (args: EventHistory
                         最近このブラウザで閲覧したイベント
                     </Typography>
                 </Box>
-                <Box>
-                    {Object.keys(eventHistories).length > 0 ? (
-                        eventHistories.map((cookie, idx) => (
-                            <Paper className={classes.paper_frame_one_event} elevation={3} key={idx}>
-                                <Link to={`/edit/${cookie.value.scheduleUpdateId}`} className={classes.event_name_link}>
-                                    <Typography variant="h6" className={classes.event_name}>
-                                        {cookie.value.name}
-                                    </Typography>
-                                </Link>
-                                <Typography variant="caption" className={classes.event_memo}>
-                                    {cookie.value.memo}
-                                </Typography>
-                                {cookie.value.nichijis.map((nichiji, idx2) => (
-                                    <Paper className={classes.paper_frame_one_nichiji} elevation={3} key={idx2}>
-                                        {nichiji}
-                                    </Paper>
-                                ))}
-                            </Paper>
-                        ))
-                    ) : (
-                        <Typography className={classes.no_cookie_msg} component="h6">
-                            今のところありません
-                        </Typography>
-                    )}
-                </Box>
+                <Box>{eventHistoryPapers}</Box>
             </Paper>
         </Container>
     );

@@ -1,12 +1,12 @@
+import { Box, Container, CssBaseline, makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router";
-import { Box, Container, CssBaseline, makeStyles } from "@material-ui/core";
-
-import { Header } from "./components2/organism/Header";
 import { Footer } from "./components2/organism/Footer";
-import { Top } from "./components2/pages/Top";
+import { Header } from "./components2/organism/Header";
 import { Edit } from "./components2/pages/Edit";
+import { Top } from "./components2/pages/Top";
 import { EventHistory } from "./containers2/organism/EventHistory";
+import { Attendance } from "./containers2/pages/Attendance";
 
 export const App: React.FC = () => {
     useEffect(() => {
@@ -36,6 +36,7 @@ export const App: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<Top />} />
                     <Route path="/edit/:key" element={<Edit />} />
+                    <Route path="/attendance/:key" element={<Attendance />} />
                     {/*<Route path="/:key" element={<Edit/>}/>*/}
                     {/*どれにもマッチしなければTop画面へリダイレクト*/}
                     {/*<Route path="*" element={<Navigate to="/" replace/>}/>;*/}
