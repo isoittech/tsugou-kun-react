@@ -235,7 +235,7 @@ export const Attendance: React.FC = () => {
     // -------------------------------------
     // エラー表示判定
     // -------------------------------------
-    const isError = !eventData || eventNichijiRows.length === 0 || eventSankashaRows.length === 0;
+    const isError = !eventData || eventNichijiRows.length === 0;
 
     // -------------------------------------
     // レンダリング
