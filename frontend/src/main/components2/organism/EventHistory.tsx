@@ -23,7 +23,7 @@ export const EventHistoryPC: React.FC<EventHistoryPCProps> = (args: EventHistory
     // 部品
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     let eventHistoryPapers;
-    if (Object.keys(eventHistories).length > 0) {
+    if (eventHistories && Object.keys(eventHistories).length > 0) {
         eventHistoryPapers = Object.entries(eventHistories).map(([key, eventInfo]) => {
             return (
                 <Paper className={classes.paper_frame_one_event} elevation={3} key={key}>
