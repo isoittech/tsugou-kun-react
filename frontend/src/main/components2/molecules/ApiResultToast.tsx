@@ -1,6 +1,5 @@
-import { Box, Button, Grid, makeStyles, Paper, TextField, Typography } from "@material-ui/core";
-import React from "react";
-import { useForm } from "react-hook-form";
+import { Box, Button, Grid, makeStyles, Paper, TextField } from "@material-ui/core";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 
 // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -19,22 +18,19 @@ export const ApiResultToast: React.FC<ApiResultToastProps> = (props) => {
     const classes = useStyles();
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    // ハンドラ系
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    const { register, handleSubmit } = useForm();
-
-    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // Clickイベントハンドラ
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const txtFieldRef = useRef(null);
     const onClick = () => {
-        const scheduleFillUrl = document.getElementById("scheduleFillUrl");
-        // 文字をすべて選択
-        // @ts-ignore
-        scheduleFillUrl.select();
-        // コピー
-        document.execCommand("copy");
+        txtFieldRef.current.select();
+        const successful = document.execCommand("copy");
+        if (!successful) {
+            throw new Error("copy command was unsuccessful");
+        }
 
-        alert("URLをコピーしました。\nメール・チャットで貼り付ける等、お知らせ用にご利用ください。");
+        alert(
+            `イベント出欠記入用ページのURLをコピーしました。\n${txtFieldRef.current.value}\nメール・チャットで貼り付ける等、お知らせ用にご利用ください。`
+        );
     };
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -46,33 +42,37 @@ export const ApiResultToast: React.FC<ApiResultToastProps> = (props) => {
                 <Grid item xs={12} sm={12}>
                     <Paper className={classes.paper} elevation={3}>
                         <Grid item xs={12}>
-                            <Link to={`/edit/${props.schedule_update_id}`} data-testid="linkEdit">
+                            <Link to={`/attendance/${props.schedule_update_id}`} data-testid="linkEdit">
                                 <Box marginTop={2}>
                                     <TextField
-                                        value={`${location.href}edit/${props.schedule_update_id}`}
-                                        id="eventEditUrl"
-                                        name="eventEditUrl"
-                                        helperText="クリックするとイベント情報修正画面へ移ります。"
-                                        label="イベント情報修正URL"
+                                        value={`${location.href}attendance/${props.schedule_update_id}`}
+                                        id="eventAttendanceUrl"
+                                        name="eventAttendanceUrl"
+                                        helperText="クリックすると出欠記入画面へ移ります。"
+                                        label="イベント出欠記入URL"
                                         variant="outlined"
                                         fullWidth
-                                        inputRef={register}
-                                        disabled
+                                        inputRef={txtFieldRef}
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
                                     />
                                 </Box>
                             </Link>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.button}
-                                fullWidth
-                                type="submit"
-                            >
-                                URLをクリップボードにコピー
-                            </Button>
-                        </Grid>
+                        {document.queryCommandSupported("copy") && (
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    fullWidth
+                                    onClick={onClick}
+                                >
+                                    URLをクリップボードにコピー
+                                </Button>
+                            </Grid>
+                        )}
                     </Paper>
                 </Grid>
             </Grid>
