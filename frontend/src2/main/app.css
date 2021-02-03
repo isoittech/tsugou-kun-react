@@ -1,0 +1,89 @@
+a:link,
+a:visited,
+a:link:hover,
+a:visited:hover {
+    text-decoration: none;
+}
+
+a:link,
+a:visited {
+    color: #edf5e1;
+}
+a:link:hover,
+a:visited:hover {
+    color: #ffffff;
+}
+
+.errorlist {
+    position: relative;
+    color: #f00;
+    /*    background-color: #f8d7da;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: .25rem;
+    border: 1px solid transparent;
+    border-color: #f5c6cb; */
+}
+
+.rightBottomFixed {
+    position: fixed;
+    right: 0px;
+    bottom: 10px;
+    transition: 1s;
+    opacity: 0.7;
+}
+.rightBottomFixed:hover {
+    opacity: 1;
+}
+
+table#nichizi_kouho_table > thead > tr > th,
+table#nichizi_kouho_table > tbody > tr > td,
+table#kaitou_table > thead > tr > th,
+table#kaitou_table > tbody > tr > td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.hissu:after {
+    content: "必須";
+    color: white;
+    background-color: red;
+    font-size: 0.5rem;
+    border-radius: 10px 10px 10px 10px;
+    padding: 1px 3px;
+    margin-bottom: 3px;
+}
+
+.edit_label {
+    font-size: 1.25rem;
+}
+
+.overrideToastStyle {
+    max-width: 100% !important;
+}
+
+#scheduleFillUrl {
+    width: 500px;
+}
+
+#scheduleFillUrl:hover {
+    cursor: pointer;
+}
+
+.custom-calendar {
+    box-shadow: 1em 1em 1em rgba(0, 0, 0, 0.1);
+    border-radius: 0.5em;
+    padding-top: 1.2em; /* default */
+    margin-left: 1.2em;
+    max-width: 90vw; /* default */
+    min-height: 36.7em; /* default */
+}
+
+.custom-calendar-in-edit {
+    box-shadow: 1em 1em 1em rgba(0, 0, 0, 0.1);
+    border-radius: 0.5em;
+    padding-top: 0em;
+    margin-left: 0em;
+    max-width: 90vw; /* default */
+    min-height: 36.7em; /* default */
+}

@@ -9,7 +9,7 @@
         "prod": "cross-env NODE_ENV=production webpack",
         "watch": "webpack -w",
         "start": "webpack-dev-server",
-        "storybook": "start-storybook -p 6006 --no-dll -s src/main",
+        "storybook": "start-storybook -p 6006 --no-dll -s src2/main",
         "build-storybook": "build-storybook --no-dll",
         "codegen": "graphql-codegen --config graphql-codegen.yml"
     },
@@ -94,17 +94,17 @@
     },
     "jest": {
         "roots": [
-            "<rootDir>/src"
+            "<rootDir>/src2"
         ],
         "collectCoverageFrom": [
-            "src/**/*.{js,jsx,ts,tsx}",
-            "!src/**/*.d.ts"
+            "src2/**/*.{js,jsx,ts,tsx}",
+            "!src2/**/*.d.ts"
         ],
         "setupFilesAfterEnv": [
-            "<rootDir>/src/test/setupTests.ts"
+            "<rootDir>/src2/test/setupTests.ts"
         ],
         "testMatch": [
-            "<rootDir>/src/test/**/*.test.{js,jsx,ts,tsx}"
+            "<rootDir>/src2/test/**/*.test.{js,jsx,ts,tsx}"
         ],
         "testEnvironment": "jest-environment-jsdom-fourteen",
         "transform": {

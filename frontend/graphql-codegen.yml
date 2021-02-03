@@ -8,9 +8,9 @@
 # --------------------------------------  
 overwrite: true
 schema: http://localhost:3000/graphql
-documents: src/main/**/*graphql.ts
+documents: src2/main/**/*graphql.ts
 generates:
-  ./src/main/generated/graphql.ts:
+  ./src2/main/generated/graphql.ts:
     plugins:
       - typescript
       - typescript-operations

@@ -6,6 +6,6 @@
         "no-console": [true, "log"]
     },
     "linterOptions": {
-        "exclude": ["src/main/generated/*.ts"]
+        "exclude": ["src2/main/generated/*.ts"]
     }
 }

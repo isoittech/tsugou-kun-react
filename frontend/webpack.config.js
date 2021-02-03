@@ -45,7 +45,7 @@ module.exports = () => {
         mode: webpackMode,
 
         // メインとなるJavaScriptファイル（エントリーポイント）
-        entry: "./src/main/main.tsx",
+        entry: "./src2/main/main.tsx",
 
         // ファイルの出力設定
         output: {
@@ -53,7 +53,7 @@ module.exports = () => {
             path: outputPath,
             // 出力ファイル名
             filename: "main.js",
-            // HTMLのsrc/href属性出力時の先頭に付与する値
+            // HTMLのsrc2/href属性出力時の先頭に付与する値
             // ※先頭スラッシュを指定しない場合、更新やリロード時に404となる。
             // publicPath: "/", // ---> やはり削った。テンプレートindex.htmlのhead/baseタグにてスラッシュを指定することにより不要となった。
         },
@@ -63,7 +63,7 @@ module.exports = () => {
                 "process.env": JSON.stringify(env),
             }),
             new HtmlWebpackPlugin({
-                template: "./src/main/index.html",
+                template: "./src2/main/index.html",
                 filename: "index.html",
             }),
             new MiniCssExtractPlugin(),
@@ -84,7 +84,7 @@ module.exports = () => {
 
         // import 文で .ts や .tsx ファイルを解決するため
         resolve: {
-            // modules: [path.resolve(__dirname, "src"), path.resolve(__dirname, "node_modules")],
+            // modules: [path.resolve(__dirname, "src2"), path.resolve(__dirname, "node_modules")],
             extensions: [".ts", ".tsx", ".js", ".json"],
         },
 

@@ -31,6 +31,6 @@
         //   例）const module = require('module') -> import module from 'module'
         // "esModuleInterop": true
     },
-    "include": ["src/main"],
+    "include": ["src2/main"],
     "exclude": ["node_modules"]
 }
