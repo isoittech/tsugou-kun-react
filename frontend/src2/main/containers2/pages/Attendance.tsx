@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router";
 import { AttendancePC, AttendancePCProps } from "../../components2/pages/Attendance";
@@ -68,6 +68,13 @@ export const Attendance: React.FC = () => {
     }, [sankashaName]);
 
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    // 出欠回答完了後の自動スクロール（TOP）
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+    const scrollTopRef = useRef();
+    // @ts-ignore
+    const scrollToTop = (behavior = "smooth") => scrollTopRef.current.scrollIntoView({ behavior });
+
+    // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     // Submit押下イベントハンドリング
     // ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
     const [addSankashaMutation, { data, loading, error }] = useAddSankashaMutation({
@@ -86,6 +93,11 @@ export const Attendance: React.FC = () => {
             // Mutation完了後にCookie更新（過去閲覧イベント）
             // -------------------------------------
             updateMoyooshiCookie(paramScheduleUpdateId);
+
+            // -------------------------------------
+            // Mutation完了後に画面上部へスクロール
+            // -------------------------------------
+            scrollToTop();
         },
         refetchQueries: [
             {
@@ -250,9 +262,11 @@ export const Attendance: React.FC = () => {
         eventSankashaRows,
         isLoading,
         isError,
+        scrollTopRef,
         onSubmit,
         setSankashaName,
         setSankashaComment,
+        scrollToTop,
     };
 
     return <AttendancePC {...args}></AttendancePC>;

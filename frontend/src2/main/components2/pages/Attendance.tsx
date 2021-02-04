@@ -34,9 +34,11 @@ export type AttendancePCProps = {
     buttonDisabled?: boolean;
     isLoading?: boolean;
     isError?: boolean;
+    scrollTopRef: any;
     onSubmit: (submitArgs: any, event) => Promise<void>;
     setSankashaName: (value: string) => void;
     setSankashaComment: (value: string) => void;
+    scrollToTop: (behavior: string) => void;
 };
 
 export const AttendancePC: React.FC<AttendancePCProps> = (props: AttendancePCProps) => {
@@ -120,6 +122,8 @@ export const AttendancePC: React.FC<AttendancePCProps> = (props: AttendancePCPro
             <Helmet>
                 <title>イベント参加状況・出欠記入 - 都合くん「この日空いてるっすか。」</title>
             </Helmet>
+            {/* 「出欠を回答する」ボタン押下時、ちょうどよい位置にスクロールするため、ここにdivを仕込む。 */}
+            <div ref={props.scrollTopRef} />
 
             <main className={classes.layout}>
                 {props.isError && <Box textAlign="center">Oh, error.... you unlucky.</Box>}
