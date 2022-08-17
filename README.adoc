@@ -43,10 +43,14 @@ $ npm start
 ....
 # # cloneする
 # cd tsugou-kun-react
-# export HOST_URL=https://XXXXXXX
+# export HOST_URL=https://XXXXXXX  # https://tsugoukun.0x0.jp
 # touch backend/data/tsugouku_XXXXXXXX.sqlite3  # tsugoukun_development.sqlite3等
 # docker-compose build --no-cache
 # docker-compose up -d
+# # ---------------------
+# # ・cron 起動によるmydns.jpへのIPアドレス通知
+# #   ※*/5 * * * * /usr/bin/wget -O - 'https://mydnsXXXXXX:PWPWPWPWPW@www.mydns.jp/login.html' --no-check-certificate >>/tmp/cronlog.log 2>>/tmp/cronlog-err.log
+# # ・https://github.com/isoittech/HttpsSiteRouter の 準備・コンテナ起動
 # # ---------------------
 # docker-compose logs                        # ログ確認
 # docker-compose exec nginx /bin/bash        # ログインして確認
@@ -322,6 +326,7 @@ $ npm i -D \
     @types/react-dom \
     @types/react-redux \
     @types/react-router-dom \
+    @types/jsonwebtoken \
     webpack \
     webpack-cli \
     webpack-dev-server \
@@ -351,6 +356,7 @@ $ npm i \
     react-cookie \
     winston \
     moment \
+    jsonwebtoken \
     @types/winston \
     @types/moment \
     # Material-UIに変更する
